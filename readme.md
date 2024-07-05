@@ -18,6 +18,6 @@ https://code.visualstudio.com/docs/python/python-quick-start
 * install https://tug.org/mactex/ for conversion to pdf
 
 ## to pdf
-```
+```bash
 jupyter nbconvert --to pdf Retrieval-Augmented\ Generation.ipynb
 ```

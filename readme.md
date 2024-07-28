@@ -7,8 +7,12 @@ https://code.visualstudio.com/docs/python/python-quick-start
 * https://conda.io/projects/conda/en/latest/user-guide/getting-started.html
 
 ## use conda
+* conda create -n <environmentName>
 * conda activate .conda/ 
 * conda deactivate
+
+## Jupiter notebook
+* https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter
 
 ## VS Commands
 * Command Palette  Cmd+Shift+P
@@ -16,6 +20,18 @@ https://code.visualstudio.com/docs/python/python-quick-start
 ## install exporter
 * conda install nbconvert
 * install https://tug.org/mactex/ for conversion to pdf
+
+## Diagrams
+* https://marketplace.visualstudio.com/items?itemName=vstirbu.vscode-mermaid-preview
+* https://marketplace.visualstudio.com/items?itemName=hediet.vscode-drawio
+* https://support.typora.io/Draw-Diagrams-With-Markdown/ - tutorial
+
+## Latex
+* https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop
+
+## Spelling check
+* https://marketplace.visualstudio.com/items?itemName=ban.spellright
+* https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker
 
 ## to pdf
 ```bash

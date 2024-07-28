@@ -37,3 +37,10 @@ https://code.visualstudio.com/docs/python/python-quick-start
 ```bash
 jupyter nbconvert --to pdf Retrieval-Augmented\ Generation.ipynb
 ```
+
+-------
+
+Data about vector databases:
+* https://medium.com/@mutahar789/optimizing-rag-a-guide-to-choosing-the-right-vector-database-480f71a33139
+* https://developers.cloudflare.com/vectorize/best-practices/insert-vectors/
+* https://www.aporia.com/learn/best-vector-dbs-for-retrieval-augmented-generation-rag/

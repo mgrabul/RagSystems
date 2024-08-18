@@ -3,7 +3,6 @@
 /ai_notebook.ipynb
 /ai_notebook.pdf
 /experiment2CasualModelParagraphRetreavel_1.json
-/experiments
 /experiments.txt
 /main.py
 /notes.md
@@ -19,3 +18,4 @@
 /.DS_Store
 /temp/*
 /.quarto/
+/notes/*

@@ -36,4 +36,16 @@ https://code.visualstudio.com/docs/python/python-quick-start
 ## to pdf
 ```bash
 jupyter nbconvert --to pdf Retrieval-Augmented\ Generation.ipynb
+
+jupyter nbconvert --to pdf Retrieval-Augmented\ Generation.ipynb --output Retrieval-Augmented\ Generation_v1.pdf
+
+```
+In visual studio code
+```
+>Markdown-pdf: Export ...
+```
+
+.md export
+```
+pandoc notes.md -o notes.pdf
 ```

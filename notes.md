@@ -4,8 +4,6 @@ The primary goal of this research is educational.
 This research aims to enhance the capabilities of Large Language Models (LLMs) using Retrieval-Augmented Generation (RAG) techniques. 
 I have developed a simple RAG and will compare the accuracy of question-answering between standard LLMs and RAG enhance LLMS, this study explores the potential improvements in performance and robustness that a RAG system can offer.
 
-[Retrieval-Augmented Generation - github](https://github.com/mgrabul/RagSystems/blob/main/Retrieval-Augmented%20Generation.ipynb)
-
 ## Introduction
 
 Let's start with a real world analogy.
@@ -26,7 +24,7 @@ Current problems in LLMs are:
 
 1. **Limitation in memory**, once the network is trained it will not be able to learn new things.
 2. **Hardware requirements and cost**, Useful LLMS require extremely powerful hardware
-3. **Privacy**, useful models are owned and owned by extremely whelty companies as they are expensive, this is a serious privacy problems and some companies don't allow usage of this kind of models, especially because of GDPR.
+3. **Privacy**, useful models are owned and owned by extremely wealthy companies as they are expensive, this is a serious privacy problems and some companies don't allow usage of this kind of models, especially because of GDPR.
 
 
 ## What is RAG Retrieval Augmented Generation
@@ -39,10 +37,9 @@ Current problems in LLMs are:
 
 Technical problems that LLMs have:
 
-* Under fitted, high bias - meaning the number of parameters is not big enough to correctly approximate all input, not powerful enough to correctly answer to the input.
+* Under fitted, high bias - meaning the number of parameters is not big enough to correctly approximate all input, not powerful enough to correctly answer to the input. 
 
-
-* Tightly correlated to the type of data they are trained on - If a model is trained on the subject of history it will not be able to answer questions from mathematics, also their knowledge might not be up to date
+* Tightly correlated to the type of data they are trained on - If a model is trained on the subject of history it will not be able to answer questions from mathematics, also their knowledge might not be up to date. 
 
 
 Rag systems do not suffer as much as other models from this problem, their memory can be extended without the need for training or adding additional parameters.
@@ -104,9 +101,12 @@ Requirement of RAG generative component:
 
 ## Retriever system
 
+### Components
+
 * Sentence Embedding Model
 * Non-parametric memory
 
+### Retriever phases 
 
 **Storing Phase:**
 
@@ -137,9 +137,7 @@ Question
                                           
 ```
 
------
-
-## Non-parametric memory - vector databases
+### Non-parametric memory - vector databases
 
 Usually Dense vector databases
 Need to have the following properties:
@@ -150,7 +148,7 @@ Need to have the following properties:
 * Possibility to store data on disk
 
 Current databases: 
-* Redis Vector Similarity Search (VSS)
+* Redis Vector Similarity Search (VSS) - open sourced
 * Pinecone - exclusively managed, closed source
 * Weaviate - open source
 * Milvus - open source
@@ -164,7 +162,8 @@ For demonstration purposes Faiss is chosen
 
 ---
 
-## Sentence embedding models
+### Sentence embedding models
+
 
 Based on the transformers model encoder. Created by adding additional layer of pooling.
 
@@ -201,7 +200,7 @@ Sentence
 ```
 
 
-## Pooling
+### Pooling
 
 Is a function $F:E^n->E$, where E is the set of contextual embeddings
 $F(e1,e2,..en)->e$, $e$ in $E$
@@ -209,7 +208,7 @@ $F(e1,e2,..en)->e$, $e$ in $E$
 
 Most popular is **MEAN** pool, it returns the "average vector"
 
-## Technical requirements the Embedder
+### Technical requirements the Embedder
 
 The requirement of the sentence embedding model is the follows:
 
@@ -226,7 +225,7 @@ if $A$ and $P$ are semantically more similar $A$ and $N$, then the distance $dis
 **This is an extremely useful feature because it allows for representing the meaning and information of sentences in a way that enables the measurement of semantic information.**
 !!!!
 
-## Siamese training network and loss function
+### Siamese training network and loss function
 The input and output of the sentence embeddings is in the correct format but needs to be fine-tuned in order to meet the semantic requirement Embedders are trained with Siamese networks.
 
 *Siamese network with Contrastive Loss function*
@@ -237,11 +236,11 @@ The input and output of the sentence embeddings is in the correct format but nee
  Shared Network                Shared Network 
     |                                |
  Anchor Embedding          Positive/Negative Embedding
-       \                         /
-        \                       /
-         \                     /
-             Contrastive Loss
-                Function
+       \                           /
+        \                         /
+         \                       /
+              Contrastive Loss
+                 Function
 
 ```
 The networks end's with a contrastive loss function that is given with the following formula:
@@ -283,7 +282,7 @@ General RAG systematization
 
 * Naive RAG 
 
-Is the type of rag described in this document.
+Is the type of RAG described in this document.
 
 * Advanced RAG 
   * **pre-retrieval** phase 
@@ -298,23 +297,22 @@ Is the type of rag described in this document.
 
 
 
-### Different RAG methods and models
+## Different RAG methods and models
 
-##### RAG-Sequence Model
-Retrieves k embeddings. Iterates over all of them generating the next token, and it measures the probability. The next token is the one with the heights probability.
+#### RAG-Sequence Model
+Retrieves k embeddings. Iterates over all of them generating the next token, and it measures the probability for the generated token. The next token is the one with the heights probability.
 
-##### RAG-Token Model
+#### RAG-Token Model
 Retrieves new documents on every generated token.
 
-#### Iterative and Recursive RAG
+### Iterative and Recursive RAG
 
-##### Speculative RAG 
+#### Speculative RAG 
 Groups the embeddings using k-mean algorithm and tests the results using 
 * Self-Consistency Score - probability of the answer and the rational been generated from the question.
-* Self-reflection score - Probability of positive answer, "Yes" been generated given the question, rational and the answer.
+* Self-Reflection Score - Probability of positive answer, "Yes" been generated given the question, rational and the answer.
 
-
-## Recursive rag
+#### Recursive rag
  As any recursive algorithm it repeats its self until the results satisfies certain criteria. In case of the retrieval, a naive RAG system performs good when all the information required for answering the question is in the retrieved embeddings.
 
 

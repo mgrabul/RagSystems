@@ -24,7 +24,7 @@ Current problems in LLMs are:
 
 1. **Limitation in memory**, once the network is trained it will not be able to learn new things.
 2. **Hardware requirements and cost**, Useful LLMS require extremely powerful hardware
-3. **Privacy**, useful models are owned and owned by extremely wealthy companies as they are expensive, this is a serious privacy problems and some companies don't allow usage of this kind of models, especially because of GDPR.
+3. **Privacy**, useful models are owned and managed by extremely wealthy companies as they are expensive, this is a serious privacy problems and some companies don't allow usage of this kind of models, especially because of GDPR.
 
 
 ## What is RAG Retrieval Augmented Generation
@@ -58,10 +58,12 @@ Rag system is build of two subsystems:
 
 
 Phases:
-- Phase 1 Retrieval, Knowledge retrieval, When asked a question the RAG retrieval system will retrieve all known information by submitting an appropriate query to the non-parametric memory.
-- Phase 2 Augmentation, with the retrieved information, a context around the question is created, the context should contain all information for answering the question.
-- Phase 3 Generation, The context and question will be passed to an LLM that will generate an answer.
 
+- Phase 1 Retrieval, Knowledge retrieval, When asked a question the RAG retrieval system will retrieve all known information by submitting an appropriate query to the non-parametric memory. 
+
+- Phase 2 Augmentation, with the retrieved information, a context around the question is created, the context should contain all information for answering the question. 
+
+- Phase 3 Generation, The context and question will be passed to an LLM that will generate an answer. 
 
 
 

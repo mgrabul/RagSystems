@@ -1,0 +1,113 @@
+[
+    {
+        "Question Type": "List-based Question",
+        "Question": "What materials were used in constructing the Great Wall of China?",
+        "Retrieval type": "Sentence retrieval",
+        "Retrievals": 1
+    },
+    [
+        {
+            "modelType": "casual_model",
+            "llm": "facebook/blenderbot-90M",
+            "size": "90M",
+            "question": "What materials were used in constructing the Great Wall of China?",
+            "retrieved_documents": "The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.",
+            "LLM Answer": "pos sitter sitter drip ba ba ba le diving ba ba bee ba ba da ba ba cats ba ba table da ba da disc ba ba orba da da prba ba prda da __end__",
+            "RAG Answer": "scibal pubalfatty composition asses sciscifatty fatty bee pumubee bee mubee zarbalpuscibal mutbal bee bal composition fatty composition fatty bee bal strip scimutcomposition __end__"
+        },
+        {
+            "modelType": "casual_model",
+            "llm": "gpt2",
+            "size": "124M",
+            "question": "What materials were used in constructing the Great Wall of China?",
+            "retrieved_documents": "The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.",
+            "LLM Answer": "\n\nThe Great Wall of China is the largest in the world, and is the largest city in the world. It is the largest city in the world. It is the largest city in",
+            "RAG Answer": "\n\nThe Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood. The Great Wall of China was built by the People's Republic of"
+        },
+        {
+            "modelType": "casual_model",
+            "llm": "EleutherAI/gpt-neo-125M",
+            "size": "125M",
+            "question": "What materials were used in constructing the Great Wall of China?",
+            "retrieved_documents": "The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.",
+            "LLM Answer": "\n\nThe Great Wall of China was constructed by the Chinese government in the 17th century, and is known as the Great Wall of China.\n\nWhat was the purpose of the Great",
+            "RAG Answer": "\n\nThe Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood. Answer What materials were used in constructing the Great Wall of China?"
+        },
+        {
+            "modelType": "casual_model",
+            "llm": "gpt2-medium",
+            "size": "355M",
+            "question": "What materials were used in constructing the Great Wall of China?",
+            "retrieved_documents": "The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.",
+            "LLM Answer": "\n\nThe Great Wall of China was built by the Ming Dynasty (1644-1911). The Great Wall was constructed of a combination of stone, wood, and metal. It was",
+            "RAG Answer": "'Answer The Great Wall of China was built of various materials, including stone, brick, tamped earth, and wood. The Great Wall of China was constructed of various materials, including stone"
+        },
+        {
+            "modelType": "casual_model",
+            "llm": "gpt2-large",
+            "size": "762M",
+            "question": "What materials were used in constructing the Great Wall of China?",
+            "retrieved_documents": "The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.",
+            "LLM Answer": "\n\nThe Great Wall of China was built by the Qin Dynasty (221-206 B.C.), which lasted from 221 to 206 B.C.\n\nThe Great Wall of China",
+            "RAG Answer": "'The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.'Answer What materials were used in constructing the Great Wall of China?"
+        },
+        {
+            "modelType": "casual_model",
+            "llm": "EleutherAI/gpt-neo-1.3B",
+            "size": "1.3B",
+            "question": "What materials were used in constructing the Great Wall of China?",
+            "retrieved_documents": "The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.",
+            "LLM Answer": "\n\nThe Great Wall of China was constructed using many different types of materials, including wood, stone, brick, clay, and iron.\n\nThe Great Wall of China was constructed using",
+            "RAG Answer": "\n\nA:\n\nThe Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.\n\n<|endoftext|>"
+        }
+    ],
+    [
+        {
+            "modelType": "qa_model",
+            "llm": "distilbert-base-uncased-distilled-squad",
+            "size": "66M",
+            "question": "What materials were used in constructing the Great Wall of China?",
+            "retrieved_documents": "The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.",
+            "LLM Answer": "what materials were used in constructing the great wall of china? [SEP]",
+            "RAG Answer": "stone, brick, tamped earth, and wood"
+        },
+        {
+            "modelType": "qa_model",
+            "llm": "deepset/roberta-base-squad2",
+            "size": "125M",
+            "question": "What materials were used in constructing the Great Wall of China?",
+            "retrieved_documents": "The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.",
+            "LLM Answer": "<s>",
+            "RAG Answer": " stone, brick, tamped earth, and wood"
+        },
+        {
+            "modelType": "qa_model",
+            "llm": "bert-large-uncased-whole-word-masking-finetuned-squad",
+            "size": "340M",
+            "question": "What materials were used in constructing the Great Wall of China?",
+            "retrieved_documents": "The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.",
+            "LLM Answer": "",
+            "RAG Answer": "stone, brick, tamped earth, and wood"
+        }
+    ],
+    [
+        {
+            "modelType": "t5_model",
+            "llm": "t5-base",
+            "size": "220M",
+            "question": "What materials were used in constructing the Great Wall of China?",
+            "retrieved_documents": "The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.",
+            "LLM Answer": "None",
+            "RAG Answer": "stone, brick, tamped earth, and wood"
+        },
+        {
+            "modelType": "t5_model",
+            "llm": "t5-large",
+            "size": "770M",
+            "question": "What materials were used in constructing the Great Wall of China?",
+            "retrieved_documents": "The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.",
+            "LLM Answer": "False",
+            "RAG Answer": "stone, brick, tamped earth, and wood"
+        }
+    ]
+]

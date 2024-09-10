@@ -1,0 +1,113 @@
+[
+    {
+        "Question Type": "Fact-based Question",
+        "Question": "How tall is the Pyramid of Giza?",
+        "Retrieval type": "Sentence retrieval",
+        "Retrievals": 1
+    },
+    [
+        {
+            "modelType": "casual_model",
+            "llm": "facebook/blenderbot-90M",
+            "size": "90M",
+            "question": "How tall is the Pyramid of Giza?",
+            "retrieved_documents": "The Great Pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.",
+            "LLM Answer": "balkicker mutations mutations pment mutations mutations mutations kicker fiers eston eston eston eres bender eston trout eston trout mutations eston eston teau pment mutations bender eston eston yacht eston eston joreston eston ix eston eston __end__",
+            "RAG Answer": "lease willis lease mative mative lease willis mative lease lease lease willis ular distribution witness lease willis willis willis pollwillis willis lease lease ular lease willis mutlease willis design scripwillis willis bee lease willis __end__"
+        },
+        {
+            "modelType": "casual_model",
+            "llm": "gpt2",
+            "size": "124M",
+            "question": "How tall is the Pyramid of Giza?",
+            "retrieved_documents": "The Great Pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.",
+            "LLM Answer": "\n\nThe Pyramid of Giza is the tallest building in Egypt. The Pyramid of Giza is located in the Giza Plateau. The Pyramid of Giza is the tallest building in",
+            "RAG Answer": "\n\nAnswer The Great Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.'Answer How tall is the"
+        },
+        {
+            "modelType": "casual_model",
+            "llm": "EleutherAI/gpt-neo-125M",
+            "size": "125M",
+            "question": "How tall is the Pyramid of Giza?",
+            "retrieved_documents": "The Great Pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.",
+            "LLM Answer": "\n\nThe Pyramid of Giza is the tallest pyramid in the world. It was completed in the 13th century AD by the Egyptian king Tutankhamun, and is located in the",
+            "RAG Answer": "\n\nThe Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.'Answer How tall is the Pyramid of"
+        },
+        {
+            "modelType": "casual_model",
+            "llm": "gpt2-medium",
+            "size": "355M",
+            "question": "How tall is the Pyramid of Giza?",
+            "retrieved_documents": "The Great Pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.",
+            "LLM Answer": "\n\nThe Pyramid of Giza is the tallest structure in Egypt. It is 1,068 feet tall, and is one of the largest pyramids in the world. The Pyramid of",
+            "RAG Answer": "\n\nThe Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.\n\nThe pyramid was built on the"
+        },
+        {
+            "modelType": "casual_model",
+            "llm": "gpt2-large",
+            "size": "762M",
+            "question": "How tall is the Pyramid of Giza?",
+            "retrieved_documents": "The Great Pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.",
+            "LLM Answer": "\n\nThe Pyramid of Giza is the tallest structure in the world.\n\nHow tall is the Taj Mahal?\n\nThe Taj Mahal is the tallest building in the world",
+            "RAG Answer": "\n\nThe Great Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.\n\nAnswer The Great Pyramid of"
+        },
+        {
+            "modelType": "casual_model",
+            "llm": "EleutherAI/gpt-neo-1.3B",
+            "size": "1.3B",
+            "question": "How tall is the Pyramid of Giza?",
+            "retrieved_documents": "The Great Pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.",
+            "LLM Answer": "\n\nThe Pyramid of Giza is one of the Seven Wonders of the Ancient World. It is one of the Seven Wonders of the Modern World. It is one of the Seven Wonders of",
+            "RAG Answer": "\n\nThe pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet"
+        }
+    ],
+    [
+        {
+            "modelType": "qa_model",
+            "llm": "distilbert-base-uncased-distilled-squad",
+            "size": "66M",
+            "question": "How tall is the Pyramid of Giza?",
+            "retrieved_documents": "The Great Pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.",
+            "LLM Answer": "how tall is the pyramid of giza? [SEP]",
+            "RAG Answer": "146. 6 meters"
+        },
+        {
+            "modelType": "qa_model",
+            "llm": "deepset/roberta-base-squad2",
+            "size": "125M",
+            "question": "How tall is the Pyramid of Giza?",
+            "retrieved_documents": "The Great Pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.",
+            "LLM Answer": "<s>",
+            "RAG Answer": " 146.6 meters (481 feet)"
+        },
+        {
+            "modelType": "qa_model",
+            "llm": "bert-large-uncased-whole-word-masking-finetuned-squad",
+            "size": "340M",
+            "question": "How tall is the Pyramid of Giza?",
+            "retrieved_documents": "The Great Pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.",
+            "LLM Answer": "tall",
+            "RAG Answer": "146. 6 meters"
+        }
+    ],
+    [
+        {
+            "modelType": "t5_model",
+            "llm": "t5-base",
+            "size": "220M",
+            "question": "How tall is the Pyramid of Giza?",
+            "retrieved_documents": "The Great Pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.",
+            "LLM Answer": "None",
+            "RAG Answer": "146.6 meters (481 feet)"
+        },
+        {
+            "modelType": "t5_model",
+            "llm": "t5-large",
+            "size": "770M",
+            "question": "How tall is the Pyramid of Giza?",
+            "retrieved_documents": "The Great Pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.",
+            "LLM Answer": "False",
+            "RAG Answer": "140 meters (481 feet)"
+        }
+    ]
+]

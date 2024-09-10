@@ -3,10 +3,8 @@
 /ai_notebook.ipynb
 /ai_notebook.pdf
 /experiment2CasualModelParagraphRetreavel_1.json
-/experiments
 /experiments.txt
 /main.py
-/notes.md
 /readme_uslovi_za_polaganje.md
 /results.json
 /results_simple_question.json
@@ -17,3 +15,7 @@
 /IA_PrvaStrana.pdf
 /notes.pdf
 /.DS_Store
+/temp/*
+/.quarto/
+/notes/*
+/ML-Retrieval-Augmented Generation.pdf

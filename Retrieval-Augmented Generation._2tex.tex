@@ -14,19 +14,18 @@ comparing the accuracy of question-answering between standard LLMs and
     those integrated with RAG systems, this study explores the potential
     improvements in performance and robustness that RAG systems can offer.
     \end{abstract}
-
     \begin{keywords}
     %  - Leave one blank line after the Abstract and write your Key-Words (6 - 10 words)\\
 \end{keywords}
 
 \begin{dates}
-{\break
-\color{red}
-Received: May 31, 2019. Revised: May 4, 2020. Accepted: May 22, 2020. Published: May 29, 2020
-\break(WSEAS will fill these dates in case of final acceptance, following strictly our database and possible email
-communication)}
+  {\break
+  \color{red}
+  Received: May 31, 2019. Revised: May 4, 2020. Accepted: May 22, 2020. Published: May 29, 2020
+  \break(WSEAS will fill these dates in case of final acceptance, following strictly our database and possible email
+  communication)}
 \end{dates}
-  \end{@twocolumnfalse}
+\end{@twocolumnfalse}
 \vspace{2ex} 
 ]
 
@@ -44,7 +43,7 @@ extensive usages, and we are still rediscovering what they can be used
 for. However, there are some aspects that are not ideal, for example:
 
 \begin{itemize}
-% \tightlist
+
 \item
   \textbf{Limitation in Memory}: LLMs are trained once on a set of data.
   Once trained, they cannot answer questions or generate text on data
@@ -66,7 +65,6 @@ for. However, there are some aspects that are not ideal, for example:
 
 \section{What is Retrieval augmented generation}
 
-% //TODO UNcomment
 \emph{Retrieval-augmented generation (RAG) is an advanced artificial intelligence (AI) technique that combines information retrieval with text generation, allowing AI models to retrieve relevant information from a knowledge source and incorporate it into generated text.} (Miesle, P. no date) \cite{cite6}
 
 
@@ -91,7 +89,7 @@ their memory can be extended without the need for training or adding
 additional parameters. The system has two types of memory:
 
 \begin{itemize}
-% \tightlist
+
 \item
   \textbf{Parametric memory} - refers to the knowledge in the LLM
   generative model
@@ -110,7 +108,7 @@ on various topics. Therefor a production RAG system in the context of
 LLMs is build from 2 sub-systems:
 
 \begin{itemize}
-% \tightlist
+
 \item
   \textbf{Retrieval and Augmentation}
 \item
@@ -124,7 +122,7 @@ From the perspective of usage of the RAG system, generating an answer is
 done in three phases:
 
 \begin{itemize}
-% \tightlist
+
 \item
   Phase 1 Retrieval, Knowledge retrieval, When asked a question the RAG
   retrieval system will retrieve all known information by submitting an
@@ -220,14 +218,14 @@ here as a text block. The text blocks are stored as embeddings.
 This part of the system is composed of two components or modules:
 
 \begin{itemize}
-% \tightlist
+
 \item
   Sentence Embedding Model
 \item
   Non-parametric memory
 \end{itemize}
 
-\subsection{Storing Phase}\label{storing-phase}
+\subsection{Storing Phase}
 
 The idea of the retrieval phase is for a given text block to create
 embedding and store this embedding in the non-parametric memory.
@@ -235,11 +233,9 @@ embedding and store this embedding in the non-parametric memory.
 The process is as follows:
 
 \begin{itemize}
-% \tightlist
 \item
   \begin{enumerate}
   \def\labelenumi{\arabic{enumi}.}
-  % \tightlist
   \item
     Take a text block, sentence, or paragraph.
   \end{enumerate}
@@ -247,7 +243,6 @@ The process is as follows:
   \begin{enumerate}
   \def\labelenumi{\arabic{enumi}.}
   \setcounter{enumi}{1}
-  % \tightlist
   \item
     Passes this text to the Sentence Embedding model to get an
     embedding(dense vector).
@@ -256,12 +251,10 @@ The process is as follows:
   \begin{enumerate}
   \def\labelenumi{\arabic{enumi}.}
   \setcounter{enumi}{2}
-  % \tightlist
   \item
     Stores this embedding in a non-parametric memory.
   \end{enumerate}
 \end{itemize}
-
 \begin{verbatim}
 Sentence
 |
@@ -283,7 +276,6 @@ The process is as follows:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
-% \tightlist
 \item
   Takes input text, referred to as a query.
 \item
@@ -313,8 +305,8 @@ Question
                                                          -> Answer
 \end{verbatim}
 
-    \subsubsection{Non-parametric memory - vector
-databases}\label{non-parametric-memory---vector-databases}
+\subsubsection{Non-parametric memory - vector
+databases}
 
 The non-parametric memory is usually a dense vector database. Besides
 being able to store vectors, a vector database must also have the
@@ -339,7 +331,7 @@ are imported) dense vector embeddings with up to 1M vectors with 64
 bytes per dimension and also with 100M vectors from DeepDb that have a
 dimension of 96 and 8 bytes per dimension.
 
-\paragraph{Popular vector databases}\label{popular-vector-databases}
+\paragraph{Popular vector databases}
 
 In recent years, there have been significant developments in the field
 of vector databases. Several new dense vector databases have emerged,
@@ -349,7 +341,7 @@ incorporating vector capabilities.
 Currently, (as of 2024), these are the options for dense vector storage:
 
 \begin{itemize}
-% tightlist
+
 \item
   Redis Vector Similarity Search (VSS)
 \item
@@ -441,7 +433,7 @@ embeddings is the same as the created sentence embedding. Here are some
 of the popular pooling methods used in sentence embedding models:
 
 \begin{itemize}
-% tightlist
+
 \item
   Mean Pooling
 \item
@@ -454,10 +446,9 @@ of the popular pooling methods used in sentence embedding models:
 
 The most representative method is Mean Pooling, which calculates an
 embedding using the mean:
-
-$$
-meanpool(e_1, e_2, \ldots, e_n) = \frac{1}{n} \sum_{i=1}^{n} e_i
-$$
+\begin{equation}
+  meanpool(e_1, e_2, \ldots, e_n) = \frac{1}{n} \sum_{i=1}^{n} e_i
+\end{equation}
 
 According to research paper \cite{cite5} by Miesle et al.~(2023), Mean
 Pooling, Max Pooling, and CLS Token are commonly used techniques.
@@ -470,6 +461,7 @@ entire sentences.
 
 The requirement of the sentence embedding model is as follows:
 
+% TODO question: should i enumerate some of the mathematical expressions, not sure since there are no formulas in this section
 For every three blocks of text \(A\), \(P\), \(N\), the model \(SE\) is
 to provide three embeddings \(SE(A)\), \(SE(P)\), \(SE(N)\),\\
 such that: if \(A\) and \(P\) are semantically more similar \(A\) and
@@ -484,10 +476,7 @@ describing it as a vector.}
 representing the meaning and information of sentences in a way that
 enables the measurement of semantic information.}
 
-    % \newpage
-
-\subsubsection{Siamese training network and loss
-functions}\label{siamese-training-network-and-loss-functions}
+\subsubsection{Siamese training network and loss functions}
 
 Up to this point, I have explained how a sentence embedding model works,
 including its input and output. Even though the input and output are in
@@ -505,13 +494,13 @@ copies of the same neural network. These two networks share the same
 parameters. The network ends with a loss function. Popular lost
 functions are contrastive loss and the triplet loss function.
 
-\paragraph{Contrastive loss function}\label{contrastive-loss-function}
+\paragraph{Contrastive loss function}
 
 Contrastive loss function uses the Siamese network. The training set
 elements consist of two text blocks \(A\), \(C\) where:
 
 \begin{itemize}
-% tightlist
+
 \item
   \(A\) - is called an anchor case, it is used to compare against
 \item
@@ -532,32 +521,37 @@ elements consist of two text blocks \(A\), \(C\) where:
         \                     /
          \                   /
             Contrastive Loss
-                Function
+               Function
 \end{verbatim}
 
 The networks end's with a contrastive loss function that is given with
-the following formula: 
-\[ Loss =  \frac{1}{2} (y*D(A,C)^2 + (1-y)*max(0,m-D(A,C))^2) \]
-
+the following formula:
+\begin{equation} 
+  Loss =  \frac{1}{2} (y*D(A,C)^2 + (1-y)*max(0,m-D(A,C))^2)
+\end{equation}
 In the previous function \(y\) can be 1 or 0. This is because the
 network can be trained on cases with similar and dissimilar embeddings.
 
 \begin{itemize}
-% \tightlist
+
 \item
-  Similar embeddings (y=1), the form of the loss function is: \[
-   Loss = \frac{1}{2}(D(A,C))
-   \]
+  Similar embeddings (y=1), the form of the loss function is: 
+  \begin{equation}
+    Loss = \frac{1}{2}(D(A,C))
+  \end{equation}
+
 \item
-  Dissimilar embeddings (y=0), the form of the loss function is: \[
-  Loss =  \frac{1}{2}(max(0,m-D(A,C))^2)
-  \] In this case \(m\) acts as a kind of tolerance level and the
+  Dissimilar embeddings (y=0), the form of the loss function is: 
+  \begin{equation}
+    Loss =  \frac{1}{2}(max(0,m-D(A,C))^2)
+  \end{equation}
+  In this case \(m\) acts as a kind of tolerance level and the
   function is triggered only for a distance bigger than \(m\).
 \end{itemize}
 
 % \newpage
 
-\paragraph{Triplet Loss function}\label{triplet-loss-function}
+\paragraph{Triplet Loss function}
 
 Similarly to the Contrastive loss function training method, the triplet
 loss function uses a variation of the Siamese network where instead of
@@ -592,9 +586,11 @@ This Siamese network ends with a triplet distance activation function.
 The function calculates the distance \(D(A,P)\) \(D(A,N)\) and is
 activated if \(D(A,P)\) \textgreater{} \(D(A,N) + margin\). The
 triplet function from the perspective of the Sentence embedder model is
-a Loss function and its output is used for training. \[
-Loss = max(0, D(A,P) - D(A,N) + margin)
-\] \cite{cite5}
+a Loss function and its output is used for training. 
+
+\begin{equation}
+  Loss = max(0, D(A,P) - D(A,N) + margin) 
+\end{equation}\cite{cite5}
 
 If \(D(A,P) < D(A,N)\), the function returns 0 and nothing should be
 adjusted for the current test case. If \(D(A,P) > D(A,N)\), then the
@@ -604,10 +600,12 @@ give a bias to the loss function and make sure that only for really
 small \(D(A,P)\) compared to \(D(A,N)\) the model should not be
 adjusted, but for most cases, it will be adjusted. For no adjustments to
 happen, the following condition should be true:
-\(D(A,P) + margin < D(A,N)\).
 
-\subparagraph{Contrastive vs Triplet Loss
-function}\label{contrastive-vs-triplet-loss-function}
+\begin{equation}
+  D(A,P) + margin < D(A,N)
+\end{equation}
+
+\subparagraph{Contrastive vs Triplet Loss function}
 
 Both loss functions are used for training the embedder to detect
 semantic similarities. The primary difference is that contrastive loss
@@ -635,15 +633,18 @@ between the embeddings won't be enough since it does not satisfy the
 distance requirements. That's why cosine distance is used:
 
 % \[
-% D(A, B) = 1 - \cos(\theta), \mathrm{where} \ \theta \ \mathrm{is \ the \ angle \ between} \ A \ \mathrm{and} \ B
+% D(A, B) = 1 - \cos(\theta), 
 % \]
+% \[
+% \mathrm{where} \ \theta \ \mathrm{is \ the \ angle \ between} \ A \ \mathrm{and} \ B
+% \]
+% todo check this equation with the one on top
 
-\[
-D(A, B) = 1 - \cos(\theta), 
-\]
-\[
-\mathrm{where} \ \theta \ \mathrm{is \ the \ angle \ between} \ A \ \mathrm{and} \ B
-\]
+\begin{equation}
+  D(A, B) = 1 - \cos(\theta)
+\end{equation}
+
+where \(\theta\) is the angle between \(A\) and \(B\).
 
 At this point, all the components of the sentence embedding model are
 explained. A representative example of a sentence embedding model is
@@ -665,14 +666,16 @@ Is the type of rag described in this document.
 
 Focuses on improving the retrieval of embeddings or data. It adds
 additional \textbf{pre-retrieval} and \textbf{post-retrieval} phase. In
-the pre-retrieve several optimization methods are employed like: * Query
+the pre-retrieve several optimization methods are employed like: 
+% TODO this should be a list
+* Query
 optimization * Storage optimization and retrieval * Extending the stored
 data with metadata In the \textbf{post-retrieval} phase idea is to
 create more usable context from the retrieved data. The data now is
 re-ranked and compressed, cleaned up. This concept is derived from the
 work of Gao et al.~(2023) \cite{cite4}.
 
-\subsubsection{Modular RAG}\label{modular-rag}
+\subsubsection{Modular RAG}
 
 This type of architecture tries to split the system in to more modules
 that can be independently scaled and optimized. Example: Query
@@ -680,7 +683,7 @@ Processing Module, Retriever, Re-ranking, Context Management, Generation
 Module.
 
 \subsection{Different RAG methods and
-models}\label{different-rag-methods-and-models}
+models}
 
 \subsubsection{RAG-Sequence Model}
 
@@ -746,15 +749,16 @@ It gives the probability that the LLM can generate the answer and the
 rational based on the question. It is given by the joint probability
 formula:
 
-\[
-\begin{array}{c}
-P_{sc} = P(A,B \mid Q) = P(A \mid Q) \cdot P(B \mid Q, A) \\
- \mathrm{Where:} \\
-A : \mathrm{Answer} \\
-B : \mathrm{Rationale} \\
-Q : \mathrm{Question}
-\end{array}
-\]
+\begin{equation}
+  P_{sc} = P(A,B \mid Q) = P(A \mid Q) \cdot P(B \mid Q, A)
+\end{equation}
+  
+Where:
+\begin{itemize}
+  \item \( A \) is the answer
+  \item \( B \) is the rationale
+  \item \( Q \) is the question
+\end{itemize}
 
 The value can be retreated from the LLM. It simply says what is the
 probability that the answer been generated based on the question and the
@@ -772,9 +776,11 @@ score is the conditional probability of $Yes$ been generated by the
 LLM given the input of a question $Q$, answer $A$, rational $B$ and self
 reflected statement $R$.
 
-Self-reflection score: \[
-P_{sr} = P("Yes"|Q, A, B, R)
-\]
+Self-reflection score: 
+
+\begin{equation}
+  P_{sr} = P("Yes"|Q, A, B, R)  
+\end{equation}
 
 The process is repeated for all the clusters, and a \(p_{sr}*p_{sc}\) is
 calculated. The answer with the highest \(p_{sr}*p_{sc}\) score is
@@ -916,7 +922,7 @@ There will be 3 types of RAG augmentation, in this text called
 retrieval:
 
 \begin{itemize}
-% \tightlist
+
 \item
   Retrieval of one sentence, will create a context for the question from
   one sentence using a facts sentence based database.
@@ -994,7 +1000,7 @@ fact-based question: ``How tall is the Pyramid of Giza?''. The
 experiment parameters are as follows:
 
 \begin{itemize}
-% \tightlist
+
 \item
   \textbf{Question Type}: Fact-based
 \item
@@ -1091,7 +1097,7 @@ list-based question: ``What materials were used in constructing the
 Great Wall of China?''. The experiment parameters are as follows:
 
 \begin{itemize}
-% \tightlist
+
 \item
   \textbf{Question Type}: List-based Question
 \item
@@ -1196,7 +1202,7 @@ be smaller and paragraphs hold more context and information than the
 sentences. The experiment parameters are as follows:
 
 \begin{itemize}
-% \tightlist
+
 \item
   \textbf{Question Type}: Fact-based Question
 \item
@@ -1292,7 +1298,7 @@ Great Wall of China?'' using paragraph retrieval with one retrieved
 document. The experiment parameters are as follows:
 
 \begin{itemize}
-% \tightlist
+
 \item
   \textbf{Question Type}: List-based Question
 \item
@@ -1405,7 +1411,7 @@ with three retrieved documents. The experiment parameters are as
 follows:
 
 \begin{itemize}
-% \tightlist
+
 \item
   \textbf{Question Type}: Synthesis-based Question
 \item
@@ -1530,7 +1536,7 @@ models with parametric memory. Compared to models solely relying on
 parametric memory, RAG systems offer several advantages:
 
 \begin{itemize}
-% \tightlist
+
 \item
   \textbf{Horizontally Scalable}: RAG systems can efficiently scale by
   distributing the retrieval process across multiple nodes, allowing for

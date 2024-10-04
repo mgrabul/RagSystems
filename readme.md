@@ -39,6 +39,8 @@ jupyter nbconvert --to pdf Retrieval-Augmented\ Generation.ipynb
 
 jupyter nbconvert --to pdf Retrieval-Augmented\ Generation.ipynb --output Retrieval-Augmented\ Generation_v1.pdf
 
+jupyter nbconvert --to latex Retrieval-Augmented\ Generation.ipynb --output Retrieval-Augmented\ Generation.tex
+
 ```
 In visual studio code
 ```

@@ -1,0 +1,2406 @@
+\documentclass[11pt]{wseas}
+
+% Essential packages
+\usepackage{graphicx}   % For including images
+\usepackage{amsmath}    % For mathematical equations
+\usepackage{float}      % For float placement control
+\usepackage{longtable}  % For long tables that span multiple pages
+\usepackage{booktabs}   % For better table formatting
+\usepackage{hyperref}   % For hyperlinks (make sure wseas.cls doesn't already include it)
+\usepackage{fancyvrb}  
+\usepackage{listings}
+\usepackage{pygments} % Include pygments styling
+% Custom colors (if necessary)
+\usepackage{xcolor}     % For text and link colors
+
+% Define link colors (you can adjust these as needed)
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=green,
+    urlcolor=cyan
+}
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \tableofcontents
+
+    \newpage
+
+\section{Topic}\label{topic}
+
+Extending the capabilities of LLMs using Retrieval-Augmented Generation
+techniques. Comparing the accuracy of answering questions between
+standard LLM vs.~RAG LLM for different LLMs.
+
+    \section{Abstract}\label{abstract}
+
+This research aims to enhance the capabilities of Large Language Models
+(LLMs) using Retrieval-Augmented Generation (RAG) techniques. By
+comparing the accuracy of question-answering between standard LLMs and
+those integrated with RAG systems, this study explores the potential
+improvements in performance and robustness that RAG systems can offer.
+
+    \section{Introduction}\label{introduction}
+
+LLMs are quite useful and have taken the world of AI by storm. They have
+extensive usages, and we are still rediscovering what they can be used
+for. However, there are some aspects that are not ideal, for example:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Limitation in Memory}: LLMs are trained once on a set of data.
+  Once trained, they cannot answer questions or generate text on data
+  they have not been trained on (problem of under-fitting and high
+  bias).
+\item
+  \textbf{Hardware Requirements and Cost}: Running useful
+  general-purpose LLM requires serious hardware capabilities, which
+  comes with additional costs.
+\item
+  \textbf{Privacy}: Large and useful LLMs are typically run by
+  companies, requiring users to send data to externally managed servers.
+  This may pose problems for individual users who need to submit private
+  data and for companies, especially with GDPR requirements that might
+  not be satisfied.
+\end{itemize}
+
+    \newpage
+
+\section{What is Retrieval augmented
+generation}\label{what-is-retrieval-augmented-generation}
+
+\emph{Retrieval-augmented generation (RAG) is an advanced artificial
+intelligence (AI) technique that combines information retrieval with
+text generation, allowing AI models to retrieve relevant information
+from a knowledge source and incorporate it into generated text.}
+(Miesle, P. no date) {[}6{]}
+
+The basic idea around a RAG system is extending the capabilities of an
+already trained machine learning model (MLM) in particular an LLM.
+
+One common problem in LLMs is that in order get a correct output/answer
+the LLM needs to be trained on a dataset that is relevant to the
+input/question. For example, asking an LLM who is the winner of 2024
+euro championship will not result in a correct answer if the model is
+trained before 2024. Regardless of the capabilities of the chosen LLM,
+it just does not contain memory related to this information. In case
+like this the LLM will need to be retrained. Different problem that
+occurs in LLMs and machine models in general is that perhaps the LLM is
+not powerful enough for the given task. Example for the second case is
+that if a model is asked extremely difficult question, even though the
+model has been trained on all the relevant data it might still not
+produce correct output in case of a difficult task.
+
+Rag systems do not suffer as much as other models from this problem,
+their memory can be extended without the need for training or adding
+additional parameters. The system has two types of memory:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Parametric memory} - refers to the knowledge in the LLM
+  generative model
+\item
+  \textbf{Non-parametric memory} - stored in special types of databases.
+  This non-parametric memory can be extended with additional knowledge
+  easily and it still can be used by the LLM. \textbf{This is the core
+  idea in RAG. Without any additional training new knowledge can be made
+  available to the LLM.}
+\end{itemize}
+
+The RAG technique integrates a retrieval model and generative model. RAG
+systems usually work around extending the capabilities of NLP(Natural
+Language processing models) giving them additional memory or information
+on various topics. Therefor a production RAG system in the context of
+LLMs is build from 2 sub-systems:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Retrieval and Augmentation}
+\item
+  \textbf{Generative AI component} or parametric memory, it is usually
+  language generation tool like LLMs
+\end{itemize}
+
+\newpage
+
+From the perspective of usage of the RAG system, generating an answer is
+done in three phases:
+
+\begin{itemize}
+\tightlist
+\item
+  Phase 1 Retrieval, Knowledge retrieval, When asked a question the RAG
+  retrieval system will retrieve all known information by submitting an
+  appropriate query to the non-parametric memory.
+\item
+  Phase 2 Augmentation, with the retrieved information, a context around
+  the question is created, the context should contain all information
+  for answering the question.
+\item
+  Phase 3 Generation, The context and question will be passed to an LLM
+  that will generate an answer.
+\end{itemize}
+
+\begin{verbatim}
+Question  
+    |
+     ---> | Retrieval and | 
+          | Augmentation  |
+                 |
+                  --> (context + question)
+                               |
+                                ---> | Generative |
+                                     |     AI     |
+                                     |  Component  | --> Answer             
+              
+\end{verbatim}
+
+    \newpage
+
+\section{Generative AI component or a LLM
+transformer}\label{generative-ai-component-or-a-llm-transformer}
+
+The Generative AI component is an LLM transformer. Typically, the
+transformer has two main components, the encoder and the decoder. The
+input text is initially tokenized, meaning it is split into small
+continuous lists of characters. In the next step, the model transforms
+the tokens into fixed-size vectors called embeddings. In the final step,
+in a so-called attention layer, an additional linear transformation on
+the embeddings is performed, making them dependent on the context they
+appear in. These context-dependent embeddings, also called contextual
+embeddings, are the output of the encoder and the input to the decoder.
+The encoder is of extreme importance in this text as it is a crucial
+part of a RAG system.
+
+\emph{Embeddings are vector representations, typically produced by a
+neural network, whose main objective is to map (embed) the input media
+item into a vector space, where the locality encodes the semantics of
+the input} {[}2{]}.
+
+The decoder takes the input and generates new embeddings and again
+combines the output with the embedded tokens to produce new tokens. The
+vector transformation where token embeddings are transformed to
+different ones to capture the context of the input text is called
+attention. It is described in the paper by Vaswani et al.~(2017)
+\href{https://arxiv.org/pdf/1706.03762}{Attention Is All You Need}: As a
+result of the initial research paper on transformers: The LLM
+transformers do not suffer from maintaining context and dependencies as
+much as recurrent or convolutional networks.
+
+Transformers can be trained significantly faster than architectures
+based on recurrent or convolutional layers.
+
+\emph{Transformers outperform the best previously reported models in
+translation.} According to Vaswani et al.~{[}1{]}
+
+The quality of the generated text generally depends on the number of the
+parameters of the model. Regardless of the quality of the output, every
+LLM for a given input is expected to generate grammatically correct text
+and semantically related to the input. For example if I ask even the
+smallest LLM ``What is the capital of France?'' it might return ``Berlin
+is the capital of France''. The answers will perhaps not be correct, but
+they will contain the context of the question and grammatically correct.
+
+\textbf{The generative component of the RAG system needs to be able for
+a given input and context to generate grammatically correct sentences
+related to the given context.}
+
+\textbf{This is exactly what is achieved with the LLM transformers and
+that is why they are ideal to be used in the generation phase of the RAG
+system.}
+
+    \newpage
+
+\section{Retrieval System}\label{retrieval-system}
+
+The retrieval system is used to store and retrieve knowledge outside the
+knowledge maintained in the LLM. The knowledge here is in the form of
+paragraphs, sentences, or other forms of continuous text, referred to
+here as a text block. The text blocks are stored as embeddings.
+
+This part of the system is composed of two components or modules:
+
+\begin{itemize}
+\tightlist
+\item
+  Sentence Embedding Model
+\item
+  Non-parametric memory
+\end{itemize}
+
+\subsection{Storing Phase}\label{storing-phase}
+
+The idea of the retrieval phase is for a given text block to create
+embedding and store this embedding in the non-parametric memory.
+
+The process is as follows:
+
+\begin{itemize}
+\tightlist
+\item
+  \begin{enumerate}
+  \def\labelenumi{\arabic{enumi}.}
+  \tightlist
+  \item
+    Take a text block, sentence, or paragraph.
+  \end{enumerate}
+\item
+  \begin{enumerate}
+  \def\labelenumi{\arabic{enumi}.}
+  \setcounter{enumi}{1}
+  \tightlist
+  \item
+    Passes this text to the Sentence Embedding model to get an
+    embedding(dense vector).
+  \end{enumerate}
+\item
+  \begin{enumerate}
+  \def\labelenumi{\arabic{enumi}.}
+  \setcounter{enumi}{2}
+  \tightlist
+  \item
+    Stores this embedding in a non-parametric memory.
+  \end{enumerate}
+\end{itemize}
+
+\begin{verbatim}
+Sentence
+|
+ -> Tokenization
+     |
+      -> Embedded Vectors
+          |
+           -> Contextual Vectors
+\end{verbatim}
+
+\newpage
+
+\subsection{Retrieval Phase}\label{retrieval-phase}
+
+The idea of the retrieval phase is to return all relevant information
+from the non-parametric memory for a given text, query, or question.
+
+The process is as follows:
+
+\begin{enumerate}
+% \def\labelenumi{\arabic{enumi})}
+% \tightlist
+  \item
+  Takes input text, referred to as a query.
+  \item
+  Passes the query text to the Sentence Embedding model to get a query
+  embedding or a query dense vector.
+  \item
+  Using the query embedding, fetches a list of related knowledge from
+  the non-parametric memory.
+\end{enumerate}
+
+\begin{verbatim}
+Question 
+   |
+    -> Sentence Embedder 
+   |            | 
+   |             -> Embedding 
+   |                 |
+   |                  -> Non-Parametric memory 
+   |                         |
+   |                          -> Retrieved Documents
+   |                                   |
+   |                                    -> Context
+   |                                          | 
+   |                                           -->| Generative |
+    --------------------------------------------->| Component  |
+                                                        |
+                                                         -> Answer
+                                            
+\end{verbatim}
+
+    \subsubsection{Non-parametric memory - vector
+databases}\label{non-parametric-memory---vector-databases}
+
+The non-parametric memory is usually a dense vector database. Besides
+being able to store vectors, a vector database must also have the
+capability to query for the k the closest vectors to a given input
+vector. Like any database, fast storage and querying are important.
+Ideally, these databases should be able to store data on disk to enable
+horizontal scaling and data distribution, which are essential for a RAG
+system to achieve scalability compared to a traditional LLM model. This
+project will use the Faiss library, as it sutisfies the conditions for
+vector storage and quering the k closest vectors, it laks the automatic
+distributive scaling but a full DB solution is not required for the
+project in this paper.
+
+\emph{The Faiss library is dedicated to vector similarity search, a core
+functionality of vector databases. Faiss is a toolkit of indexing
+methods and related primitives used to search, cluster, compress, and
+transform vectors} (Douze et al., 2024, p.~1) {[}2{]}.
+
+According to the referenced research, the Faiss database was tested with
+768-dimensional ContrieverDb (name of the database from where vectors
+are imported) dense vector embeddings with up to 1M vectors with 64
+bytes per dimension and also with 100M vectors from DeepDb that have a
+dimension of 96 and 8 bytes per dimension.
+
+\paragraph{Popular vector databases}\label{popular-vector-databases}
+
+In recent years, there have been significant developments in the field
+of vector databases. Several new dense vector databases have emerged,
+and some older databases, like NodeDB and MongoDB, have begun
+incorporating vector capabilities.
+
+Currently, (as of 2024), these are the options for dense vector storage:
+
+\begin{itemize}
+\tightlist
+\item
+  Redis Vector Similarity Search (VSS)
+\item
+  Pinecone - exclusively managed, closed source
+\item
+  Weaviate - open source
+\item
+  Milvus - open source
+\item
+  Qdrant - open source
+\item
+  Vespa - open source
+\item
+  Cloudflare Vectorize - exclusively managed, closed source
+\item
+  MongoDB Atlas - fully managed, closed source
+\item
+  Postges, pgvector - open-sourced
+\end{itemize}
+
+\emph{The previous information is taken form various blog posts (Ali, M.
+2023; Cloudflare Docs, no date; Kehrer, K. 2023; Benedict, 2023;
+Bratanič, T., 2023; Pondhouse Data 2023)} {[}9{]} {[}10{]} {[}11{]}
+{[}12{]} {[}13{]} {[}14{]} {[}15{]} {[}16{]}
+
+    \subsubsection{Sentence embedding
+models}\label{sentence-embedding-models}
+
+Sentence embedding models are derived from LLM transformer models. LLMs
+transformer contains two general components, encoder and decoder. As
+described in the section ``Generative AI component or a LLM
+transformer'', the input of an encoder is a text, the output is a
+contextual embedding.
+
+From particular interest for the Sentence embedding models and the RAG
+system is the encoder layer of the LLMs transformer.
+
+Here is a description on how sentences are converted to embedding by an
+encoder.
+
+\textbf{LLM Transformer's encoder}
+
+\begin{verbatim}
+Sentence
+|
+ -> Tokenization
+     |
+      -> Embedded Vectors
+          |
+           -> Contextual Vectors
+\end{verbatim}
+
+The Sentence embedding models incorporates the LLM transformers encoder
+layer and adds additional layer of \emph{pooling}. This layer operates
+on the token embedding and groups them in one embedding. This outputs
+embedding are dependent on the context of the input text, and are called
+sentence contextual embedding or sentence embedding. All the sentence
+contextual embedding have the same size, and it is equal to the size of
+the token embedding.
+
+\newpage
+
+Here is a more visual description on the process of creating sentence
+embedding by a Sentence embedding model:
+
+\textbf{Sentence embedding model}
+
+\begin{verbatim}
+Sentence 
+ |
+  -> Tokenization
+      | 
+       -> Embedded Vectors
+           | 
+            -> Contextual Vectors
+                | 
+                 -> | Mean Pooling            |  
+                    | Max Pooling             | 
+                    | CLS Token               |
+                    | Attention-based Pooling |
+                       | 
+                        -> Sentence embedding
+\end{verbatim}
+
+    \subsubsection{Pooling}\label{pooling}
+
+The pooling phase involves the task of combining multiple contextual
+token embeddings into one sentence embedding. The dimension of the token
+embeddings is the same as the created sentence embedding. Here are some
+of the popular pooling methods used in sentence embedding models:
+
+\begin{itemize}
+\tightlist
+\item
+  Mean Pooling
+\item
+  Max Pooling
+\item
+  CLS Token
+\item
+  Attention-based Pooling
+\end{itemize}
+
+The most representative method is Mean Pooling, which calculates an
+embedding using the mean:
+
+\[
+\text{meanpool}(e_1, e_2, \ldots, e_n) = \frac{1}{n} \sum_{i=1}^{n} e_i
+\]
+
+According to research paper {[}5{]} by Miesle et al.~(2023), Mean
+Pooling, Max Pooling, and CLS Token are commonly used techniques.
+
+The goal of sentence embedding models is to produce an embedding or
+vector from text. As mentioned before, they are built by adding a layer
+to the LLM's transformer encoder component. LLMs produce token
+embeddings, while sentence embedding models produce embeddings for
+entire sentences.
+
+The requirement of the sentence embedding model is as follows:
+
+For every three blocks of text \(A\), \(P\), \(N\), the model \(SE\) is
+to provide three embeddings \(SE(A)\), \(SE(P)\), \(SE(N)\),\\
+such that: if \(A\) and \(P\) are semantically more similar \(A\) and
+\(N\), then the distance \(distance(SE(A), SE(P))\) \textless{}
+\(distance(SE(A), SE(N))\).
+
+\textbf{The simple interpretation is that the sentence embedding model
+takes a block of text and captures its meaning or semantics by
+describing it as a vector.}
+
+\textbf{This is an extremely useful feature because it allows for
+representing the meaning and information of sentences in a way that
+enables the measurement of semantic information.}
+
+    \newpage
+
+\subsubsection{Siamese training network and loss
+functions}\label{siamese-training-network-and-loss-functions}
+
+Up to this point, I have explained how a sentence embedding model works,
+including its input and output. Even though the input and output are in
+the required format, sentence embedding models are additionally trained
+to meet the semantic requirements defined above.
+
+The main issue during training is that we don't really know the exact
+output for a block of text, it can be any embedding. It is the relative
+distance between the embeddings that is important. Semantically close
+embeddings should be closer than embeddings that have different
+meanings. To solve this problem, the model is trained using a Siamese
+network or a variation of the Siamese network. Initially the sentence
+embedder is trained with Siamese network that conceptual contains two
+copies of the same neural network. These two networks share the same
+parameters. The network ends with a loss function. Popular lost
+functions are contrastive loss and the triplet loss function.
+
+\paragraph{Contrastive loss function}\label{contrastive-loss-function}
+
+Contrastive loss function uses the Siamese network. The training set
+elements consist of two text blocks \(A\), \(C\) where:
+
+\begin{itemize}
+\tightlist
+\item
+  \(A\) - is called an anchor case, it is used to compare against
+\item
+  \(C\) - means positive or negative case, is either a text similar to
+  \(A\) or a text block that is not similar to \(A\)
+\end{itemize}
+
+\emph{Siamese network with Contrastive Loss function}
+
+\begin{verbatim}
+ Anchor                        Positive/Negative
+  Input                            Input
+    |                                |
+ Shared Network                Shared Network 
+    |                                |
+ Anchor Embedding          Positive/Negative Embedding
+       \                          /
+        \                        /
+         \                      /
+              Contrastive Loss
+                  Function
+\end{verbatim}
+
+The networks end's with a contrastive loss function that is given with
+the following formula: \[
+Loss =  \frac{1}{2} (y*D(A,C)^2 + (1-y)*max(0,m-D(A,C))^2)
+\]
+
+In the previous function \(y\) can be 1 or 0. This is because the
+network can be trained on cases with similar and dissimilar embeddings.
+
+\begin{itemize}
+\tightlist
+\item
+  Similar embeddings (y=1), the form of the loss function is: \[
+   Loss = \frac{1}{2}(D(A,C))
+   \]
+\item
+  Dissimilar embeddings (y=0), the form of the loss function is: \[
+  Loss =  \frac{1}{2}(max(0,m-D(A,C))^2)
+  \] In this case \(m\) acts as a kind of tolerance level and the
+  function is triggered only for a distance bigger than \(m\).
+\end{itemize}
+
+\newpage
+
+\paragraph{Triplet Loss function}\label{triplet-loss-function}
+
+Similarly to the Contrastive loss function training method, the triplet
+loss function uses a variation of the Siamese network where instead of
+two networks, three networks are used. One single test case consists of
+three text blocks: \(A\), \(P\), and \(N\). * The text block \(A\) is
+used for comparison and is called an anchor. * The text block \(P\) is
+semantically similar to \(A\) and is called the positive case. * The
+text block \(N\) is semantically different from \(A\) and \(P\) and is
+called the negative case.
+
+\emph{Siamese network with triplet loss function}
+
+\begin{verbatim}
+                   
+Anchor           Positive           Negative
+ Input             Input            Input
+   |                 |                |
+Shared            Shared            Shared
+Network           Network           Network
+   |                 |                |
+Anchor           Positive           Negative
+Embedding        Embedding          Embedding
+      \              |               /
+       \             |              /  
+        \            |             /
+         \           |            /
+             Triplet Distance
+               Loss function     
+\end{verbatim}
+
+This Siamese network ends with a triplet distance activation function.
+The function calculates the distance \(D(A,P)\) \(D(A,N)\) and is
+activated if \(D(A,P)\) \textgreater{} \(D(A,N) + \text{margin}\). The
+triplet function from the perspective of the Sentence embedder model is
+a Loss function and its output is used for training. \[
+Loss = \max(0, D(A,P) - D(A,N) + \text{margin})
+\] {[}5{]}
+
+If \(D(A,P) < D(A,N)\), the function returns 0 and nothing should be
+adjusted for the current test case. If \(D(A,P) > D(A,N)\), then the
+function returns a value greater than 0, so the model's parameters
+should be adjusted to minimize this distance. The margin is there to
+give a bias to the loss function and make sure that only for really
+small \(D(A,P)\) compared to \(D(A,N)\) the model should not be
+adjusted, but for most cases, it will be adjusted. For no adjustments to
+happen, the following condition should be true:
+\(D(A,P) + \text{margin} < D(A,N)\).
+
+\subparagraph{Contrastive vs Triplet Loss
+function}\label{contrastive-vs-triplet-loss-function}
+
+Both loss functions are used for training the embedder to detect
+semantic similarities. The primary difference is that contrastive loss
+is easier to implement in the context of generating the training set. It
+requires two text chunks, whereas triplet loss requires three text
+chunks. On the other hand, triplet loss often provides better results
+during training. Typically, the embedder is trained twice: initially
+with a contrastive loss function and later fine-tuned with a triplet
+loss function.
+
+An important point to mention is that the distance function in the
+triplet or contrastive loss can vary depending on the use case of the
+network. When trying to find semantic similarities, a cosine distance
+between the embeddings is used, whereas in different contexts, a norm
+distance like Euclidean distance can be used.
+
+Cosine distance is based on cosine similarity, or the cosine of the
+angle between the two embeddings. Cosine distance does not measure the
+size of the difference between the embeddings but how similar the
+direction is, as embeddings with close directions have values close to
+0. Orthogonal embeddings have cosine values equal to 0, and embeddings
+that are oppositely directed have cosine values close to -1. The loss
+function needs to be a distance function, so just a cosine similarity
+between the embeddings won't be enough since it does not satisfy the
+distance requirements. That's why cosine distance is used:
+
+\[
+D(A, B) = 1 - \cos(\theta), \text{ where } \theta \text{ is the angle between A and B}
+\]
+
+At this point, all of the components of the sentence embedding model are
+explained. A representative example of a sentence embedding model is
+SBERT, which is based on the popular LLM BERT. This resource will use
+SBERT as a Sentence Embedder Model.
+
+    \newpage
+
+\section{Related work}\label{related-work}
+
+\subsection{General RAG
+systematization}\label{general-rag-systematization}
+
+\subsubsection{Naive RAG}\label{naive-rag}
+
+Is the type of rag described in this document.
+
+\subsubsection{Advanced RAG}\label{advanced-rag}
+
+Focuses on improving the retrieval of embeddings or data. It adds
+additional \textbf{pre-retrieval} and \textbf{post-retrieval} phase. In
+the pre-retrieve several optimization methods are employed like: * Query
+optimization * Storage optimization and retrieval * Extending the stored
+data with metadata In the \textbf{post-retrieval} phase idea is to
+create more usable context from the retrieved data. The data now is
+re-ranked and compressed, cleaned up. This concept is derived from the
+work of Gao et al.~(2023) {[}4{]}.
+
+\subsubsection{Modular RAG}\label{modular-rag}
+
+This type of architecture tries to split the system in to more modules
+that can be independently scaled and optimized. Example: Query
+Processing Module, Retriever, Re-ranking, Context Management, Generation
+Module.
+
+\subsection{Different RAG methods and
+models}\label{different-rag-methods-and-models}
+
+\subsubsection{RAG-Sequence Model}\label{rag-sequence-model}
+
+This type of RAG retrieves \(k\) embeddings, but unlike the standard RAG
+implementation it does not use all the embeddings at the same time to
+generate the answer. Before returning a token, the next token is
+generated \(k\) times, meaning for every embedding one token is
+generated. Then the token with the highest probability is returned. This
+is done for every token.
+
+\emph{The RAG-Sequence model uses the same retrieved document to
+generate the complete sequence. Technically, it treats the retrieved
+document as a single latent variable that is marginalized to get the
+seq2seq probability p(y\textbar x) via a top-K approximation.
+Concretely, the top K documents are retrieved using the retriever, and
+the generator produces the output sequence probability for each
+document, which are then marginalized (Lewis et al., 2024, p.~3)
+{[}3{]}}
+
+\subsubsection{RAG-Token Model}\label{rag-token-model}
+
+Interesting research has been done using the so-called \emph{RAG-Token
+Model}. The RAG technique described, initially retrieves \(k\) documents
+related to the question then augments the context of the question and
+sends the context and the question as an input to an LLM or the
+generator. The RAG-Token Model retrieves new documents on every
+generated token. Once a token is generated, the token is appended to all
+previously generated tokens and this are appended to the initial
+question. This results in a string of the following form ``Question +
+GenerateTockenList''. This new string is then used again as an input in
+the RAG, or as an input for the RAG retrieved. The process retrieves new
+documents for every new generated token and uses this documents to
+generate the next token. This makes sure that every new generated token
+is equally dependent on the question and the non-parametric memory.
+
+\emph{RAG-Token Model, In the RAG-Token model we can draw a different
+latent document for each target token and marginalize accordingly. This
+allows the generator to choose content from several documents when
+producing an answer. Concretely, the top K documents are retrieved using
+the retriever, and then the generator produces a distribution for the
+next output token for each document, before marginalizing, and repeating
+the process with the following output token (Lewis et al., 2024, p.~3)
+{[}3{]}}
+
+\subsection{Iterative RAG}\label{iterative-rag}
+
+One example is the ``Speculative RAG'' described in the paper {[}18{]}
+by (Wang 2024). Based on the question it retrieves \(N\) embeddings. The
+embeddings are then clustered in \(k\) classes using K-means. From the
+\(k\) clusters one embedding is selected per cluster, resulting in k
+embeddings. Then the algorithm uses two LLMs so called a drafter and a
+verifier. The drafter is used to generate the answer called a draft and
+explanation called rational. It is important to note that not all LLMs
+generate rationals. There are some that can do this, but usually the
+model needs to be trained to provide the rational. The RAG-Model from
+Hugginface provides explanations that can be used as a rational, also
+the retrieved embeddings might be used as rationals. Once the answer and
+the rational are generated, the quality of the answer and question is
+measured by the verifier.
+
+\subsubsection{Self-Consistency Score}\label{self-consistency-score}
+
+It gives the probability that the LLM can generate the answer and the
+rational based on the question. It is given by the joint probability
+formula: \[
+ρ_{sc} = P(A,B∣Q) = P(A|Q) * P(B|Q,A) 
+\] Where: - A - answer - B - rational - Q - question
+
+The value can be retreated from the LLM. It simply says what is the
+probability that the answer been generated based on the question and the
+probability that the rational is generated based on the question and the
+answer.
+
+\subsubsection{Self-reflection score}\label{self-reflection-score}
+
+It tries to determine if the rational sports the answer. For this a new
+question R can be formed: Does the rational ``A'' sports the answer
+``B'' for the question ``Q''? The new question is called a
+self-reflected statement and denoted with R. Then the probability of Yes
+been generated from the LLM is measured. In general, the self-reflection
+score is the conditional probability of ``Yes'' been generated by the
+LLM given the input of a question Q, answer A, rational B and self
+reflected statement R.
+
+Self-reflection score: \[
+ρ_{sr} = P("Yes"|Q, A, B, R)
+\]
+
+The process is repeated for all the clusters, and a \(ρ_{sr}*ρ_{sc}\) is
+calculated. The answer with the highest \(ρ_{sr}*ρ_{sc}\) score is
+picked as the most relevant, and it is the answer that is returned.
+
+\newpage
+
+\subsection{Recursive RAG}\label{recursive-rag}
+
+As any recursive algorithm it repeats its self until the results
+satisfies certain criteria. In case of the retrieval, a naive RAG system
+performs good when all the information required for answering the
+question is in the retrieved embedding, but it fails when this
+information is scattered in different embeddings. The Recursive rag
+starts examine the semantically similar documents not only of the
+question but also of the embeddings that are initially retrieved. With
+this it tries to capture all the relevant information. The previous is
+described in the paper from (Karpukhin et al.~2020; Pondhouse Data, no
+date) {[}16{]} {[}17{]}
+
+    \newpage
+
+\section{Research methodology}\label{research-methodology}
+
+In this research, a simple RAG system will be coded. The system will be
+flexible and modular enough so can use different LLMS as generators. The
+system will also have a Retriever that will be able to create embeddings
+based on sentences and also on paragraphs. The retriever will also
+retrieve embeddings based on a question/query. All the chosen LLMs and
+their appropriate RAGs will be asked three different type of Open-domain
+question. This is a type of question that can't be answered with simple
+yes or no and requires accessing a broad range of information to provide
+an answer.
+
+The purpose of the experiments: 1. Compare the differences between a RAG
+answer and a standard LLM. 2. Assess the quality of the models for
+answering different type of questions
+
+\subsection{LLMs}\label{llms}
+
+Depending on the LLMs type, three different LLM models will be used:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Casual models
+\item
+  Question answering models
+\item
+  T5 - conversational models
+\end{enumerate}
+
+Regarding the model size, the experiments will be done on small LLMs
+ranging from 66M up to 1.3B.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3451}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3239}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1549}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1761}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Model
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Description
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Number of Parameters
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Type
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{blenderbot 90M} & Facebook AI's BlenderBot Model & 90M & Causal
+Model \\
+\textbf{GPT-2 124M} & OpenAI's Generative Model & 124M & Causal Model \\
+\textbf{GPT-Neo 125M} & EleutherAI's Generative Model & 125M & Causal
+Model \\
+\textbf{GPT-2 Medium 355M} & OpenAI's Generative Model & 355M & Causal
+Model \\
+\textbf{GPT-2 Large 762M} & OpenAI's Generative Model & 762M & Causal
+Model \\
+\textbf{GPT-Neo 1.3B} & EleutherAI's Generative Model & 1.3B & Causal
+Model \\
+\textbf{DistilBERT} & Hugging Face's Optimized BERT for QA & 66M &
+Question Answering Model \\
+\textbf{roberta-base} & Facebook AI's Optimized BERT for QA & 125M &
+Question Answering Model \\
+\textbf{bert-large-uncased-whole-word-masking-finetuned-squad} &
+Google's NLU Model for QA & 340M & Question Answering Model \\
+\textbf{T5 Base 220M} & Google's Text-to-Text Transfer Transformer &
+220M & T5 - Conversational Model \\
+\textbf{T5 Large 770M} & Google's Text-to-Text Transfer Transformer &
+770M & T5 - Conversational Model \\
+\end{longtable}
+
+\emph{For comparison, the currently used production ChatGPT 3.5,
+according to ChatGPT, has a size of around 175B. ChatGPT 4.0 has not
+exposed any information about the number of parameters or architecture.
+Most probably, both models employ the RAG technique to improve their
+performance.}
+
+It is important to point out that the causal models are not trained for
+answering questions but for generating text based on input. Running a
+RAG around causal LLMs will give an idea of how powerful a RAG system
+can be. The question-answering models are more suitable for usage in a
+RAG system. They extract the continuous character set in the context
+that has the highest probability of being an answer given a specific
+question. The T5 models are conversational models, and although they are
+not specifically trained to answer questions, they are trained to
+maintain a conversation and should outperform the causal and
+question-answering LLMs.
+
+\subsection{Questions}\label{questions}
+
+The questions asked and their types are:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Fact-based question - ``How tall is the Pyramid of Giza?''
+\item
+  List-based question - ``What materials were used in constructing the
+  Great Wall of China?''
+\item
+  Synthesis-based Fact question - ``Which famous structures were either
+  designed or structurally influenced by Gustave Eiffel?''
+\end{enumerate}
+
+The ``Synthesis-based Fact'' question is a type of question where the
+answer needs to be derived from more than one retrieved fact. Unlike the
+other questions, where the answer is directly contained in the
+embedding, correctly answering the synthesis-based fact question implies
+that the retrieval system correctly mapped and retrieved the embeddings,
+and that the LLM is capable of drawing conclusions based on several
+facts.
+
+\newpage
+
+\subsection{Retrieval and
+augmentation}\label{retrieval-and-augmentation}
+
+There will be 3 types of RAG augmentation, in this text called
+retrieval:
+
+\begin{itemize}
+\tightlist
+\item
+  Retrieval of one sentence, will create a context for the question from
+  one sentence using a facts sentence based database.
+\item
+  Retrieval of one paragraph, will create a context for the question
+  from one paragraph using a facts sentence based database.
+\item
+  Retrieval of three paragraphs, will create a context for the question
+  from three paragraphs using a facts paragraph based database. The
+  database for the sentences and paragraphs are created from two files
+  containing semantically correct but not necessarily related sentences
+  and paragraphs.
+\end{itemize}
+
+\subsection{RAG solution}\label{rag-solution}
+
+The RAG system will be a manual solution, not an existing RAG system.
+The idea is to show that even a simple RAG system can extend the
+capabilities of the LLM.
+
+\subsection{Sentence Embedder}\label{sentence-embedder}
+
+For sentence embedder a SBART based embedder will be used:
+
+\begin{verbatim}
+sentence_transformers import SentenceTransformer
+\end{verbatim}
+
+\subsubsection{Non-Parametric library}\label{non-parametric-library}
+
+For non-parametric library \texttt{faiss} will be used, it is more than
+enough to handle this experiment.
+
+\subsubsection{Environment}\label{environment}
+
+Jupyter notebook.
+
+\subsubsection{Hardware}\label{hardware}
+
+For the particular reasons an open sourced LLMs will be used that can be
+run locally on the pc. The chosen hardware is a m3 processor with 36GB
+of RAM.
+
+\subsubsection{Experiments definition}\label{experiments-definition}
+
+In total five experiments will be performed.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3611}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2639}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2083}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Experiment
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Question Type
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Augmentation Type
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Augmentations
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & Fact-based question & Sentence & 1 \\
+2 & List-based question & Sentence & 1 \\
+3 & Fact-based question & Paragraph & 1 \\
+4 & List-based question & Paragraph & 1 \\
+5 & Synthesis-based Fact question & Paragraph & 3 \\
+\end{longtable}
+
+    
+
+    \section{Results and discussion}\label{results-and-discussion}
+
+\subsection{Experiment 1: Fact-based Question - ``How tall is the
+Pyramid of
+Giza?''}\label{experiment-1-fact-based-question---how-tall-is-the-pyramid-of-giza}
+
+\subsubsection{Experiment Description}\label{experiment-description}
+
+In this experiment, various language models were tested to answer the
+fact-based question: ``How tall is the Pyramid of Giza?''. The
+experiment parameters are as follows:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Question Type}: Fact-based
+\item
+  \textbf{Question}: ``How tall is the Pyramid of Giza?''
+\item
+  \textbf{Retrieval Type}: Sentence retrieval
+\item
+  \textbf{Number of Retrievals}: 1
+\end{itemize}
+
+\subsubsection{Causal Models}\label{causal-models}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.0977}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4805}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4219}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+LLM
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+LLM Answer
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+RAG Answer
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+facebook blenderbot-90M & balkicker mutations mutations pment mutations
+mutations mutations kicker fiers eston eston eston eres bender eston
+\ldots{} & lease willis lease mative mative lease willis mative lease
+lease lease willis \ldots{} \\
+gpt2 & The Pyramid of Giza is the tallest building in Egypt. The Pyramid
+of Giza is located in the Giza Plateau \ldots{} & The Great Pyramid of
+Giza is the largest and oldest of the three pyramids, standing at 146.6
+meters \ldots{} \\
+EleutherAI gpt-neo-125M & The Pyramid of Giza is the tallest pyramid in
+the world. It was completed in the 13th century AD \ldots{} & The
+Pyramid of Giza is the largest and oldest of the three pyramids,
+standing at 146.6 meters \ldots{} \\
+gpt2-medium & The Pyramid of Giza is the tallest structure in Egypt. It
+is 1,068 feet tall, and is one of the largest pyramids \ldots{} & The
+Pyramid of Giza is the largest and oldest of the three pyramids,
+standing at 146.6 meters \ldots{} \\
+gpt2-large & The Pyramid of Giza is the tallest structure in the world.
+How tall is the Taj Mahal? \ldots{} & The Great Pyramid of Giza is the
+largest and oldest of the three pyramids, standing at 146.6 meters
+\ldots{} \\
+EleutherAI gpt-neo-1.3B & The Pyramid of Giza is one of the Seven
+Wonders of the Ancient World. It is one of the Seven Wonders of the
+Modern World \ldots{} & The pyramid of Giza, also known as the Pyramid
+of Khufu\ldots{} and oldest of the three pyramids, standing at 146.6
+meters \ldots{} \\
+\end{longtable}
+
+In all the cases the casual models generated a wrong LLM answer. Except
+the \texttt{facebook/blenderbot-90M} they all generated grammatically
+correct sentences. Concerning the RAG answers, all of them generated a
+correct RAG answer except the \texttt{facebook/blenderbot-90M}. This is
+an amazing result since without any additional training or tuning, the
+models when using a RAG approach were able to generate a correct answer.
+Taking in to consideration the parameters the smallest model that give a
+correct answer was GPT2 with 90M.
+
+\newpage
+
+\subsubsection{QA Models}\label{qa-models}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3714}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2286}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+LLM
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+LLM Answer
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+RAG Answer
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+distilbert-base-uncased-distilled-squad\_66M & how tall is the pyramid
+of giza? {[}SEP{]} & 146.6 meters \\
+deepset roberta-base-squad2\_125M & & 146.6 meters (481 feet) \\
+bert-large-uncased-whole-word-masking-finetuned-squad\_340M & tall &
+146.6 meters \\
+\end{longtable}
+
+The QA models are also answered correctly. Compared to the casual LLMs
+RAG generated answer, here the models perform better as a model of 66M
+was able to answer the question correctly. The generated LLM answer was
+wrong for every model.
+
+\subsubsection{T5 Models}\label{t5-models}
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+LLM & LLM Answer & RAG Answer \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+t5-base\_220M & None & 146.6 meters (481 feet) \\
+t5-large\_770M & False & 140 meters (481 feet) \\
+\end{longtable}
+
+The T5 models RAG generated answer is also correct for all the models.
+At this point they perform the quality of the answer is on the same
+level of the QA models and Casual models. But the models a bigger than
+the QA models.
+
+Conclusion: Given the size of the models the QA models are most
+appropriate for answering Fact-based Question.
+
+    \newpage
+
+\subsection{Experiment 2: List-based Question - ``What materials were
+used in constructing the Great Wall of
+China?''}\label{experiment-2-list-based-question---what-materials-were-used-in-constructing-the-great-wall-of-china}
+
+\subsubsection{Experiment Description}\label{experiment-description}
+
+In this experiment, various language models were tested to answer the
+list-based question: ``What materials were used in constructing the
+Great Wall of China?''. The experiment parameters are as follows:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Question Type}: List-based Question
+\item
+  \textbf{Question}: ``What materials were used in constructing the
+  Great Wall of China?''
+\item
+  \textbf{Retrieval Type}: Sentence retrieval
+\item
+  \textbf{Number of Retrievals}: 1
+\end{itemize}
+
+\subsubsection{Causal Models}\label{causal-models}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.0977}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4805}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4219}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+LLM
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+LLM Answer
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+RAG Answer
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+facebook blenderbot-90M & pos sitter sitter drip ba ba ba le diving ba
+ba bee ba ba da ba ba cats ba ba table da ba da disc ba ba orba da da
+prba ba prda da \textbf{end} & scibal pubalfatty composition asses
+sciscifatty fatty bee pumubee bee mubee zarbalpuscibal mutbal bee bal
+composition fatty composition fatty bee bal strip scimutcomposition
+\textbf{end} \\
+gpt2 & The Great Wall of China is the largest in the world, and is the
+largest city in the world. It is the largest city in the world. It is
+the largest city in & The Great Wall of China is made of various
+materials, including stone, brick, tamped earth, and wood. The Great
+Wall of China was built by the People's Republic of \ldots{} \\
+EleutherAI gpt-neo-125M & The Great Wall of China was constructed by the
+Chinese government in the 17th century, and is known as the Great Wall
+of China \ldots{} & The Great Wall of China is made of various
+materials, including stone, brick, tamped earth, and wood. Answer What
+materials were used in constructing the Great Wall of China? \\
+gpt2-medium & The Great Wall of China was built by the Ming Dynasty
+(1644-1911). The Great Wall was constructed of a combination of stone,
+wood, and metal \ldots{} & 'Answer The Great Wall of China was built of
+various materials, including stone, brick, tamped earth, and wood. The
+Great Wall of China was constructed of various materials, including
+stone \ldots{} \\
+gpt2-large & The Great Wall of China was built by the Qin Dynasty
+(221-206 B.C.), which lasted from 221 to 206 B.C. \ldots{} & 'The Great
+Wall of China is made of various materials, including stone, brick,
+tamped earth, and wood.'Answer What materials were used in constructing
+the Great Wall of China? \\
+EleutherAI gpt-neo-1.3B & The Great Wall of China was constructed using
+many different types of materials, including wood, stone, brick, clay,
+and iron \ldots{} & The Great Wall of China is made of various
+materials, including stone, brick, tamped earth, and wood. \\
+\end{longtable}
+
+In all cases, the causal models generated incorrect or irrelevant LLM
+answers. The RAG approach, however, performed significantly better, with
+all models providing correct information about the materials used in
+constructing the Great Wall of China. This demonstrates the
+effectiveness of RAG in generating accurate answers even when the base
+model's output is flawed.
+
+\subsubsection{QA Models}\label{qa-models}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3714}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2286}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+LLM
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+LLM Answer
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+RAG Answer
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+distilbert-base-uncased-distilled-squad\_66M & what materials were used
+in constructing the great wall of china? {[}SEP{]} & stone, brick,
+tamped earth, and wood \\
+deepset roberta-base-squad2\_125M & & stone, brick, tamped earth, and
+wood \\
+bert-large-uncased-whole-word-masking-finetuned-squad\_340M & & stone,
+brick, tamped earth, and wood \\
+\end{longtable}
+
+The QA models performed well in generating correct RAG answers,
+accurately listing the materials used in constructing the Great Wall of
+China. Similar to the first experiment, the generated LLM answers were
+incorrect, but the RAG system compensated for this by providing correct
+and relevant answers, showing its strength in retrieving and presenting
+accurate information.
+
+\subsubsection{T5 Models}\label{t5-models}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3714}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2286}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+LLM
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+LLM Answer
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+RAG Answer
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+t5-base\_220M & None & stone, brick, tamped earth, and wood \\
+t5-large\_770M & False & stone, brick, tamped earth, and wood \\
+\end{longtable}
+
+The T5 models also demonstrated strong performance in the RAG approach,
+correctly listing the materials used in constructing the Great Wall of
+China. However, like the other models, their direct LLM answers were
+inaccurate or non-informative, further highlighting the importance of
+RAG in ensuring accurate output.
+
+\textbf{Conclusion:}
+
+Given the size of the models the QA models are most appropriate for
+answering List-based Question.
+
+    \newpage
+
+\subsection{Experiment 3: Fact-based Question - ``How tall is the
+Pyramid of
+Giza?''}\label{experiment-3-fact-based-question---how-tall-is-the-pyramid-of-giza}
+
+\subsubsection{Experiment Description}\label{experiment-description}
+
+In this experiment, various language models were tested to answer the
+fact-based question: ``How tall is the Pyramid of Giza?'' using
+paragraph retrieval with one retrieved document. Storing paragraphs is
+more efficient than storing sentences, as the size of the database will
+be smaller and paragraphs hold more context and information than the
+sentences. The experiment parameters are as follows:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Question Type}: Fact-based Question
+\item
+  \textbf{Question}: ``How tall is the Pyramid of Giza?''
+\item
+  \textbf{Retrieval Type}: Paragraph retrieval
+\item
+  \textbf{Number of Retrievals}: 1
+\end{itemize}
+
+\subsubsection{Causal Models}\label{causal-models}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.0977}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4805}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4219}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+LLM
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+LLM Answer
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+RAG Answer
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+facebook blenderbot-90M & pickbalfiers fiers predators mutations bender
+mutations mutations eston mutations eston predators kicker mutations
+mutations predators mutations pment eston eston eston trout mutations
+fiers eston eston bender eston eston kicker eston eston fiers eston
+joreston \textbf{end} & design mutpuwillis willis design lease orpotbee
+willis potpotdistribution fatty fatty composition lease mutfatty fatty
+willis strip spy lease willis distribution willis strip distribution
+mutdraft mutpupumutspy \textbf{end} \\
+gpt2 & The Pyramid of Giza is the tallest building in the world. It is
+located in the northern part of the country of Egypt. It is one of the
+tallest buildings in the world & The Great Pyramid of Giza is the
+tallest man-made structure in the world for over 3,800 years until the
+construction of Lincoln Cathedral in England in 1311. The Sphinx is \\
+EleutherAI gpt-neo-125M & How tall is the Pyramid of Giza? How tall is
+the Pyramid of Giza? How tall is the Pyramid of Giza? How tall is & The
+Great Pyramid of Giza was the tallest man-made structure in the world
+for over 3,800 years until the construction of Lincoln Cathedral in
+England in 1311. The Great \\
+gpt2-medium & The Pyramid of Giza, also known as the Great Pyramid of
+Giza or Pyramid of the Sun, is one of the world's largest pyramids. It
+was built in Egypt & The Pyramid of Giza is the tallest man-made
+structure in the world for over 3,800 years until the construction of
+Lincoln Cathedral in England in 1311. The Sphinx, \\
+gpt2-large & The Pyramid of Giza is believed to be the tallest structure
+in the world. The Pyramid of Giza is located in Egypt. The Pyramid of
+Giza was built between & The height of the Great Pyramid of Giza is
+146.6 meters (481 feet). This is the tallest man-made structure in the
+world for over 3,800 years. The \\
+EleutherAI gpt-neo-1.3B & This is a question that has been asked many
+times, but the answer is not always so simple. Some of the tallest
+buildings in the world are located in the United States, and & The
+Pyramids of Giza are the only remaining structure of the Seven Wonders
+of the Ancient World. The Great Pyramid of Giza, also known as the
+Pyramid of Khuf \\
+\end{longtable}
+
+In this experiment, the causal models generally provided incorrect or
+nonsensical LLM answers. However, the RAG approach performed
+significantly better, producing correct answers by accurately retrieving
+and presenting the relevant information from the paragraph.
+
+\subsubsection{QA Models}\label{qa-models}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3714}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2286}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+LLM
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+LLM Answer
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+RAG Answer
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+distilbert-base-uncased-distilled-squad\_66M & how tall is the pyramid
+of giza? {[}SEP{]} & 146.6 meters \\
+deepset roberta-base-squad2\_125M & & 146.6 meters (481 feet) \\
+bert-large-uncased-whole-word-masking-finetuned-squad\_340M & tall &
+146.6 meters \\
+\end{longtable}
+
+The QA models continued to perform well, with the RAG approach providing
+correct and relevant answers. Despite the direct LLM answers being
+incorrect, the RAG system ensured accurate information was retrieved and
+presented.
+
+\subsubsection{T5 Models}\label{t5-models}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3714}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2286}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+LLM
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+LLM Answer
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+RAG Answer
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+t5-base\_220M & None & 146.6 meters (481 feet) \\
+t5-large\_770M & False & 146.6 meters \\
+\end{longtable}
+
+The T5 models also demonstrated strong performance in the RAG approach,
+consistently providing the correct height of the Pyramid of Giza. As
+seen in previous experiments, the direct LLM answers were inaccurate,
+underscoring the importance of using RAG for accurate outputs.
+
+\textbf{Conclusion:}
+
+The QA models and T5 models were particularly efficient, consistently
+providing the correct height of the Pyramid of Giza. Given the size of
+the models, the most efficient for answering Fact-based Question with
+one paragraph retrieval are the QA models.
+
+    \newpage
+
+\subsection{Experiment 4: List-based Question - ``What materials were
+used in constructing the Great Wall of
+China?''}\label{experiment-4-list-based-question---what-materials-were-used-in-constructing-the-great-wall-of-china}
+
+\subsubsection{Experiment Description}\label{experiment-description}
+
+In this experiment, various language models were tested to answer the
+list-based question: ``What materials were used in constructing the
+Great Wall of China?'' using paragraph retrieval with one retrieved
+document. The experiment parameters are as follows:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Question Type}: List-based Question
+\item
+  \textbf{Question}: ``What materials were used in constructing the
+  Great Wall of China?''
+\item
+  \textbf{Retrieval Type}: Paragraph retrieval
+\item
+  \textbf{Number of Retrievals}: 1
+\end{itemize}
+
+\subsubsection{Causal Models}\label{causal-models}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.0977}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4805}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4219}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+LLM
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+LLM Answer
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+RAG Answer
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+facebook blenderbot-90M & horn ba ba squba ba ba da ba ba bal ba ba phba
+ba eling ba ba sheet ba ba itba da phth ba ba muba da da audprba da
+\textbf{end} & potpotscistrip scipotorscizarpotdistribution scipotstrip
+strip cupotstrip sciscistrip potsciscibee qpotstrip cuqstrip
+potqsciqstrip sci\_\_end\_\_ \\
+gpt2 & There are many materials that were used in the construction of
+the Great Wall of China, but only a few were used for the construction
+of the Great Wall of China \ldots{} & The Great Wall of China was built
+to protect against invasions from northern tribes. The Great Wall of
+China is made of various materials, including stone, brick, tamped earth
+\ldots{} \\
+EleutherAI gpt-neo-125M & The Great Wall of China was built by the
+Chinese government during the reign of the Qing dynasty \ldots{} & The
+Great Wall of China is over 13,000 miles long. Construction of the Great
+Wall of China began in the 7th century BC. The Great Wall of China was
+\ldots{} \\
+gpt2-medium & The Great Wall of China was constructed by a team of
+Chinese engineers, engineers, and architects \ldots{} & The Great Wall
+of China was constructed of various materials, including stone, brick,
+tamped earth, and wood. The height of the Great Wall of China varies,
+with the tallest \ldots{} \\
+gpt2-large & The Great Wall of China was constructed by the Han Dynasty
+(206 BC -- 220 AD) \ldots{} & The Great Wall of China is made of various
+materials, including stone, brick, tamped earth, and wood. The height of
+the Great Wall of China varies, with the tallest sections \ldots{} \\
+EleutherAI gpt-neo-1.3B & The Great Wall of China is one of the most
+famous examples of ancient Chinese architecture \ldots{} & The Great
+Wall of China is made of various materials, including stone, brick,
+tamped earth, and wood The height of the Great Wall of China varies,
+with the tallest \ldots{} \\
+\end{longtable}
+
+In this experiment, the causal models generally provided incorrect or
+nonsensical LLM answers. The RAG approach, however, showed improvement,
+with more accurate information being retrieved and presented. Despite
+this, the answers still lacked consistency in listing all the materials
+used in the construction of the Great Wall of China.
+
+\subsubsection{QA Models}\label{qa-models}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3714}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2286}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+LLM
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+LLM Answer
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+RAG Answer
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+distilbert-base-uncased-distilled-squad\_66M & what materials were used
+in constructing the great wall of china? {[}SEP{]} & stone, brick,
+tamped earth, and wood \\
+deepset roberta-base-squad2\_125M & & stone, brick, tamped earth, and
+wood \\
+bert-large-uncased-whole-word-masking-finetuned-squad\_340M & & stone,
+brick, tamped earth, and wood \\
+\end{longtable}
+
+The QA models performed exceptionally well in generating correct RAG
+answers, accurately listing the materials used in constructing the Great
+Wall of China. The direct LLM answers were not particularly useful, but
+the RAG system effectively retrieved and presented the necessary
+information.
+
+\subsubsection{T5 Models}\label{t5-models}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3714}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2286}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+LLM
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+LLM Answer
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+RAG Answer
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+t5-base\_220M & None & stone, brick, tamped earth, and wood \\
+t5-large\_770M & False & stone, brick, tamped earth, and wood \\
+\end{longtable}
+
+The T5 models also performed well in the RAG approach, consistently
+providing the correct list of materials used in constructing the Great
+Wall of China. Similar to other models, the direct LLM answers were
+inaccurate or non-informative, but the RAG system ensured accurate
+output.
+
+\textbf{Conclusion:}
+
+The QA models proved to be the most efficient for answering list-based
+questions with paragraph retrievals. Their performance in generating
+accurate RAG answers highlights their suitability for RAG-based
+solutions, especially when detailed and precise information is required.
+Given the size and efficiency, the QA models are the best choice for
+implementing a RAG solution in this context.
+
+    \newpage
+
+\subsection{Experiment 5: Synthesis-based Question - ``Which famous
+structures, both designed or structurally influenced by Gustave
+Eiffel?''}\label{experiment-5-synthesis-based-question---which-famous-structures-both-designed-or-structurally-influenced-by-gustave-eiffel}
+
+\subsubsection{Experiment Description}\label{experiment-description}
+
+In this experiment, various language models were tested to answer the
+synthesis-based question: ``Which famous structures, both designed or
+structurally influenced by Gustave Eiffel?'' using paragraph retrieval
+with three retrieved documents. The experiment parameters are as
+follows:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Question Type}: Synthesis-based Question
+\item
+  \textbf{Question}: ``Which famous structures, both designed or
+  structurally influenced by Gustave Eiffel?''
+\item
+  \textbf{Retrieval Type}: Paragraph retrieval
+\item
+  \textbf{Number of Retrievals}: 3
+\end{itemize}
+
+The synthesis-based question require that several facts are take in to
+consideration inorder to answer the quiestion. In this case the
+retreaver will need provide the generator several paragraphs with
+information on Gustave Eiffel. Then the LLM needs combine the facts in
+to conclusion and generate the answer.
+
+\subsubsection{Causal Models}\label{causal-models}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.0977}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4805}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4219}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+LLM
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+LLM Answer
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+RAG Answer
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+facebook blenderbot-90M & etically ication ix belle ication belle
+ication judgment ication belle le tacication belle conception ication le
+le belle ication planted le tacdden ication tacication judge ix ication
+le ication judge belle ication ication le \textbf{end} & Error
+generating text for facebook blenderbot-90M \\
+gpt2 & They're not, but it's hard not to feel a twinge of nostalgia for
+them \ldots{} & The Eiffel Tower is located in Paris, France. The Eiffel
+Tower was completed in 1889. The Eiffel Tower was painted every seven
+years to prevent it \ldots{} \\
+EleutherAI gpt-neo-125M & This article is part of a series of articles
+that explore Gustave Eiffel's influence on architecture and design
+\ldots{} & The Colosseum was completed in AD 80. The Colosseum was
+designed by Gustave Eiffel, who also designed the Eiffel Tower. \\
+gpt2-medium & There are many, many, many. Some of the most famous of
+them are: The Eiffel Tower, Paris \ldots{} & The Eiffel Tower is located
+in Paris, France. The Eiffel Tower was completed in 1889. The Eiffel
+Tower is 324 meters tall. The Eiffel Tower was designed by Gustave
+Eiffel. \\
+gpt2-large & The Louvre, Paris, France The Eiffel Tower, Paris, France
+The Eiffel Tower, Paris, France \ldots{} & The Eiffel Tower is located
+in Paris, France. The Eiffel Tower is 324 meters tall. The Eiffel Tower
+was designed by Gustave Eiffel. \\
+EleutherAI gpt-neo-1.3B & The Eiffel Tower in Paris. The Eiffel Tower in
+Paris. The Eiffel Tower in Paris \ldots{} & The Eiffel Tower is located
+in Paris, France. The Eiffel Tower was completed in 1889. The Eiffel
+Tower is 324 meters tall. \\
+\end{longtable}
+
+In this experiment, the causal models struggled to produce accurate or
+relevant LLM answers. The RAG approach helped improve the accuracy but
+was still limited, with most models failing to provide a comprehensive
+list of structures designed or influenced by Gustave Eiffel. The answers
+often lacked synthesis, indicating that causal models might not be the
+best choice for complex synthesis-based questions.
+
+\newpage
+
+\subsubsection{QA Models}\label{qa-models}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3714}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2286}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+LLM
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+LLM Answer
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+RAG Answer
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+distilbert-base-uncased-distilled-squad\_66M & which famous structures,
+both designed or structurally influenced by gustave eiffel? {[}SEP{]} &
+statue of liberty \\
+deepset roberta-base-squad2\_125M & & \\
+bert-large-uncased-whole-word-masking-finetuned-squad\_340M & & statue
+of liberty \\
+\end{longtable}
+
+The QA models had mixed performance in this experiment. While the direct
+LLM answers were often uninformative, the RAG answers did manage to
+identify at least one structure associated with Gustave Eiffel, but they
+lacked completeness. The synthesis required for this question appeared
+challenging for these models.
+
+\subsubsection{T5 Models}\label{t5-models}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3714}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2286}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+LLM
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+LLM Answer
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+RAG Answer
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+t5-base\_220M & None & The Eiffel Tower \\
+t5-large\_770M & False & Eiffel Tower and The Statue of Liberty \\
+\end{longtable}
+
+The T5 models performed relatively well in the RAG approach, with the
+larger model (T5-large) being able to correctly list both the Eiffel
+Tower and the Statue of Liberty as structures associated with Gustave
+Eiffel. This highlights the potential of T5 models in synthesis-based
+tasks, especially when more complex reasoning is required.
+
+\textbf{Conclusion:}
+
+For synthesis-based questions, the T5 models, particularly the larger
+variant, demonstrated the most potential in the RAG approach,
+successfully identifying multiple structures associated with Gustave
+Eiffel. Although the QA models could partially answer the question, they
+struggled with the complexity of synthesizing information from multiple
+documents. The causal models, even with RAG, were not able to handle
+this task effectively. Therefore, T5 models are the best choice for
+RAG-based solutions when dealing with synthesis-based questions.
+
+    \newpage
+
+    \section{Conclusion}\label{conclusion}
+
+This text demonstrates through experimentation that Retrieval-Augmented
+Generation (RAG) systems effectively address some of the most
+significant challenges faced by Large Language Models (LLMs) and other
+models with parametric memory. Compared to models solely relying on
+parametric memory, RAG systems offer several advantages:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Horizontally Scalable}: RAG systems can efficiently scale by
+  distributing the retrieval process across multiple nodes, allowing for
+  handling larger datasets and more complex queries.
+\item
+  \textbf{Distributive}: The modular nature of RAG systems enables
+  distribution of tasks across different components, enhancing
+  robustness and flexibility.
+\item
+  \textbf{Mitigates High Bias}: By integrating external knowledge
+  retrieval, RAG systems reduce the need for extremely large models with
+  numerous parameters, thus avoiding issues related to under-fitting and
+  high bias in therms of the real world data set, or the cross
+  validation set The model is just not curved enough to handle real
+  world data.
+\item
+  \textbf{Performance Enhancement}: RAG systems can surpass the
+  performance of their base generative models by leveraging external
+  knowledge, resulting in more accurate and contextually relevant
+  responses.
+\end{itemize}
+
+As an example, a decent quality question answering system can be created
+using only a 66M parameter pertained question answering model like
+DistilBERT when using an index like FAISS. However, it is crucial that
+the paragraphs and sentences provided to the model contain the answer
+explicitly written, with no pronouns or ambiguous references. In case of
+the T5 models they will perform better than QA in a more complex text
+scenarios, these models are capable of understanding and synthesizing
+information. The t5-large\_770M given the size and performance would be
+a good candidate more general RAG solution.
+
+In summary, RAG systems provide a scalable, distributive, and
+cost-efficient solution to enhance the capabilities of LLMs, addressing
+key limitations and improving overall performance without the necessity
+for excessively large and complex models.
+
+    \section{Reference List}\label{reference-list}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez,
+  A. N., Kaiser, Ł., \& Polosukhin, I. (2017). Attention Is All You
+  Need. Retrieved from \url{https://arxiv.org/pdf/1706.03762}
+\item
+  Douze, M., Guzhva, A., Deng, C., Johnson, J., Szilvasy, G., Mazaré,
+  P-E., Lomeli, M., Hosseini, L., \& Jégou, H. (2024). The Faiss
+  Library. Retrieved from \url{https://arxiv.org/pdf/2401.08281}
+\item
+  Lewis, P., Yih, W., Rocktäschel, T., \& Riedel, S. (2020).
+  Retrieval-Augmented Generation (RAG) Explained: Understanding Key
+  Concepts. Retrieved from \url{https://arxiv.org/pdf/2005.11401v4}
+\item
+  Gao, Y., Xiong, Y., Gao, X., Jia, K., Pan, J., Bi, Y., Dai, Y., Sun,
+  J., Guo, Q., Wang, M., \& Wang, H. (2023). Retrieval-Augmented
+  Generation for Large Language Models: A Survey. Retrieved from
+  \url{https://arxiv.org/pdf/2312.10997}
+\item
+  Reimers, N., \& Gurevych, I. (2019). Sentence-BERT: Sentence
+  Embeddings using Siamese BERT-Networks. Retrieved from
+  \url{https://arxiv.org/pdf/1908.10084}
+\item
+  Miesle, P. (no date). Retrieval-augmented Generation (RAG) Explained:
+  Understanding Key Concepts. DataStax. Retrieved from
+  \url{https://www.datastax.com/guides/what-is-retrieval-augmented-generation}
+\item
+  Owczarek, D. (2023). The Comprehensive Guide to Retrieval Augmented
+  Generation LLMs: Transforming Data into Knowledge. Nexocode. Retrieved
+  from
+  \url{https://nexocode.com/blog/posts/retrieval-augmented-generation-rag-llms}
+\item
+  Alkestrup, J., \& Purup, N. S. (n.d.). Building high-quality RAG
+  systems. Implement Consulting Group. Retrieved from
+  \url{https://implementconsultinggroup.com/article/building-high-quality-rag-systems}
+\item
+  Ali, M. (2023). Optimizing RAG: A Guide to Choosing the Right Vector
+  Database. Medium. Retrieved from
+  \href{https://medium.com/@mutahar789/optimizing-rag-a-guide-to-choosing-the-right-vector-database-480f71a33139}{https://medium.com/@mutahar789/optimizing-rag-a-guide-to-choosing-the-right-vector-database-480f71a33139}
+\item
+  Cloudflare Docs. no date. Best Practices: Insert Vectors. Retrieved
+  from
+  \url{https://developers.cloudflare.com/vectorize/best-practices/insert-vectors/}
+\item
+  Kehrer, K. (2023). Best Vector DBs for Retrieval Augmented Generation
+  (RAG). Aporia. Retrieved from
+  \url{https://www.aporia.com/learn/best-vector-dbs-for-retrieval-augmented-generation-rag/}
+\item
+  Databricks. (n.d.). Retrieval-Augmented Generation (RAG). Retrieved
+  from
+  \url{https://www.databricks.com/glossary/retrieval-augmented-generation-rag}
+\item
+  MongoDB Docs. (n.d.). Atlas CLI: Deploy Local. Retrieved from
+  \url{https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-deploy-local/}
+\item
+  Benedict, V. M. W. (2023). RAG with Atlas Vector Search and MongoDB.
+  Medium. Retrieved from
+  \href{https://medium.com/@if-21062/rag-with-atlas-vector-search-mongodb-0d2420e00b64}{https://medium.com/@if-21062/rag-with-atlas-vector-search-mongodb-0d2420e00b64}
+\item
+  Bratanič, T. (2023). Neo4j Langchain Vector Index Implementation.
+  Neo4j. Retrieved from
+  \url{https://neo4j.com/developer-blog/neo4j-langchain-vector-index-implementation/}
+\item
+  Pondhouse Data. (2023). Advanced RAG: Recursive Retrieval with
+  llamaindex. Retrieved from
+  \url{https://www.pondhouse-data.com/blog/advanced-rag-recursive-retrieval-with-llamaindex}
+\item
+  Karpukhin, V., Oguz, B., Min, S., Lewis, P., Wu, L., Edunov, S., Chen,
+  D., \& Yih, W. (2020). Dense Passage Retrieval for Open-Domain
+  Question Answering. Retrieved from
+  \url{https://arxiv.org/pdf/2004.04906}
+\item
+  Wang, Z., Wang, Z., Le, L., Zheng, H. S., Mishra, S., Perot, V.,
+  Zhang, Y., Mattapalli, A., Taly, A., Shang, J., Lee, C-Y., \& Pfister,
+  T. (2024). Speculative RAG: Enhancing Retrieval Augmented Generation
+  through Drafting. Retrieved from
+  \url{https://arxiv.org/pdf/2407.08223}
+\end{enumerate}
+
+    
+
+    \section{Appendix: Rag
+Implementation}\label{appendix-rag-implementation}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Prepare required libraries for }
+\PY{o}{\PYZpc{}}\PY{k}{conda} install \PYZhy{}y numpy
+\PY{c+c1}{\PYZsh{} Retrieval and storage required libraries}
+\PY{o}{\PYZpc{}}\PY{k}{conda} install \PYZhy{}y sentence\PYZhy{}transformers
+\PY{o}{\PYZpc{}}\PY{k}{conda} install \PYZhy{}y faiss\PYZhy{}cpu
+\PY{c+c1}{\PYZsh{} LLMs related libraries}
+\PY{o}{\PYZpc{}}\PY{k}{conda} install \PYZhy{}y transformers
+\PY{o}{\PYZpc{}}\PY{k}{conda} install \PYZhy{}y pytorch
+\PY{o}{\PYZpc{}}\PY{k}{conda} install \PYZhy{}y ipywidgets
+\PY{o}{\PYZpc{}}\PY{k}{conda} install \PYZhy{}y protobuf
+\PY{o}{\PYZpc{}}\PY{k}{conda} install \PYZhy{}c conda\PYZhy{}forge detectron2
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} smoke test}
+\PY{k+kn}{import} \PY{n+nn}{torch}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{torch}\PY{o}{.}\PY{n}{\PYZus{}\PYZus{}version\PYZus{}\PYZus{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{122}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} LLM related libs}
+\PY{k+kn}{import} \PY{n+nn}{torch}
+\PY{k+kn}{from} \PY{n+nn}{transformers} \PY{k+kn}{import} \PY{n}{AutoModelForCausalLM}\PY{p}{,} \PY{n}{AutoTokenizer}\PY{p}{,} \PY{n}{PreTrainedTokenizer}\PY{p}{,} \PY{n}{AutoModelForQuestionAnswering}
+
+\PY{c+c1}{\PYZsh{} Retrieval and Storage Related libs}
+\PY{k+kn}{from} \PY{n+nn}{sentence\PYZus{}transformers} \PY{k+kn}{import} \PY{n}{SentenceTransformer}
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{import} \PY{n+nn}{faiss}
+
+\PY{k+kn}{import} \PY{n+nn}{re}
+\PY{k+kn}{import} \PY{n+nn}{json}
+
+\PY{k}{def} \PY{n+nf}{read\PYZus{}and\PYZus{}split\PYZus{}sentences}\PY{p}{(}\PY{n}{file\PYZus{}path}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}}\PY{n+nb}{list}\PY{p}{[}\PY{n+nb}{str}\PY{p}{]}\PY{p}{:}
+    \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{n}{file\PYZus{}path}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{file}\PY{p}{:}
+        \PY{n}{text} \PY{o}{=} \PY{n}{file}\PY{o}{.}\PY{n}{read}\PY{p}{(}\PY{p}{)}
+    \PY{n}{sentences} \PY{o}{=} \PY{n}{re}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(?\PYZlt{}!}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{d)}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{s+}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{text}\PY{o}{.}\PY{n}{strip}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+    \PY{k}{return} \PY{n}{sentences}
+
+\PY{k}{def} \PY{n+nf}{read\PYZus{}and\PYZus{}split\PYZus{}paragraphs}\PY{p}{(}\PY{n}{file\PYZus{}path}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}} \PY{n+nb}{list}\PY{p}{[}\PY{n+nb}{str}\PY{p}{]}\PY{p}{:}
+    \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{n}{file\PYZus{}path}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{file}\PY{p}{:}
+        \PY{n}{text} \PY{o}{=} \PY{n}{file}\PY{o}{.}\PY{n}{read}\PY{p}{(}\PY{p}{)}
+    \PY{n}{paragraphs} \PY{o}{=} \PY{n}{text}\PY{o}{.}\PY{n}{strip}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{k}{return} \PY{n}{paragraphs}
+
+\PY{k}{def} \PY{n+nf}{save\PYZus{}dict\PYZus{}to\PYZus{}json\PYZus{}file}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{file\PYZus{}name}\PY{p}{)}\PY{p}{:}
+    \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{n}{file\PYZus{}name}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{w}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{json\PYZus{}file}\PY{p}{:}
+        \PY{n}{json}\PY{o}{.}\PY{n}{dump}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{json\PYZus{}file}\PY{p}{,} \PY{n}{indent}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \newpage
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{123}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{class} \PY{n+nc}{Retriever}\PY{p}{:}
+    \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{model\PYZus{}name\PYZus{}in}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{all\PYZhy{}MiniLM\PYZhy{}L6\PYZhy{}v2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{documents} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model} \PY{o}{=} \PY{n}{SentenceTransformer}\PY{p}{(}\PY{n}{model\PYZus{}name\PYZus{}in}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{document\PYZus{}embeddings} \PY{o}{=} \PY{k+kc}{None}
+        \PY{c+c1}{\PYZsh{} dimension is 384 for the \PYZsq{}all\PYZhy{}MiniLM\PYZhy{}L6\PYZhy{}v2\PYZsq{}}
+        \PY{n}{d} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model}\PY{o}{.}\PY{n}{get\PYZus{}sentence\PYZus{}embedding\PYZus{}dimension}\PY{p}{(}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{index} \PY{o}{=} \PY{n}{faiss}\PY{o}{.}\PY{n}{IndexFlatL2}\PY{p}{(}\PY{n}{d}\PY{p}{)}
+        
+    \PY{k}{def} \PY{n+nf}{add\PYZus{}documents}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{new\PYZus{}documents\PYZus{}in}\PY{p}{:} \PY{n+nb}{list}\PY{p}{[}\PY{n+nb}{str}\PY{p}{]}\PY{p}{)}\PY{p}{:}
+        \PY{c+c1}{\PYZsh{} MaximumCharacters ≈ 512tokens×4characters/token=2048characters}
+        \PY{n}{new\PYZus{}document\PYZus{}embeddings} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model}\PY{o}{.}\PY{n}{encode}\PY{p}{(}\PY{n}{new\PYZus{}documents\PYZus{}in}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{float32}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{index}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{new\PYZus{}document\PYZus{}embeddings}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{documents}\PY{o}{.}\PY{n}{extend}\PY{p}{(}\PY{n}{new\PYZus{}documents\PYZus{}in}\PY{p}{)}
+
+    \PY{k}{def} \PY{n+nf}{retrieve\PYZus{}documents}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{query\PYZus{}in}\PY{p}{,} \PY{n}{results\PYZus{}size\PYZus{}in}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+        \PY{n}{query\PYZus{}embedding} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model}\PY{o}{.}\PY{n}{encode}\PY{p}{(}\PY{p}{[}\PY{n}{query\PYZus{}in}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{float32}\PY{p}{)}
+        \PY{n}{distances}\PY{p}{,} \PY{n}{indices} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{index}\PY{o}{.}\PY{n}{search}\PY{p}{(}\PY{n}{query\PYZus{}embedding}\PY{p}{,} \PY{n}{results\PYZus{}size\PYZus{}in}\PY{p}{)}
+        \PY{n}{retrieved\PYZus{}documents} \PY{o}{=} \PY{p}{[}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{documents}\PY{p}{[}\PY{n}{idx}\PY{p}{]} \PY{k}{for} \PY{n}{idx} \PY{o+ow}{in} \PY{n}{indices}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]}
+        \PY{k}{return} \PY{n}{retrieved\PYZus{}documents}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \newpage
+
+    
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{124}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{typing} \PY{k+kn}{import} \PY{n}{Dict}
+\PY{k+kn}{from} \PY{n+nn}{transformers} \PY{k+kn}{import} \PY{n}{AutoModelForCausalLM}\PY{p}{,} \PY{n}{AutoModelForSeq2SeqLM}\PY{p}{,} \PY{n}{AutoModelForQuestionAnswering}\PY{p}{,} \PY{n}{T5ForConditionalGeneration}\PY{p}{,} \PY{n}{AutoTokenizer}\PY{p}{,} \PY{n}{T5Tokenizer}\PY{p}{,} \PY{n}{AutoModelForDocumentQuestionAnswering}
+\PY{k+kn}{import} \PY{n+nn}{torch}
+\PY{k+kn}{import} \PY{n+nn}{re}
+
+\PY{c+c1}{\PYZsh{} Causal Model Generator Class}
+\PY{k}{class} \PY{n+nc}{CausalModelGenerator}\PY{p}{:}
+    \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{model\PYZus{}name}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{device}\PY{o}{=}\PY{k+kc}{None}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device} \PY{o}{=} \PY{n}{device} \PY{k}{if} \PY{n}{device} \PY{k}{else} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name} \PY{o}{=} \PY{n}{model\PYZus{}name}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model} \PY{o}{=} \PY{n}{AutoModelForCausalLM}\PY{o}{.}\PY{n}{from\PYZus{}pretrained}\PY{p}{(}\PY{n}{model\PYZus{}name}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer} \PY{o}{=} \PY{n}{AutoTokenizer}\PY{o}{.}\PY{n}{from\PYZus{}pretrained}\PY{p}{(}\PY{n}{model\PYZus{}name}\PY{p}{)}
+    \PY{k}{def} \PY{n+nf}{generate}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{question}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{context}\PY{p}{:} \PY{n+nb}{str} \PY{o}{=} \PY{k+kc}{None}\PY{p}{,} \PY{n}{max\PYZus{}new\PYZus{}tokens}\PY{o}{=}\PY{l+m+mi}{38}\PY{p}{,} \PY{n}{num\PYZus{}beams}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{,} \PY{n}{do\PYZus{}sample}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{top\PYZus{}p}\PY{o}{=}\PY{l+m+mf}{0.92}\PY{p}{)}\PY{p}{:}
+        \PY{k}{try}\PY{p}{:}
+            \PY{k}{if} \PY{n}{context}\PY{p}{:}
+                \PY{n}{prompt} \PY{o}{=} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Given }\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s2}{ }\PY{l+s+si}{\PYZob{}}\PY{n}{context}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ }\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s2}{ Answer }\PY{l+s+si}{\PYZob{}}\PY{n}{question}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}
+            \PY{k}{else}\PY{p}{:}
+                \PY{n}{prompt} \PY{o}{=} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{question}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}
+            \PY{n}{inputs} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{p}{(}\PY{n}{prompt}\PY{p}{,} \PY{n}{return\PYZus{}tensors}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{pt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device}\PY{p}{)}
+            \PY{k}{with} \PY{n}{torch}\PY{o}{.}\PY{n}{no\PYZus{}grad}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                \PY{n}{outputs} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model}\PY{o}{.}\PY{n}{generate}\PY{p}{(}
+                    \PY{n}{do\PYZus{}sample}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,}
+                    \PY{n}{input\PYZus{}ids}\PY{o}{=}\PY{n}{inputs}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{input\PYZus{}ids}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+                    \PY{n}{attention\PYZus{}mask}\PY{o}{=}\PY{n}{inputs}\PY{o}{.}\PY{n}{get}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{attention\PYZus{}mask}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{,}
+                    \PY{n}{max\PYZus{}new\PYZus{}tokens}\PY{o}{=}\PY{n}{max\PYZus{}new\PYZus{}tokens}\PY{p}{,}
+                    \PY{n}{num\PYZus{}beams}\PY{o}{=}\PY{n}{num\PYZus{}beams}\PY{p}{,}
+                    \PY{n}{max\PYZus{}length} \PY{o}{=} \PY{l+m+mi}{200}\PY{p}{,}
+                    \PY{n}{pad\PYZus{}token\PYZus{}id}\PY{o}{=}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{o}{.}\PY{n}{eos\PYZus{}token\PYZus{}id}
+                \PY{p}{)}
+
+            \PY{n}{response} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{o}{.}\PY{n}{decode}\PY{p}{(}\PY{n}{outputs}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{n}{inputs}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{input\PYZus{}ids}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{size}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}\PY{p}{]}\PY{p}{,} \PY{n}{skip\PYZus{}special\PYZus{}tokens}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+            \PY{k}{return} \PY{n}{response}
+        \PY{k}{except} \PY{n+ne}{Exception} \PY{k}{as} \PY{n}{e}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error generating text for }\PY{l+s+si}{\PYZob{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{: }\PY{l+s+si}{\PYZob{}}\PY{n}{e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{k}{return} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error generating text for }\PY{l+s+si}{\PYZob{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}
+
+\PY{c+c1}{\PYZsh{} Seq2Seq Model Generator Class}
+\PY{k}{class} \PY{n+nc}{Seq2SeqModelGenerator}\PY{p}{:}
+    \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{model\PYZus{}name}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{device}\PY{o}{=}\PY{k+kc}{None}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device} \PY{o}{=} \PY{n}{device} \PY{k}{if} \PY{n}{device} \PY{k}{else} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name} \PY{o}{=} \PY{n}{model\PYZus{}name}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model} \PY{o}{=} \PY{n}{AutoModelForSeq2SeqLM}\PY{o}{.}\PY{n}{from\PYZus{}pretrained}\PY{p}{(}\PY{n}{model\PYZus{}name}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer} \PY{o}{=} \PY{n}{AutoTokenizer}\PY{o}{.}\PY{n}{from\PYZus{}pretrained}\PY{p}{(}\PY{n}{model\PYZus{}name}\PY{p}{)}
+
+    \PY{k}{def} \PY{n+nf}{generate}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{context}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{question}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{max\PYZus{}length}\PY{o}{=}\PY{l+m+mi}{200}\PY{p}{,} \PY{n}{num\PYZus{}beams}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{:}
+        \PY{k}{try}\PY{p}{:}
+            \PY{k}{if} \PY{o+ow}{not} \PY{n}{question}\PY{p}{:}
+                \PY{k}{raise} \PY{n+ne}{ValueError}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Seq2Seq models require both context and question.}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{prompt} \PY{o}{=} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Given }\PY{l+s+si}{\PYZob{}}\PY{n}{context}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ Answer the question: }\PY{l+s+si}{\PYZob{}}\PY{n}{question}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ }\PY{l+s+s2}{\PYZdq{}}
+            \PY{n}{inputs} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{p}{(}\PY{n}{prompt}\PY{p}{,} \PY{n}{return\PYZus{}tensors}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{pt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device}\PY{p}{)}
+            \PY{k}{with} \PY{n}{torch}\PY{o}{.}\PY{n}{no\PYZus{}grad}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                \PY{n}{outputs} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model}\PY{o}{.}\PY{n}{generate}\PY{p}{(}
+                    \PY{n}{input\PYZus{}ids}\PY{o}{=}\PY{n}{inputs}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{input\PYZus{}ids}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+                    \PY{n}{attention\PYZus{}mask}\PY{o}{=}\PY{n}{inputs}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{attention\PYZus{}mask}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+                    \PY{n}{max\PYZus{}length}\PY{o}{=}\PY{n}{max\PYZus{}length}\PY{p}{,}
+                    \PY{n}{num\PYZus{}beams}\PY{o}{=}\PY{n}{num\PYZus{}beams}\PY{p}{,}
+                    \PY{n}{early\PYZus{}stopping}\PY{o}{=}\PY{k+kc}{True}
+                \PY{p}{)}
+            \PY{n}{decoded\PYZus{}output} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{o}{.}\PY{n}{decode}\PY{p}{(}\PY{n}{outputs}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{skip\PYZus{}special\PYZus{}tokens}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+            \PY{k}{return} \PY{n}{decoded\PYZus{}output}
+        \PY{k}{except} \PY{n+ne}{Exception} \PY{k}{as} \PY{n}{e}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error generating text for }\PY{l+s+si}{\PYZob{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{: }\PY{l+s+si}{\PYZob{}}\PY{n}{e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{k}{return} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error generating text for }\PY{l+s+si}{\PYZob{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}
+
+
+\PY{c+c1}{\PYZsh{} QA Model Generator Class}
+\PY{k}{class} \PY{n+nc}{QAModelGenerator}\PY{p}{:}
+    \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{model\PYZus{}name}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{device}\PY{o}{=}\PY{k+kc}{None}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device} \PY{o}{=} \PY{n}{device} \PY{k}{if} \PY{n}{device} \PY{k}{else} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name} \PY{o}{=} \PY{n}{model\PYZus{}name}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model} \PY{o}{=} \PY{n}{AutoModelForQuestionAnswering}\PY{o}{.}\PY{n}{from\PYZus{}pretrained}\PY{p}{(}\PY{n}{model\PYZus{}name}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer} \PY{o}{=} \PY{n}{AutoTokenizer}\PY{o}{.}\PY{n}{from\PYZus{}pretrained}\PY{p}{(}\PY{n}{model\PYZus{}name}\PY{p}{)}
+
+    \PY{k}{def} \PY{n+nf}{generate}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{context}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{question}\PY{p}{:} \PY{n+nb}{str}\PY{p}{)}\PY{p}{:}
+        \PY{k}{try}\PY{p}{:}
+            \PY{k}{if} \PY{o+ow}{not} \PY{n}{question}\PY{p}{:}
+                \PY{k}{raise} \PY{n+ne}{ValueError}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{QA models require both context and question.}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{inputs} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{o}{.}\PY{n}{encode\PYZus{}plus}\PY{p}{(}\PY{n}{question}\PY{p}{,} \PY{n}{context}\PY{p}{,} \PY{n}{add\PYZus{}special\PYZus{}tokens}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{return\PYZus{}tensors}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{pt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device}\PY{p}{)}
+            \PY{k}{with} \PY{n}{torch}\PY{o}{.}\PY{n}{no\PYZus{}grad}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                \PY{n}{outputs} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model}\PY{p}{(}\PY{o}{*}\PY{o}{*}\PY{n}{inputs}\PY{p}{)}
+            \PY{n}{answer\PYZus{}start} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{argmax}\PY{p}{(}\PY{n}{outputs}\PY{o}{.}\PY{n}{start\PYZus{}logits}\PY{p}{)}
+            \PY{n}{answer\PYZus{}end} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{argmax}\PY{p}{(}\PY{n}{outputs}\PY{o}{.}\PY{n}{end\PYZus{}logits}\PY{p}{)} \PY{o}{+} \PY{l+m+mi}{1}
+            \PY{k}{return} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{o}{.}\PY{n}{convert\PYZus{}tokens\PYZus{}to\PYZus{}string}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{o}{.}\PY{n}{convert\PYZus{}ids\PYZus{}to\PYZus{}tokens}\PY{p}{(}\PY{n}{inputs}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{input\PYZus{}ids}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{n}{answer\PYZus{}start}\PY{p}{:}\PY{n}{answer\PYZus{}end}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+        \PY{k}{except} \PY{n+ne}{Exception} \PY{k}{as} \PY{n}{e}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error generating text for }\PY{l+s+si}{\PYZob{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{: }\PY{l+s+si}{\PYZob{}}\PY{n}{e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{k}{return} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error generating text for }\PY{l+s+si}{\PYZob{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}
+
+\PY{c+c1}{\PYZsh{} T5 Model Generator Class}
+\PY{k}{class} \PY{n+nc}{T5ModelGenerator}\PY{p}{:}
+    \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{model\PYZus{}name}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{device}\PY{o}{=}\PY{k+kc}{None}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device} \PY{o}{=} \PY{n}{device} \PY{k}{if} \PY{n}{device} \PY{k}{else} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name} \PY{o}{=} \PY{n}{model\PYZus{}name}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model} \PY{o}{=} \PY{n}{T5ForConditionalGeneration}\PY{o}{.}\PY{n}{from\PYZus{}pretrained}\PY{p}{(}\PY{n}{model\PYZus{}name}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer} \PY{o}{=} \PY{n}{T5Tokenizer}\PY{o}{.}\PY{n}{from\PYZus{}pretrained}\PY{p}{(}\PY{n}{model\PYZus{}name}\PY{p}{,} \PY{n}{legacy}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+
+    \PY{k}{def} \PY{n+nf}{generate}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{context}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{question}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{max\PYZus{}length}\PY{o}{=}\PY{l+m+mi}{150}\PY{p}{,} \PY{n}{num\PYZus{}beams}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{)}\PY{p}{:}
+        \PY{k}{try}\PY{p}{:}
+            \PY{n}{input\PYZus{}text} \PY{o}{=} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Answer the question: }\PY{l+s+si}{\PYZob{}}\PY{n}{question}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ Given context: }\PY{l+s+si}{\PYZob{}}\PY{n}{context}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}
+            \PY{n}{inputs} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{p}{(}\PY{n}{input\PYZus{}text}\PY{p}{,} \PY{n}{return\PYZus{}tensors}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{pt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device}\PY{p}{)}
+            \PY{k}{with} \PY{n}{torch}\PY{o}{.}\PY{n}{no\PYZus{}grad}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                \PY{n}{outputs} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model}\PY{o}{.}\PY{n}{generate}\PY{p}{(}
+                    \PY{n}{input\PYZus{}ids}\PY{o}{=}\PY{n}{inputs}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{input\PYZus{}ids}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+                    \PY{n}{attention\PYZus{}mask}\PY{o}{=}\PY{n}{inputs}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{attention\PYZus{}mask}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+                    \PY{n}{max\PYZus{}length}\PY{o}{=}\PY{n}{max\PYZus{}length}\PY{p}{,}
+                    \PY{n}{num\PYZus{}beams}\PY{o}{=}\PY{n}{num\PYZus{}beams}\PY{p}{,}
+                    \PY{n}{early\PYZus{}stopping}\PY{o}{=}\PY{k+kc}{True}
+                \PY{p}{)}
+            \PY{n}{decoded\PYZus{}output} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{o}{.}\PY{n}{decode}\PY{p}{(}\PY{n}{outputs}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{skip\PYZus{}special\PYZus{}tokens}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+            \PY{k}{return} \PY{n}{decoded\PYZus{}output}
+        \PY{k}{except} \PY{n+ne}{Exception} \PY{k}{as} \PY{n}{e}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error generating text for }\PY{l+s+si}{\PYZob{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{: }\PY{l+s+si}{\PYZob{}}\PY{n}{e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{k}{return} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error generating text for }\PY{l+s+si}{\PYZob{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}
+        
+\PY{k}{class} \PY{n+nc}{DocumentQAModelGenerator}\PY{p}{:}
+    \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{model\PYZus{}name}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{device}\PY{o}{=}\PY{k+kc}{None}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device} \PY{o}{=} \PY{n}{device} \PY{k}{if} \PY{n}{device} \PY{k}{else} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name} \PY{o}{=} \PY{n}{model\PYZus{}name}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model} \PY{o}{=} \PY{n}{AutoModelForDocumentQuestionAnswering}\PY{o}{.}\PY{n}{from\PYZus{}pretrained}\PY{p}{(}\PY{n}{model\PYZus{}name}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer} \PY{o}{=} \PY{n}{AutoTokenizer}\PY{o}{.}\PY{n}{from\PYZus{}pretrained}\PY{p}{(}\PY{n}{model\PYZus{}name}\PY{p}{)}
+
+    \PY{k}{def} \PY{n+nf}{generate}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{context}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{question}\PY{p}{:} \PY{n+nb}{str}\PY{p}{)}\PY{p}{:}
+        \PY{k}{try}\PY{p}{:}
+            \PY{n}{context\PYZus{}tokens} \PY{o}{=} \PY{n}{context}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{p}{)}
+            \PY{n}{question\PYZus{}tokens} \PY{o}{=} \PY{n}{question}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{p}{)}
+            
+            \PY{n}{inputs} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{p}{(}
+                \PY{n}{question\PYZus{}tokens}\PY{p}{,}
+                \PY{n}{context\PYZus{}tokens}\PY{p}{,}
+                \PY{n}{return\PYZus{}tensors}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{pt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                \PY{n}{is\PYZus{}split\PYZus{}into\PYZus{}words}\PY{o}{=}\PY{k+kc}{True}  
+            \PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device}\PY{p}{)}
+            \PY{n}{bbox} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{tensor}\PY{p}{(}\PY{p}{[}\PY{p}{[}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1000}\PY{p}{,} \PY{l+m+mi}{1000}\PY{p}{]}\PY{p}{]} \PY{o}{*} \PY{n+nb}{len}\PY{p}{(}\PY{n}{inputs}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{input\PYZus{}ids}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{]}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n}{torch}\PY{o}{.}\PY{n}{int}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device}\PY{p}{)}
+            \PY{k}{with} \PY{n}{torch}\PY{o}{.}\PY{n}{no\PYZus{}grad}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                \PY{n}{outputs} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model}\PY{p}{(}\PY{n}{input\PYZus{}ids}\PY{o}{=}\PY{n}{inputs}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{input\PYZus{}ids}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{bbox}\PY{o}{=}\PY{n}{bbox}\PY{p}{,} \PY{n}{attention\PYZus{}mask}\PY{o}{=}\PY{n}{inputs}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{attention\PYZus{}mask}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+            \PY{n}{answer\PYZus{}start} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{argmax}\PY{p}{(}\PY{n}{outputs}\PY{o}{.}\PY{n}{start\PYZus{}logits}\PY{p}{)}
+            \PY{n}{answer\PYZus{}end} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{argmax}\PY{p}{(}\PY{n}{outputs}\PY{o}{.}\PY{n}{end\PYZus{}logits}\PY{p}{)} \PY{o}{+} \PY{l+m+mi}{1}
+            \PY{n}{answer} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{o}{.}\PY{n}{decode}\PY{p}{(}\PY{n}{inputs}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{input\PYZus{}ids}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{n}{answer\PYZus{}start}\PY{p}{:}\PY{n}{answer\PYZus{}end}\PY{p}{]}\PY{p}{)}
+            \PY{k}{return} \PY{n}{answer}
+        \PY{k}{except} \PY{n+ne}{Exception} \PY{k}{as} \PY{n}{e}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error generating text for }\PY{l+s+si}{\PYZob{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{: }\PY{l+s+si}{\PYZob{}}\PY{n}{e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{k}{return} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error generating text for }\PY{l+s+si}{\PYZob{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}
+
+\PY{k}{class} \PY{n+nc}{ModelGeneratorFactory}\PY{p}{:}
+    \PY{n}{distilbert\PYZus{}66M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{distilbert\PYZhy{}base\PYZhy{}uncased\PYZhy{}distilled\PYZhy{}squad}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{66M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
+    \PY{n}{blenderbot\PYZus{}90M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{facebook/blenderbot\PYZhy{}90M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{90M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
+    \PY{n}{gpt\PYZus{}2\PYZus{}124M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gpt2}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{124M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
+    \PY{n}{gpt\PYZus{}neo\PYZus{}125M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{EleutherAI/gpt\PYZhy{}neo\PYZhy{}125M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{125M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
+    \PY{n}{roberta\PYZus{}base\PYZus{}125M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{deepset/roberta\PYZhy{}base\PYZhy{}squad2}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{125M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
+    \PY{n}{bart\PYZus{}base\PYZus{}139M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{facebook/bart\PYZhy{}base}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{139M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
+    \PY{n}{layoutLMv2\PYZus{}base\PYZus{}200M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{microsoft/layoutlmv2\PYZhy{}base\PYZhy{}uncased}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{200M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
+    \PY{n}{t5\PYZus{}base\PYZus{}220M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{t5\PYZhy{}base}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{220M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
+    \PY{n}{bert\PYZus{}large\PYZus{}340M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bert\PYZhy{}large\PYZhy{}uncased\PYZhy{}whole\PYZhy{}word\PYZhy{}masking\PYZhy{}finetuned\PYZhy{}squad}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{340M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
+    \PY{n}{gpt\PYZus{}2\PYZus{}medium\PYZus{}355M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gpt2\PYZhy{}medium}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{355M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
+    \PY{n}{pegasus\PYZus{}xsum\PYZus{}568M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{google/pegasus\PYZhy{}xsum}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{568M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
+    \PY{n}{gpt\PYZus{}2\PYZus{}large\PYZus{}762M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gpt2\PYZhy{}large}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{762M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
+    \PY{n}{dialoGPT\PYZus{}large\PYZus{}762M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{microsoft/DialoGPT\PYZhy{}large}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{762M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
+    \PY{n}{t5\PYZus{}large\PYZus{}770M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{t5\PYZhy{}large}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{770M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
+    \PY{n}{gpt\PYZus{}neo\PYZus{}1\PYZus{}3B} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{EleutherAI/gpt\PYZhy{}neo\PYZhy{}1.3B}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{1.3B}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
+
+    \PY{n}{causal\PYZus{}models} \PY{o}{=} \PY{p}{[}
+        \PY{n}{blenderbot\PYZus{}90M}\PY{p}{,}
+        \PY{n}{gpt\PYZus{}2\PYZus{}124M}\PY{p}{,} 
+        \PY{n}{gpt\PYZus{}neo\PYZus{}125M}\PY{p}{,} 
+        \PY{n}{gpt\PYZus{}2\PYZus{}medium\PYZus{}355M}\PY{p}{,} 
+        \PY{n}{gpt\PYZus{}2\PYZus{}large\PYZus{}762M}\PY{p}{,}
+        \PY{c+c1}{\PYZsh{} dialoGPT\PYZus{}large\PYZus{}762M,}
+        \PY{n}{gpt\PYZus{}neo\PYZus{}1\PYZus{}3B}\PY{p}{,}  
+    \PY{p}{]}
+    \PY{n}{seq2seq\PYZus{}models} \PY{o}{=} \PY{p}{[}
+        \PY{n}{bart\PYZus{}base\PYZus{}139M}\PY{p}{,}
+        \PY{n}{pegasus\PYZus{}xsum\PYZus{}568M}
+    \PY{p}{]}
+    \PY{n}{qa\PYZus{}models} \PY{o}{=} \PY{p}{[}
+        \PY{n}{distilbert\PYZus{}66M}\PY{p}{,} 
+        \PY{n}{roberta\PYZus{}base\PYZus{}125M}\PY{p}{,} 
+        \PY{n}{bert\PYZus{}large\PYZus{}340M}
+    \PY{p}{]}
+    \PY{n}{document\PYZus{}qa\PYZus{}models} \PY{o}{=} \PY{p}{[}
+        \PY{n}{layoutLMv2\PYZus{}base\PYZus{}200M}
+    \PY{p}{]}
+    \PY{n}{t5\PYZus{}models} \PY{o}{=} \PY{p}{[}
+        \PY{n}{t5\PYZus{}base\PYZus{}220M}\PY{p}{,}
+        \PY{n}{t5\PYZus{}large\PYZus{}770M} 
+    \PY{p}{]}
+
+    \PY{n+nd}{@staticmethod}
+    \PY{k}{def} \PY{n+nf}{create\PYZus{}generator}\PY{p}{(}\PY{n}{model}\PY{p}{:} \PY{n}{Dict}\PY{p}{[}\PY{n+nb}{str}\PY{p}{,} \PY{n+nb}{str}\PY{p}{]}\PY{p}{,} \PY{n}{device}\PY{o}{=}\PY{k+kc}{None}\PY{p}{)}\PY{p}{:}
+        \PY{k}{if} \PY{n}{model} \PY{o+ow}{in} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{causal\PYZus{}models}\PY{p}{:}
+            \PY{k}{return} \PY{n}{CausalModelGenerator}\PY{p}{(}\PY{n}{model}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{device}\PY{p}{)}
+        \PY{k}{elif} \PY{n}{model} \PY{o+ow}{in} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{seq2seq\PYZus{}models}\PY{p}{:}
+            \PY{k}{return} \PY{n}{Seq2SeqModelGenerator}\PY{p}{(}\PY{n}{model}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{device}\PY{p}{)}
+        \PY{k}{elif} \PY{n}{model} \PY{o+ow}{in} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{qa\PYZus{}models}\PY{p}{:}
+            \PY{k}{return} \PY{n}{QAModelGenerator}\PY{p}{(}\PY{n}{model}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{device}\PY{p}{)}
+        \PY{k}{elif} \PY{n}{model} \PY{o+ow}{in} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{t5\PYZus{}models}\PY{p}{:}
+            \PY{k}{return} \PY{n}{T5ModelGenerator}\PY{p}{(}\PY{n}{model}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{device}\PY{p}{)}
+        \PY{k}{elif} \PY{n}{model} \PY{o+ow}{in} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{document\PYZus{}qa\PYZus{}models}\PY{p}{:}
+            \PY{k}{return} \PY{n}{DocumentQAModelGenerator}\PY{p}{(}\PY{n}{model}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{device}\PY{p}{)}
+        \PY{k}{else}\PY{p}{:}
+            \PY{k}{raise} \PY{n+ne}{ValueError}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Model name }\PY{l+s+si}{\PYZob{}}\PY{n}{model}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ is not recognized or supported.}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{125}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{device} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{126}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{run\PYZus{}llm\PYZus{}experiment}\PY{p}{(}\PY{n}{llms\PYZus{}list\PYZus{}in}\PY{p}{,} \PY{n}{question\PYZus{}in}\PY{p}{,} \PY{n}{retrieved\PYZus{}documents\PYZus{}in}\PY{p}{,} \PY{n}{device\PYZus{}in}\PY{p}{,} \PY{n}{output\PYZus{}file\PYZus{}in} \PY{o}{=} \PY{k+kc}{None}\PY{p}{,} \PY{n}{model\PYZus{}type\PYZus{}in}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Causal}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+    \PY{n}{results} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+
+    \PY{k}{for} \PY{n}{llm} \PY{o+ow}{in} \PY{n}{llms\PYZus{}list\PYZus{}in}\PY{p}{:}
+        \PY{n}{single\PYZus{}result} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+        \PY{n}{single\PYZus{}result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{modelType}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{model\PYZus{}type\PYZus{}in}
+        \PY{n}{single\PYZus{}result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{llm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{llm}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+        \PY{n}{single\PYZus{}result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{llm}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+        \PY{n}{single\PYZus{}result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{question\PYZus{}in}
+        \PY{n}{single\PYZus{}result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{retrieved\PYZus{}documents}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{retrieved\PYZus{}documents\PYZus{}in}   
+        \PY{k}{try}\PY{p}{:}
+            \PY{n}{generator} \PY{o}{=} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{create\PYZus{}generator}\PY{p}{(}\PY{n}{llm}\PY{p}{,} \PY{n}{device\PYZus{}in}\PY{p}{)}
+            \PY{n}{single\PYZus{}result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{LLM Answer}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{generator}\PY{o}{.}\PY{n}{generate}\PY{p}{(}\PY{n}{question}\PY{o}{=}\PY{n}{question\PYZus{}in}\PY{p}{,} \PY{n}{context}\PY{o}{=}\PY{k+kc}{None}\PY{p}{)}
+            \PY{n}{single\PYZus{}result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{RAG Answer}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{generator}\PY{o}{.}\PY{n}{generate}\PY{p}{(}\PY{n}{question}\PY{o}{=}\PY{n}{question\PYZus{}in}\PY{p}{,} \PY{n}{context}\PY{o}{=}\PY{n}{retrieved\PYZus{}documents\PYZus{}in}\PY{p}{)}
+            \PY{n}{results}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{single\PYZus{}result}\PY{p}{)}
+        \PY{k}{except} \PY{n+ne}{Exception} \PY{k}{as} \PY{n}{e}\PY{p}{:}
+            \PY{n}{error\PYZus{}message} \PY{o}{=} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error creating generator for }\PY{l+s+si}{\PYZob{}}\PY{n}{llm}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{: }\PY{l+s+si}{\PYZob{}}\PY{n}{e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}
+            \PY{n+nb}{print}\PY{p}{(}\PY{n}{error\PYZus{}message}\PY{p}{)}
+            \PY{n}{single\PYZus{}result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{LLM Answer}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{error\PYZus{}message}
+            \PY{n}{single\PYZus{}result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{RAG Answer}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{error\PYZus{}message}
+            \PY{n}{results}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{single\PYZus{}result}\PY{p}{)}
+        \PY{k}{if}\PY{p}{(}\PY{n}{output\PYZus{}file\PYZus{}in}\PY{p}{)}\PY{p}{:}
+            \PY{n}{save\PYZus{}dict\PYZus{}to\PYZus{}json\PYZus{}file}\PY{p}{(}\PY{n}{results}\PY{p}{,} \PY{n}{output\PYZus{}file\PYZus{}in}\PY{p}{)}
+    \PY{k}{return} \PY{n}{results}   
+
+\PY{k}{def} \PY{n+nf}{clean\PYZus{}and\PYZus{}join\PYZus{}sentences}\PY{p}{(}\PY{n}{sentences}\PY{p}{)}\PY{p}{:}
+    \PY{n}{cleaned\PYZus{}sentences} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+    \PY{k}{for} \PY{n}{sentence} \PY{o+ow}{in} \PY{n}{sentences}\PY{p}{:}
+        \PY{n}{sentence} \PY{o}{=} \PY{n}{sentence}\PY{o}{.}\PY{n}{strip}\PY{p}{(}\PY{p}{)}
+        \PY{k}{if} \PY{o+ow}{not} \PY{n}{re}\PY{o}{.}\PY{n}{search}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[.!?]\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{sentence}\PY{p}{)}\PY{p}{:}
+            \PY{n}{sentence} \PY{o}{+}\PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}
+        \PY{n}{cleaned\PYZus{}sentences}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{sentence}\PY{p}{)}
+    \PY{n}{paragraph} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ }\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{cleaned\PYZus{}sentences}\PY{p}{)}
+    \PY{k}{return} \PY{n}{paragraph}
+\PY{k+kn}{import} \PY{n+nn}{re}
+
+\PY{k}{def} \PY{n+nf}{clean\PYZus{}and\PYZus{}combine\PYZus{}sentences}\PY{p}{(}\PY{n}{sentences}\PY{p}{)}\PY{p}{:}
+    \PY{n}{cleaned\PYZus{}sentences} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+    
+    \PY{k}{for} \PY{n}{sentence} \PY{o+ow}{in} \PY{n}{sentences}\PY{p}{:}
+        \PY{n}{sentence} \PY{o}{=} \PY{n}{sentence}\PY{o}{.}\PY{n}{strip}\PY{p}{(}\PY{p}{)}
+        \PY{k}{if} \PY{n}{sentence} \PY{o+ow}{and} \PY{n}{sentence}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{isupper}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+            \PY{n}{sentence} \PY{o}{=} \PY{n}{sentence}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{lower}\PY{p}{(}\PY{p}{)} \PY{o}{+} \PY{n}{sentence}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}
+        \PY{n}{sentence} \PY{o}{=} \PY{n}{re}\PY{o}{.}\PY{n}{sub}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[.!?]\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{sentence}\PY{p}{)}
+        \PY{n}{cleaned\PYZus{}sentences}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{sentence}\PY{p}{)}
+    \PY{n}{combined\PYZus{}sentence} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ and }\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{cleaned\PYZus{}sentences}\PY{p}{)}
+    \PY{n}{combined\PYZus{}sentence} \PY{o}{+}\PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}
+    \PY{k}{return} \PY{n}{combined\PYZus{}sentence}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{} Experiment 1}
+\PY{c+c1}{\PYZsh{} Question Type: Fact\PYZhy{}based Question}
+\PY{c+c1}{\PYZsh{} Question: \PYZdq{}How tall is the Pyramid of Giza?\PYZdq{}}
+\PY{c+c1}{\PYZsh{} Retrieval type: Sentence retrieval}
+\PY{c+c1}{\PYZsh{} Retrievals : 1}
+
+\PY{n}{question} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{How tall is the Pyramid of Giza?}\PY{l+s+s2}{\PYZdq{}}
+
+\PY{n}{experiment\PYZus{}info} \PY{o}{=} \PY{p}{\PYZob{}}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question Type}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Fact\PYZhy{}based Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{question}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrieval type}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Sentence retrieval}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrievals}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}
+\PY{p}{\PYZcb{}}
+
+\PY{n}{sentence\PYZus{}retriever\PYZus{}in} \PY{o}{=} \PY{n}{Retriever}\PY{p}{(}\PY{p}{)}
+\PY{n}{sentence\PYZus{}retriever\PYZus{}in}\PY{o}{.}\PY{n}{add\PYZus{}documents}\PY{p}{(}\PY{n}{read\PYZus{}and\PYZus{}split\PYZus{}sentences}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{facts\PYZus{}sentences}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+\PY{n}{device} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n}{dictionaryModels} \PY{o}{=} \PY{p}{\PYZob{}}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{casual\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{causal\PYZus{}models}\PY{p}{,} 
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{qa\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{qa\PYZus{}models} \PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{t5\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{t5\PYZus{}models} 
+    \PY{p}{\PYZcb{}}
+\PY{n}{results} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{n}{results}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{experiment\PYZus{}info}\PY{p}{)}
+\PY{k}{for} \PY{n}{llms\PYZus{}key} \PY{o+ow}{in} \PY{n}{dictionaryModels}\PY{p}{:}
+    \PY{n}{single\PYZus{}llm\PYZus{}result} \PY{o}{=} \PY{n}{run\PYZus{}llm\PYZus{}experiment}\PY{p}{(}
+        \PY{n}{model\PYZus{}type\PYZus{}in} \PY{o}{=} \PY{n}{llms\PYZus{}key}\PY{p}{,}
+        \PY{n}{llms\PYZus{}list\PYZus{}in} \PY{o}{=} \PY{n}{dictionaryModels}\PY{p}{[}\PY{n}{llms\PYZus{}key}\PY{p}{]}\PY{p}{,}
+        \PY{n}{question\PYZus{}in} \PY{o}{=} \PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}
+        \PY{n}{retrieved\PYZus{}documents\PYZus{}in} \PY{o}{=}\PY{n}{clean\PYZus{}and\PYZus{}join\PYZus{}sentences}\PY{p}{(}\PY{n}{sentence\PYZus{}retriever\PYZus{}in}\PY{o}{.}\PY{n}{retrieve\PYZus{}documents}\PY{p}{(}\PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrievals}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+        \PY{n}{device\PYZus{}in} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+    \PY{n}{results}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{single\PYZus{}llm\PYZus{}result}\PY{p}{)}
+\PY{n}{save\PYZus{}dict\PYZus{}to\PYZus{}json\PYZus{}file}\PY{p}{(}\PY{n}{results}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{experiments/Experiment1.json}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}    
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{} Experiment 3}
+\PY{c+c1}{\PYZsh{} Question Type: Fact\PYZhy{}based Question}
+\PY{c+c1}{\PYZsh{} Question: How tall is the Pyramid of Giza?}
+\PY{c+c1}{\PYZsh{} Retrieval type: Paragraph retrieval}
+\PY{c+c1}{\PYZsh{} Retrievals: 1}
+
+\PY{n}{question} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{How tall is the Pyramid of Giza?}\PY{l+s+s2}{\PYZdq{}}
+\PY{n}{experiment\PYZus{}info} \PY{o}{=} \PY{p}{\PYZob{}}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question Type}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Fact\PYZhy{}based Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{question}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrieval type}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Paragraph retrieval}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrievals}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}
+\PY{p}{\PYZcb{}}
+\PY{n}{sentence\PYZus{}retriever\PYZus{}in} \PY{o}{=} \PY{n}{Retriever}\PY{p}{(}\PY{p}{)}
+\PY{n}{sentence\PYZus{}retriever\PYZus{}in}\PY{o}{.}\PY{n}{add\PYZus{}documents}\PY{p}{(}\PY{n}{read\PYZus{}and\PYZus{}split\PYZus{}paragraphs}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{facts\PYZus{}sentences}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+\PY{n}{device} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n}{dictionaryModels} \PY{o}{=} \PY{p}{\PYZob{}}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{casual\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{causal\PYZus{}models}\PY{p}{,} 
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{qa\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{qa\PYZus{}models} \PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{t5\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{t5\PYZus{}models} 
+    \PY{p}{\PYZcb{}}
+
+\PY{n}{results} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{n}{results}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{experiment\PYZus{}info}\PY{p}{)}
+\PY{k}{for} \PY{n}{llms\PYZus{}key} \PY{o+ow}{in} \PY{n}{dictionaryModels}\PY{p}{:}
+    \PY{n}{result\PYZus{}llm} \PY{o}{=} \PY{n}{run\PYZus{}llm\PYZus{}experiment}\PY{p}{(}
+        \PY{n}{model\PYZus{}type\PYZus{}in} \PY{o}{=} \PY{n}{llms\PYZus{}key}\PY{p}{,}
+        \PY{n}{llms\PYZus{}list\PYZus{}in} \PY{o}{=} \PY{n}{dictionaryModels}\PY{p}{[}\PY{n}{llms\PYZus{}key}\PY{p}{]}\PY{p}{,}
+        \PY{n}{question\PYZus{}in} \PY{o}{=} \PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}
+        \PY{n}{retrieved\PYZus{}documents\PYZus{}in} \PY{o}{=}\PY{n}{clean\PYZus{}and\PYZus{}join\PYZus{}sentences}\PY{p}{(}\PY{n}{sentence\PYZus{}retriever\PYZus{}in}\PY{o}{.}\PY{n}{retrieve\PYZus{}documents}\PY{p}{(}\PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrievals}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+        \PY{n}{device\PYZus{}in} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+    \PY{n}{results}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{result\PYZus{}llm}\PY{p}{)}
+\PY{n}{save\PYZus{}dict\PYZus{}to\PYZus{}json\PYZus{}file}\PY{p}{(}\PY{n}{results}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{experiments/Experiment3.json}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}    
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{} Experiment 4}
+\PY{c+c1}{\PYZsh{} Question Type: List\PYZhy{}based Question}
+\PY{c+c1}{\PYZsh{} Question: What materials were used in constructing the Great Wall of China?}
+\PY{c+c1}{\PYZsh{} Retrieval type: Paragraph retrieval}
+\PY{c+c1}{\PYZsh{} Retrievals : 1}
+
+\PY{n}{question} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{What materials were used in constructing the Great Wall of China?}\PY{l+s+s2}{\PYZdq{}}
+
+\PY{n}{experiment\PYZus{}info} \PY{o}{=} \PY{p}{\PYZob{}}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question Type}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{List\PYZhy{}based Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{question}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrieval type}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Paragraph retrieval}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrievals}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}
+\PY{p}{\PYZcb{}}
+
+\PY{n}{sentence\PYZus{}retriever\PYZus{}in} \PY{o}{=} \PY{n}{Retriever}\PY{p}{(}\PY{p}{)}
+\PY{n}{sentence\PYZus{}retriever\PYZus{}in}\PY{o}{.}\PY{n}{add\PYZus{}documents}\PY{p}{(}\PY{n}{read\PYZus{}and\PYZus{}split\PYZus{}paragraphs}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{facts\PYZus{}sentences}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+\PY{n}{device} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n}{dictionaryModels} \PY{o}{=} \PY{p}{\PYZob{}}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{casual\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{causal\PYZus{}models}\PY{p}{,} 
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{qa\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{qa\PYZus{}models} \PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{t5\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{t5\PYZus{}models} 
+    \PY{p}{\PYZcb{}}
+
+\PY{n}{results} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{n}{results}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{experiment\PYZus{}info}\PY{p}{)}
+\PY{k}{for} \PY{n}{llms\PYZus{}key} \PY{o+ow}{in} \PY{n}{dictionaryModels}\PY{p}{:}
+    \PY{n}{result\PYZus{}llm} \PY{o}{=} \PY{n}{run\PYZus{}llm\PYZus{}experiment}\PY{p}{(}
+        \PY{n}{model\PYZus{}type\PYZus{}in} \PY{o}{=} \PY{n}{llms\PYZus{}key}\PY{p}{,}
+        \PY{n}{llms\PYZus{}list\PYZus{}in} \PY{o}{=} \PY{n}{dictionaryModels}\PY{p}{[}\PY{n}{llms\PYZus{}key}\PY{p}{]}\PY{p}{,}
+        \PY{n}{question\PYZus{}in} \PY{o}{=} \PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}
+        \PY{n}{retrieved\PYZus{}documents\PYZus{}in} \PY{o}{=}\PY{n}{clean\PYZus{}and\PYZus{}join\PYZus{}sentences}\PY{p}{(}\PY{n}{sentence\PYZus{}retriever\PYZus{}in}\PY{o}{.}\PY{n}{retrieve\PYZus{}documents}\PY{p}{(}\PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}  \PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrievals}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+        \PY{n}{device\PYZus{}in} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+    \PY{n}{results}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{result\PYZus{}llm}\PY{p}{)}
+\PY{n}{save\PYZus{}dict\PYZus{}to\PYZus{}json\PYZus{}file}\PY{p}{(}\PY{n}{results}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{experiments/Experiment4.json}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}  
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{newpage}
+
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{} Experiment 5}
+\PY{c+c1}{\PYZsh{} Question Type: Synthesis\PYZhy{}based Question}
+\PY{c+c1}{\PYZsh{} Question: Which famous structures, both designed or structurally influenced by Gustave Eiffel?}
+\PY{c+c1}{\PYZsh{} Retrieval type: Paragraph retrieval}
+\PY{c+c1}{\PYZsh{} Retrievals : 3}
+
+\PY{n}{question} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Which famous structures, both designed or structurally influenced by Gustave Eiffel?}\PY{l+s+s2}{\PYZdq{}}
+\PY{n}{experiment\PYZus{}info} \PY{o}{=} \PY{p}{\PYZob{}}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question Type}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Synthesis\PYZhy{}based Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{question}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrieval type}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Paragraph retrieval}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrievals}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{3}
+\PY{p}{\PYZcb{}}
+
+\PY{n}{sentence\PYZus{}retriever\PYZus{}in} \PY{o}{=} \PY{n}{Retriever}\PY{p}{(}\PY{p}{)}
+\PY{n}{sentence\PYZus{}retriever\PYZus{}in}\PY{o}{.}\PY{n}{add\PYZus{}documents}\PY{p}{(}\PY{n}{read\PYZus{}and\PYZus{}split\PYZus{}paragraphs}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{facts\PYZus{}sentences}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+\PY{n}{device} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n}{dictionaryModels} \PY{o}{=} \PY{p}{\PYZob{}}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{casual\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{causal\PYZus{}models}\PY{p}{,} 
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{qa\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{qa\PYZus{}models} \PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{t5\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{t5\PYZus{}models} 
+    \PY{p}{\PYZcb{}}
+\PY{n}{results} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{n}{results}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{experiment\PYZus{}info}\PY{p}{)}
+\PY{k}{for} \PY{n}{llms\PYZus{}key} \PY{o+ow}{in} \PY{n}{dictionaryModels}\PY{p}{:}
+    \PY{n}{results\PYZus{}llm} \PY{o}{=} \PY{n}{run\PYZus{}llm\PYZus{}experiment}\PY{p}{(}
+        \PY{n}{model\PYZus{}type\PYZus{}in} \PY{o}{=} \PY{n}{llms\PYZus{}key}\PY{p}{,}
+        \PY{n}{llms\PYZus{}list\PYZus{}in} \PY{o}{=} \PY{n}{dictionaryModels}\PY{p}{[}\PY{n}{llms\PYZus{}key}\PY{p}{]}\PY{p}{,}
+        \PY{n}{question\PYZus{}in} \PY{o}{=} \PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}
+        \PY{n}{retrieved\PYZus{}documents\PYZus{}in} \PY{o}{=}\PY{n}{clean\PYZus{}and\PYZus{}join\PYZus{}sentences}\PY{p}{(}\PY{n}{sentence\PYZus{}retriever\PYZus{}in}\PY{o}{.}\PY{n}{retrieve\PYZus{}documents}\PY{p}{(}\PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrievals}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+        \PY{n}{device\PYZus{}in} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+    \PY{n}{results}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{results\PYZus{}llm}\PY{p}{)}
+\PY{n}{save\PYZus{}dict\PYZus{}to\PYZus{}json\PYZus{}file}\PY{p}{(}\PY{n}{results}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{experiments/Experiment5.json}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}  
+\end{Verbatim}
+\end{tcolorbox}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}

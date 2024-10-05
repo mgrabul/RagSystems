@@ -25,10 +25,6 @@
 \usepackage{xcolor}    % for highlighting text (e.g. \hl)
 \usepackage{soul}      % for highlighting text (e.g. \hl)
 \usepackage{ragged2e}  % for text alignment    (e.g. \justify)
-% custom packages ->
-\usepackage{booktabs}  % for tables
-\setcounter{secnumdepth}{2} % for numbering subsubsections
-% costom packages <-
 
 \RequirePackage{fontspec}
 \setmainfont{Times New Roman}

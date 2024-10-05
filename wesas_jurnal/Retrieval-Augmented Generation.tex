@@ -408,23 +408,6 @@ embedding by a Sentence embedding model:
 
 \textbf{Sentence embedding model}
 
-% \begin{verbatim}
-% Sentence 
-%  |
-%   -> Tokenization
-%       | 
-%        -> Embedded Vectors
-%            | 
-%             -> Contextual Vectors
-%                 | 
-%                  -> | Mean Pooling            |  
-%                     | Max Pooling             | 
-%                     | CLS Token               |
-%                     | Attention-based Pooling |
-%                        | 
-%                         -> Sentence embedding
-% \end{verbatim}
-
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\linewidth]{resources/v1/sentenceEmbeddingModelCreation.png}
@@ -1372,17 +1355,19 @@ used in the construction of the Great Wall of China.
 \subsubsection{QA Models}
 
 \begin{table*}[htbp]
-\centering
-\caption{Comparison of LLM and RAG Answers} % Optional caption
-\begin{tabular}{p{0.3714\linewidth} p{0.4000\linewidth} p{0.2286\linewidth}}
-\toprule
-\textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
-\midrule
-distilbert-base-uncased-distilled-squad\_66M & what materials were used in constructing the great wall of china? {[}SEP{]} & stone, brick, tamped earth, and wood \\
-deepset roberta-base-squad2\_125M & & stone, brick, tamped earth, and wood \\
-bert-large-uncased-whole-word-masking-finetuned-squad\_340M & & stone, brick, tamped earth, and wood \\
-\bottomrule
-\end{tabular}
+  \centering
+  \caption{Comparison of LLM and RAG Answers}
+  \begin{tabular}{|p{0.3714\linewidth}|p{0.4000\linewidth}|p{0.2286\linewidth}|}
+    \hline
+    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
+    \hline
+    distilbert-base-uncased-distilled-squad\_66M & what materials were used in constructing the great wall of china? {[}SEP{]} & stone, brick, tamped earth, and wood \\
+    \hline
+    deepset roberta-base-squad2\_125M & & stone, brick, tamped earth, and wood \\
+    \hline
+    bert-large-uncased-whole-word-masking-finetuned-squad\_340M & & stone, brick, tamped earth, and wood \\
+    \hline
+  \end{tabular}
 \end{table*}
   
 
@@ -1395,17 +1380,19 @@ information.
 \subsubsection{T5 Models}
 
 \begin{table*}[htbp]
-\centering
-\caption{Comparison of LLM and RAG Answers} % Optional caption for the table
-\begin{tabular}{p{0.3714\linewidth} p{0.4000\linewidth} p{0.2286\linewidth}}
-\toprule
-\textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
-\midrule
-distilbert-base-uncased-distilled-squad\_66M & what materials were used in constructing the great wall of china? {[}SEP{]} & stone, brick, tamped earth, and wood \\
-deepset roberta-base-squad2\_125M & & stone, brick, tamped earth, and wood \\
-bert-large-uncased-whole-word-masking-finetuned-squad\_340M & & stone, brick, tamped earth, and wood \\
-\bottomrule
-\end{tabular}
+  \centering
+  \caption{Comparison of LLM and RAG Answers} % Optional caption for the table
+  \begin{tabular}{|p{0.3714\linewidth}|p{0.4000\linewidth}|p{0.2286\linewidth}|}
+    \hline
+    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
+    \hline
+    distilbert-base-uncased-distilled-squad\_66M & what materials were used in constructing the great wall of china? {[}SEP{]} & stone, brick, tamped earth, and wood \\
+    \hline
+    deepset roberta-base-squad2\_125M & & stone, brick, tamped earth, and wood \\
+    \hline
+    bert-large-uncased-whole-word-masking-finetuned-squad\_340M & & stone, brick, tamped earth, and wood \\
+    \hline
+  \end{tabular}
 \end{table*}
 
 The T5 models also performed well in the RAG approach, consistently

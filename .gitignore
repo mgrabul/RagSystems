@@ -19,11 +19,12 @@
 /.quarto/
 /notes/*
 # LaTeX
-/*.log
-/*.aux
-/*.gz
-/*.xdv
-/*.fdb_latexmk
-/*.fls
-/*.out
-/*.dvi
+*.log
+*.aux
+*.gz
+*.xdv
+*.fdb_latexmk
+*.fls
+*.out
+*.dvi
+*.toc

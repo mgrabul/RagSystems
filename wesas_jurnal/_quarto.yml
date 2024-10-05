@@ -1,0 +1,6 @@
+format:
+  pdf:
+    latex-engine: lualatex  # Or lualatex
+    number-sections: true
+    includes: 
+      in_header: "\\setcounter{section}{2}"

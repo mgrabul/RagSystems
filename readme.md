@@ -15,7 +15,7 @@ https://code.visualstudio.com/docs/python/python-quick-start
 * https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter
 
 ## VS Commands
-* Command Palette  Cmd+Shift+P
+* Command Palette Cmd+Shift+P
 
 ## install exporter
 * conda install nbconvert

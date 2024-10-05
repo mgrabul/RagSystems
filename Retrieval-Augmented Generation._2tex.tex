@@ -1,5 +1,14 @@
 \documentclass{wseas}
 
+% custom package for drawing flowcharts
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
+
+% custom setup of how figures are rendered
+\usepackage{caption}
+\captionsetup[figure]{labelfont=bf,labelformat=simple,labelsep=colon,name={Fig.}}
+
+
 \author{Marko Grabuloski}
 \title{Enhancing Language models with RAG}  
     
@@ -61,7 +70,6 @@ for. However, there are some aspects that are not ideal, for example:
   not be satisfied.
 \end{itemize}
 
-    % \newpage
 
 \section{What is Retrieval augmented generation}
 
@@ -116,9 +124,7 @@ LLMs is build from 2 sub-systems:
   language generation tool like LLMs
 \end{itemize}
 
-% \newpage
-
-From the perspective of usage of the RAG system, generating an answer is
+From the perspective of usage of the RAG system, the answer generation is
 done in three phases:
 
 \begin{itemize}
@@ -136,24 +142,40 @@ done in three phases:
   that will generate an answer.
 \end{itemize}
 
-\begin{verbatim}
-Question  
-    |
-     ---> | Retrieval and | 
-          | Augmentation  |
-                 |
-                  --> (context + question)
-                               |
-                                ---> | Generative |
-                                     |     AI     |
-                                     |  Component  | --> Answer             
-              
-\end{verbatim}
 
-    % \newpage
 
-\section{Generative AI component or a LLM
-transformer}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{resources/v1/retrievalAndAugmentation.png}
+  \caption{RAG's system retrieval and augmentation phase}
+  \label{fig:rag_system_figure}
+\end{figure}
+
+%  TODO: reference image in text, try to find example in journals
+% \tikzstyle{block} = [rectangle, draw, fill=blue!20, 
+%     text width=10em, text centered, rounded corners, minimum height=3em]
+% \tikzstyle{line} = [draw, -stealth]
+% \begin{figure}[htbp]
+%   \centering
+%   \begin{tikzpicture}[node distance=2cm]
+%     \node (question) [block] {Question};
+%     \node (retrieval) [block, below of=question] {Retrieval and Augmentation};
+%     \node (context) [block, below of=retrieval] {Context + Question};
+%     \node (generative) [block, below of=context] {Generative AI Component};
+%     \node (answer) [block, below of=generative] {Answer};
+
+%     \path [line] (question) -- (retrieval);
+%     \path [line] (retrieval) -- (context);
+%     \path [line] (context) -- (generative);
+%     \path [line] (generative) -- (answer);
+%   \end{tikzpicture}
+%   \caption{Answer generation process in a RAG system}
+%   \label{fig:flowchart}
+% \end{figure}
+
+
+
+\section{Generative AI component or a LLM transformer}
 
 The Generative AI component is an LLM transformer. Typically, the
 transformer has two main components, the encoder and the decoder. The
@@ -172,6 +194,8 @@ neural network, whose main objective is to map (embed) the input media
 item into a vector space, where the locality encodes the semantics of
 the input} \cite{cite2}.
 
+% TODO: add reference to the paper
+% TODO: there are double : in the same sentence, this should be fixed
 The decoder takes the input and generates new embeddings and again
 combines the output with the embedded tokens to produce new tokens. The
 vector transformation where token embeddings are transformed to
@@ -181,7 +205,6 @@ attention. It is described in the paper by Vaswani et al.~(2017)
 result of the initial research paper on transformers: The LLM
 transformers do not suffer from maintaining context and dependencies as
 much as recurrent or convolutional networks.
-
 Transformers can be trained significantly faster than architectures
 based on recurrent or convolutional layers.
 
@@ -196,17 +219,13 @@ smallest LLM ``What is the capital of France?'' it might return ``Berlin
 is the capital of France''. The answers will perhaps not be correct, but
 they will contain the context of the question and grammatically correct.
 
-\break
 \textbf{The generative component of the RAG system needs to be able for
 a given input and context to generate grammatically correct sentences
 related to the given context.}
 
-\break
 \textbf{This is exactly what is achieved with the LLM transformers and
 that is why they are ideal to be used in the generation phase of the RAG
 system.}
-\break
-% \newpage
 
 \section{Retrieval System}
 
@@ -232,40 +251,37 @@ embedding and store this embedding in the non-parametric memory.
 
 The process is as follows:
 
+%  TODO: use proper lists, this is probably bad
 \begin{itemize}
 \item
   \begin{enumerate}
-  \def\labelenumi{\arabic{enumi}.}
-  \item
+  % \def\labelenumi{\arabic{enumi}.}
+  % \item
     Take a text block, sentence, or paragraph.
   \end{enumerate}
 \item
   \begin{enumerate}
-  \def\labelenumi{\arabic{enumi}.}
-  \setcounter{enumi}{1}
-  \item
+  % \def\labelenumi{\arabic{enumi}.}
+  % \setcounter{enumi}{1}
+  % \item
     Passes this text to the Sentence Embedding model to get an
     embedding(dense vector).
   \end{enumerate}
 \item
   \begin{enumerate}
-  \def\labelenumi{\arabic{enumi}.}
-  \setcounter{enumi}{2}
-  \item
+  % \def\labelenumi{\arabic{enumi}.}
+  % \setcounter{enumi}{2}
+  % \item
     Stores this embedding in a non-parametric memory.
   \end{enumerate}
 \end{itemize}
-\begin{verbatim}
-Sentence
-|
- -> Tokenization
-     |
-      -> Embedded Vectors
-          |
-           -> Contextual Vectors
-\end{verbatim}
 
-% \newpage
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{resources/v1/retrievalSystemStoringPhase.png}
+  \caption{RAG retrieval system, storing phase}
+  \label{fig:retrieval_system_storing_phase_figure}
+\end{figure}
 
 \subsection{Retrieval Phase}
 
@@ -286,27 +302,15 @@ The process is as follows:
   the non-parametric memory.
 \end{enumerate}
 
-\begin{verbatim}
-Question 
-   |
-    -> Sentence Embedder 
-   |            | 
-   |             -> Embedding 
-   |                 |
-   |                  -> Non-Parametric memory 
-   |                         |
-   |                          -> Retrieved Documents
-   |                                   |
-   |                                    -> Context
-   |                                          | 
-   |                                           -->| Generative |
-    --------------------------------------------->| Component  |
-                                                        |
-                                                         -> Answer
-\end{verbatim}
 
-\subsubsection{Non-parametric memory - vector
-databases}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{resources/v1/retrievalSystemRetreavalPhase.png} % Replace with your image path
+  \caption{Siamese network with Contrastive Loss function}
+  \label{fig:retrieval_system_retreaval_phase_figure}
+\end{figure}
+
+\subsubsection{Non-parametric memory - vector databases}
 
 The non-parametric memory is usually a dense vector database. Besides
 being able to store vectors, a vector database must also have the
@@ -383,15 +387,12 @@ encoder.
 
 \textbf{LLM Transformer's encoder}
 
-\begin{verbatim}
-Sentence
-|
- -> Tokenization
-     |
-      -> Embedded Vectors
-          |
-           -> Contextual Vectors
-\end{verbatim}
+\begin{figure}[htbp]{}
+  \centering
+  \includegraphics[width=\linewidth]{resources/v1/transformerEncoder.png}
+  \caption{LLM Transformer's encoder}
+  \label{fig:encoder_layer_figure}
+\end{figure}
 
 The Sentence embedding models incorporates the LLM transformers encoder
 layer and adds additional layer of \emph{pooling}. This layer operates
@@ -401,31 +402,37 @@ sentence contextual embedding or sentence embedding. All the sentence
 contextual embedding have the same size, and it is equal to the size of
 the token embedding.
 
-% \newpage
 
 Here is a more visual description on the process of creating sentence
 embedding by a Sentence embedding model:
 
 \textbf{Sentence embedding model}
 
-\begin{verbatim}
-Sentence 
- |
-  -> Tokenization
-      | 
-       -> Embedded Vectors
-           | 
-            -> Contextual Vectors
-                | 
-                 -> | Mean Pooling            |  
-                    | Max Pooling             | 
-                    | CLS Token               |
-                    | Attention-based Pooling |
-                       | 
-                        -> Sentence embedding
-\end{verbatim}
+% \begin{verbatim}
+% Sentence 
+%  |
+%   -> Tokenization
+%       | 
+%        -> Embedded Vectors
+%            | 
+%             -> Contextual Vectors
+%                 | 
+%                  -> | Mean Pooling            |  
+%                     | Max Pooling             | 
+%                     | CLS Token               |
+%                     | Attention-based Pooling |
+%                        | 
+%                         -> Sentence embedding
+% \end{verbatim}
 
-    \subsubsection{Pooling}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{resources/v1/sentenceEmbeddingModelCreation.png}
+  \caption{Sentence embedding model}
+  \label{fig:sentence_embedding_model_figure}
+\end{figure}
+
+\subsubsection{Pooling}
 
 The pooling phase involves the task of combining multiple contextual
 token embeddings into one sentence embedding. The dimension of the token
@@ -462,6 +469,7 @@ entire sentences.
 The requirement of the sentence embedding model is as follows:
 
 % TODO question: should i enumerate some of the mathematical expressions, not sure since there are no formulas in this section
+% TODO check what the \textless{} does, probably it is not needed
 For every three blocks of text \(A\), \(P\), \(N\), the model \(SE\) is
 to provide three embeddings \(SE(A)\), \(SE(P)\), \(SE(N)\),\\
 such that: if \(A\) and \(P\) are semantically more similar \(A\) and
@@ -508,21 +516,43 @@ elements consist of two text blocks \(A\), \(C\) where:
   \(A\) or a text block that is not similar to \(A\)
 \end{itemize}
 
-\emph{Siamese network with Contrastive Loss function}
+% \emph{Siamese network with Contrastive Loss function}
 
-\begin{verbatim}
- Anchor                Positive/Negative
-  Input                      Input
-    |                          |
- Shared Network          Shared Network 
-    |                          |
- Anchor Embedding      Positive/Negative 
-       \                  Embedding
-        \                     /
-         \                   /
-            Contrastive Loss
-               Function
-\end{verbatim}
+% \begin{verbatim}
+%  Anchor                Positive/Negative
+%   Input                      Input
+%     |                          |
+%  Shared Network          Shared Network 
+%     |                          |
+%  Anchor Embedding      Positive/Negative 
+%        \                  Embedding
+%         \                     /
+%          \                   /
+%             Contrastive Loss
+%                Function
+% % \end{verbatim}
+% \begin{figure}[htbp]
+% \begin{verbatim}
+%  Anchor                Positive/Negative
+%   Input                      Input
+%     |                          |
+%  Shared Network          Shared Network 
+%     |                          |
+%  Anchor Embedding      Positive/Negative 
+%        \                  Embedding
+%         \                     /
+%          \                   /
+%             Contrastive Loss
+%                Function
+% \end{verbatim}
+% \end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{resources/v1/contrastiveLoss.png}
+  \caption{Siamese network with Contrastive Loss function}
+  \label{fig:contrastive_loss_function_figure}
+\end{figure}
 
 The networks end's with a contrastive loss function that is given with
 the following formula:
@@ -549,7 +579,6 @@ network can be trained on cases with similar and dissimilar embeddings.
   function is triggered only for a distance bigger than \(m\).
 \end{itemize}
 
-% \newpage
 
 \paragraph{Triplet Loss function}
 
@@ -562,25 +591,32 @@ semantically similar to \(A\) and is called the positive case. * The
 text block \(N\) is semantically different from \(A\) and \(P\) and is
 called the negative case.
 
-\emph{Siamese network with triplet loss function}
+% \emph{Siamese network with triplet loss function}
 
-\begin{verbatim}
+% \begin{verbatim}
                    
-Anchor        Positive      Negative
- Input         Input         Input
-   |             |             |
-Shared         Shared        Shared
-Network        Network       Network
-   |             |             |
-Anchor        Positive       Negative
-Embedding     Embedding     Embedding
-      \          |           /
-       \         |          /  
-        \        |         /
-         \       |        /
-          Triplet Distance
-            Loss function     
-\end{verbatim}
+% Anchor        Positive      Negative
+%  Input         Input         Input
+%    |             |             |
+% Shared         Shared        Shared
+% Network        Network       Network
+%    |             |             |
+% Anchor        Positive       Negative
+% Embedding     Embedding     Embedding
+%       \          |           /
+%        \         |          /  
+%         \        |         /
+%          \       |        /
+%           Triplet Distance
+%             Loss function     
+% \end{verbatim}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{resources/v1/tripletLoss.png}
+  \caption{Siamese network with triplet loss function}
+  \label{fig:triplet_loss_function_figure}
+\end{figure}
 
 This Siamese network ends with a triplet distance activation function.
 The function calculates the distance \(D(A,P)\) \(D(A,N)\) and is
@@ -651,7 +687,6 @@ explained. A representative example of a sentence embedding model is
 SBERT, which is based on the popular LLM BERT. This resource will use
 SBERT as a Sentence Embedder Model.
 
-    % \newpage
 
 \section{Related work}
 
@@ -786,7 +821,6 @@ The process is repeated for all the clusters, and a \(p_{sr}*p_{sc}\) is
 calculated. The answer with the highest \(p_{sr}*p_{sc}\) score is
 picked as the most relevant, and it is the answer that is returned.
 
-% \newpage
 
 \subsection{Recursive RAG}
 
@@ -801,7 +835,6 @@ this it tries to capture all the relevant information. The previous is
 described in the paper from (Karpukhin et al.~2020; Pondhouse Data, no
 date) \cite{cite16} \cite{cite17}
 
-    % \newpage
 
 \section{Research methodology}
 
@@ -913,7 +946,6 @@ that the retrieval system correctly mapped and retrieved the embeddings,
 and that the LLM is capable of drawing conclusions based on several
 facts.
 
-% \newpage
 
 \subsection{Retrieval and
 augmentation}
@@ -1039,7 +1071,6 @@ models when using a RAG approach were able to generate a correct answer.
 Taking in to consideration the parameters the smallest model that give a
 correct answer was GPT2 with 90M.
 
-% \newpage
 
 \subsubsection{QA Models}
 
@@ -1084,7 +1115,6 @@ the QA models.
 Conclusion: Given the size of the models the QA models are most
 appropriate for answering Fact-based Question.
 
-    % \newpage
 
 \subsection{Experiment 2: List-based Question - ``What materials were
 used in constructing the Great Wall of
@@ -1186,7 +1216,6 @@ RAG in ensuring accurate output.
 Given the size of the models the QA models are most appropriate for
 answering List-based Question.
 
-    % \newpage
 
 \subsection{Experiment 3: Fact-based Question - ``How tall is the
 Pyramid of
@@ -1283,8 +1312,6 @@ The QA models and T5 models were particularly efficient, consistently
 providing the correct height of the Pyramid of Giza. Given the size of
 the models, the most efficient for answering Fact-based Question with
 one paragraph retrieval are the QA models.
-
-    % \newpage
 
 \subsection{Experiment 4: List-based Question - ``What materials were
 used in constructing the Great Wall of
@@ -1396,7 +1423,6 @@ solutions, especially when detailed and precise information is required.
 Given the size and efficiency, the QA models are the best choice for
 implementing a RAG solution in this context.
 
-    % \newpage
 
 \subsection{Experiment 5: Synthesis-based Question - ``Which famous
 structures, both designed or structurally influenced by Gustave
@@ -1462,7 +1488,6 @@ list of structures designed or influenced by Gustave Eiffel. The answers
 often lacked synthesis, indicating that causal models might not be the
 best choice for complex synthesis-based questions.
 
-% \newpage
 
 \subsubsection{QA Models}
 
@@ -1525,7 +1550,6 @@ documents. The causal models, even with RAG, were not able to handle
 this task effectively. Therefore, T5 models are the best choice for
 RAG-based solutions when dealing with synthesis-based questions.
 
-    % \newpage
 
 \section{Conclusion}
 
@@ -1656,535 +1680,3 @@ for excessively large and complex models.
 
     
 \end{document}    
-
-%     \section{Appendix: Rag
-% Implementation}\label{appendix-rag-implementation}
-
-%     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-% \prompt{In}{incolor}{ }{\boxspacing}
-% \begin{Verbatim}[commandchars=\\\{\}]
-% \PY{c+c1}{\PYZsh{} Prepare required libraries for }
-% \PY{o}{\PYZpc{}}\PY{k}{conda} install \PYZhy{}y numpy
-% \PY{c+c1}{\PYZsh{} Retrieval and storage required libraries}
-% \PY{o}{\PYZpc{}}\PY{k}{conda} install \PYZhy{}y sentence\PYZhy{}transformers
-% \PY{o}{\PYZpc{}}\PY{k}{conda} install \PYZhy{}y faiss\PYZhy{}cpu
-% \PY{c+c1}{\PYZsh{} LLMs related libraries}
-% \PY{o}{\PYZpc{}}\PY{k}{conda} install \PYZhy{}y transformers
-% \PY{o}{\PYZpc{}}\PY{k}{conda} install \PYZhy{}y pytorch
-% \PY{o}{\PYZpc{}}\PY{k}{conda} install \PYZhy{}y ipywidgets
-% \PY{o}{\PYZpc{}}\PY{k}{conda} install \PYZhy{}y protobuf
-% \PY{o}{\PYZpc{}}\PY{k}{conda} install \PYZhy{}c conda\PYZhy{}forge detectron2
-% \end{Verbatim}
-% \end{tcolorbox}
-
-%     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-% \prompt{In}{incolor}{ }{\boxspacing}
-% \begin{Verbatim}[commandchars=\\\{\}]
-% \PY{c+c1}{\PYZsh{} smoke test}
-% \PY{k+kn}{import} \PY{n+nn}{torch}
-% \PY{n+nb}{print}\PY{p}{(}\PY{n}{torch}\PY{o}{.}\PY{n}{\PYZus{}\PYZus{}version\PYZus{}\PYZus{}}\PY{p}{)}
-% \PY{n+nb}{print}\PY{p}{(}\PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)}\PY{p}{)}
-% \end{Verbatim}
-% \end{tcolorbox}
-
-%     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-% \prompt{In}{incolor}{122}{\boxspacing}
-% \begin{Verbatim}[commandchars=\\\{\}]
-% \PY{c+c1}{\PYZsh{} LLM related libs}
-% \PY{k+kn}{import} \PY{n+nn}{torch}
-% \PY{k+kn}{from} \PY{n+nn}{transformers} \PY{k+kn}{import} \PY{n}{AutoModelForCausalLM}\PY{p}{,} \PY{n}{AutoTokenizer}\PY{p}{,} \PY{n}{PreTrainedTokenizer}\PY{p}{,} \PY{n}{AutoModelForQuestionAnswering}
-
-% \PY{c+c1}{\PYZsh{} Retrieval and Storage Related libs}
-% \PY{k+kn}{from} \PY{n+nn}{sentence\PYZus{}transformers} \PY{k+kn}{import} \PY{n}{SentenceTransformer}
-% \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
-% \PY{k+kn}{import} \PY{n+nn}{faiss}
-
-% \PY{k+kn}{import} \PY{n+nn}{re}
-% \PY{k+kn}{import} \PY{n+nn}{json}
-
-% \PY{k}{def} \PY{n+nf}{read\PYZus{}and\PYZus{}split\PYZus{}sentences}\PY{p}{(}\PY{n}{file\PYZus{}path}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}}\PY{n+nb}{list}\PY{p}{[}\PY{n+nb}{str}\PY{p}{]}\PY{p}{:}
-%     \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{n}{file\PYZus{}path}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{file}\PY{p}{:}
-%         \PY{n}{text} \PY{o}{=} \PY{n}{file}\PY{o}{.}\PY{n}{read}\PY{p}{(}\PY{p}{)}
-%     \PY{n}{sentences} \PY{o}{=} \PY{n}{re}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(?\PYZlt{}!}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{d)}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{s+}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{text}\PY{o}{.}\PY{n}{strip}\PY{p}{(}\PY{p}{)}\PY{p}{)}
-%     \PY{k}{return} \PY{n}{sentences}
-
-% \PY{k}{def} \PY{n+nf}{read\PYZus{}and\PYZus{}split\PYZus{}paragraphs}\PY{p}{(}\PY{n}{file\PYZus{}path}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}} \PY{n+nb}{list}\PY{p}{[}\PY{n+nb}{str}\PY{p}{]}\PY{p}{:}
-%     \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{n}{file\PYZus{}path}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{file}\PY{p}{:}
-%         \PY{n}{text} \PY{o}{=} \PY{n}{file}\PY{o}{.}\PY{n}{read}\PY{p}{(}\PY{p}{)}
-%     \PY{n}{paragraphs} \PY{o}{=} \PY{n}{text}\PY{o}{.}\PY{n}{strip}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-%     \PY{k}{return} \PY{n}{paragraphs}
-
-% \PY{k}{def} \PY{n+nf}{save\PYZus{}dict\PYZus{}to\PYZus{}json\PYZus{}file}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{file\PYZus{}name}\PY{p}{)}\PY{p}{:}
-%     \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{n}{file\PYZus{}name}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{w}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{json\PYZus{}file}\PY{p}{:}
-%         \PY{n}{json}\PY{o}{.}\PY{n}{dump}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{json\PYZus{}file}\PY{p}{,} \PY{n}{indent}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{)}
-% \end{Verbatim}
-% \end{tcolorbox}
-
-%     \newpage
-
-%     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-% \prompt{In}{incolor}{123}{\boxspacing}
-% \begin{Verbatim}[commandchars=\\\{\}]
-% \PY{k}{class} \PY{n+nc}{Retriever}\PY{p}{:}
-%     \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{model\PYZus{}name\PYZus{}in}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{all\PYZhy{}MiniLM\PYZhy{}L6\PYZhy{}v2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{documents} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model} \PY{o}{=} \PY{n}{SentenceTransformer}\PY{p}{(}\PY{n}{model\PYZus{}name\PYZus{}in}\PY{p}{)}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{document\PYZus{}embeddings} \PY{o}{=} \PY{k+kc}{None}
-%         \PY{c+c1}{\PYZsh{} dimension is 384 for the \PYZsq{}all\PYZhy{}MiniLM\PYZhy{}L6\PYZhy{}v2\PYZsq{}}
-%         \PY{n}{d} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model}\PY{o}{.}\PY{n}{get\PYZus{}sentence\PYZus{}embedding\PYZus{}dimension}\PY{p}{(}\PY{p}{)}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{index} \PY{o}{=} \PY{n}{faiss}\PY{o}{.}\PY{n}{IndexFlatL2}\PY{p}{(}\PY{n}{d}\PY{p}{)}
-        
-%     \PY{k}{def} \PY{n+nf}{add\PYZus{}documents}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{new\PYZus{}documents\PYZus{}in}\PY{p}{:} \PY{n+nb}{list}\PY{p}{[}\PY{n+nb}{str}\PY{p}{]}\PY{p}{)}\PY{p}{:}
-%         \PY{c+c1}{\PYZsh{} MaximumCharacters ≈ 512tokens×4characters/token=2048characters}
-%         \PY{n}{new\PYZus{}document\PYZus{}embeddings} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model}\PY{o}{.}\PY{n}{encode}\PY{p}{(}\PY{n}{new\PYZus{}documents\PYZus{}in}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{float32}\PY{p}{)}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{index}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{new\PYZus{}document\PYZus{}embeddings}\PY{p}{)}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{documents}\PY{o}{.}\PY{n}{extend}\PY{p}{(}\PY{n}{new\PYZus{}documents\PYZus{}in}\PY{p}{)}
-
-%     \PY{k}{def} \PY{n+nf}{retrieve\PYZus{}documents}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{query\PYZus{}in}\PY{p}{,} \PY{n}{results\PYZus{}size\PYZus{}in}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
-%         \PY{n}{query\PYZus{}embedding} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model}\PY{o}{.}\PY{n}{encode}\PY{p}{(}\PY{p}{[}\PY{n}{query\PYZus{}in}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{float32}\PY{p}{)}
-%         \PY{n}{distances}\PY{p}{,} \PY{n}{indices} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{index}\PY{o}{.}\PY{n}{search}\PY{p}{(}\PY{n}{query\PYZus{}embedding}\PY{p}{,} \PY{n}{results\PYZus{}size\PYZus{}in}\PY{p}{)}
-%         \PY{n}{retrieved\PYZus{}documents} \PY{o}{=} \PY{p}{[}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{documents}\PY{p}{[}\PY{n}{idx}\PY{p}{]} \PY{k}{for} \PY{n}{idx} \PY{o+ow}{in} \PY{n}{indices}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]}
-%         \PY{k}{return} \PY{n}{retrieved\PYZus{}documents}
-% \end{Verbatim}
-% \end{tcolorbox}
-
-%     \newpage
-
-    
-
-%     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-% \prompt{In}{incolor}{124}{\boxspacing}
-% \begin{Verbatim}[commandchars=\\\{\}]
-% \PY{k+kn}{from} \PY{n+nn}{typing} \PY{k+kn}{import} \PY{n}{Dict}
-% \PY{k+kn}{from} \PY{n+nn}{transformers} \PY{k+kn}{import} \PY{n}{AutoModelForCausalLM}\PY{p}{,} \PY{n}{AutoModelForSeq2SeqLM}\PY{p}{,} \PY{n}{AutoModelForQuestionAnswering}\PY{p}{,} \PY{n}{T5ForConditionalGeneration}\PY{p}{,} \PY{n}{AutoTokenizer}\PY{p}{,} \PY{n}{T5Tokenizer}\PY{p}{,} \PY{n}{AutoModelForDocumentQuestionAnswering}
-% \PY{k+kn}{import} \PY{n+nn}{torch}
-% \PY{k+kn}{import} \PY{n+nn}{re}
-
-% \PY{c+c1}{\PYZsh{} Causal Model Generator Class}
-% \PY{k}{class} \PY{n+nc}{CausalModelGenerator}\PY{p}{:}
-%     \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{model\PYZus{}name}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{device}\PY{o}{=}\PY{k+kc}{None}\PY{p}{)}\PY{p}{:}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device} \PY{o}{=} \PY{n}{device} \PY{k}{if} \PY{n}{device} \PY{k}{else} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name} \PY{o}{=} \PY{n}{model\PYZus{}name}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model} \PY{o}{=} \PY{n}{AutoModelForCausalLM}\PY{o}{.}\PY{n}{from\PYZus{}pretrained}\PY{p}{(}\PY{n}{model\PYZus{}name}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device}\PY{p}{)}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer} \PY{o}{=} \PY{n}{AutoTokenizer}\PY{o}{.}\PY{n}{from\PYZus{}pretrained}\PY{p}{(}\PY{n}{model\PYZus{}name}\PY{p}{)}
-%     \PY{k}{def} \PY{n+nf}{generate}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{question}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{context}\PY{p}{:} \PY{n+nb}{str} \PY{o}{=} \PY{k+kc}{None}\PY{p}{,} \PY{n}{max\PYZus{}new\PYZus{}tokens}\PY{o}{=}\PY{l+m+mi}{38}\PY{p}{,} \PY{n}{num\PYZus{}beams}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{,} \PY{n}{do\PYZus{}sample}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{top\PYZus{}p}\PY{o}{=}\PY{l+m+mf}{0.92}\PY{p}{)}\PY{p}{:}
-%         \PY{k}{try}\PY{p}{:}
-%             \PY{k}{if} \PY{n}{context}\PY{p}{:}
-%                 \PY{n}{prompt} \PY{o}{=} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Given }\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s2}{ }\PY{l+s+si}{\PYZob{}}\PY{n}{context}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ }\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s2}{ Answer }\PY{l+s+si}{\PYZob{}}\PY{n}{question}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}
-%             \PY{k}{else}\PY{p}{:}
-%                 \PY{n}{prompt} \PY{o}{=} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{question}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}
-%             \PY{n}{inputs} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{p}{(}\PY{n}{prompt}\PY{p}{,} \PY{n}{return\PYZus{}tensors}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{pt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device}\PY{p}{)}
-%             \PY{k}{with} \PY{n}{torch}\PY{o}{.}\PY{n}{no\PYZus{}grad}\PY{p}{(}\PY{p}{)}\PY{p}{:}
-%                 \PY{n}{outputs} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model}\PY{o}{.}\PY{n}{generate}\PY{p}{(}
-%                     \PY{n}{do\PYZus{}sample}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,}
-%                     \PY{n}{input\PYZus{}ids}\PY{o}{=}\PY{n}{inputs}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{input\PYZus{}ids}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
-%                     \PY{n}{attention\PYZus{}mask}\PY{o}{=}\PY{n}{inputs}\PY{o}{.}\PY{n}{get}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{attention\PYZus{}mask}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{,}
-%                     \PY{n}{max\PYZus{}new\PYZus{}tokens}\PY{o}{=}\PY{n}{max\PYZus{}new\PYZus{}tokens}\PY{p}{,}
-%                     \PY{n}{num\PYZus{}beams}\PY{o}{=}\PY{n}{num\PYZus{}beams}\PY{p}{,}
-%                     \PY{n}{max\PYZus{}length} \PY{o}{=} \PY{l+m+mi}{200}\PY{p}{,}
-%                     \PY{n}{pad\PYZus{}token\PYZus{}id}\PY{o}{=}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{o}{.}\PY{n}{eos\PYZus{}token\PYZus{}id}
-%                 \PY{p}{)}
-
-%             \PY{n}{response} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{o}{.}\PY{n}{decode}\PY{p}{(}\PY{n}{outputs}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{n}{inputs}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{input\PYZus{}ids}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{size}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}\PY{p}{]}\PY{p}{,} \PY{n}{skip\PYZus{}special\PYZus{}tokens}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
-%             \PY{k}{return} \PY{n}{response}
-%         \PY{k}{except} \PY{n+ne}{Exception} \PY{k}{as} \PY{n}{e}\PY{p}{:}
-%             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error generating text for }\PY{l+s+si}{\PYZob{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{: }\PY{l+s+si}{\PYZob{}}\PY{n}{e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-%             \PY{k}{return} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error generating text for }\PY{l+s+si}{\PYZob{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}
-
-% \PY{c+c1}{\PYZsh{} Seq2Seq Model Generator Class}
-% \PY{k}{class} \PY{n+nc}{Seq2SeqModelGenerator}\PY{p}{:}
-%     \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{model\PYZus{}name}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{device}\PY{o}{=}\PY{k+kc}{None}\PY{p}{)}\PY{p}{:}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device} \PY{o}{=} \PY{n}{device} \PY{k}{if} \PY{n}{device} \PY{k}{else} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name} \PY{o}{=} \PY{n}{model\PYZus{}name}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model} \PY{o}{=} \PY{n}{AutoModelForSeq2SeqLM}\PY{o}{.}\PY{n}{from\PYZus{}pretrained}\PY{p}{(}\PY{n}{model\PYZus{}name}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device}\PY{p}{)}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer} \PY{o}{=} \PY{n}{AutoTokenizer}\PY{o}{.}\PY{n}{from\PYZus{}pretrained}\PY{p}{(}\PY{n}{model\PYZus{}name}\PY{p}{)}
-
-%     \PY{k}{def} \PY{n+nf}{generate}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{context}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{question}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{max\PYZus{}length}\PY{o}{=}\PY{l+m+mi}{200}\PY{p}{,} \PY{n}{num\PYZus{}beams}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{:}
-%         \PY{k}{try}\PY{p}{:}
-%             \PY{k}{if} \PY{o+ow}{not} \PY{n}{question}\PY{p}{:}
-%                 \PY{k}{raise} \PY{n+ne}{ValueError}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Seq2Seq models require both context and question.}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-%             \PY{n}{prompt} \PY{o}{=} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Given }\PY{l+s+si}{\PYZob{}}\PY{n}{context}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ Answer the question: }\PY{l+s+si}{\PYZob{}}\PY{n}{question}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ }\PY{l+s+s2}{\PYZdq{}}
-%             \PY{n}{inputs} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{p}{(}\PY{n}{prompt}\PY{p}{,} \PY{n}{return\PYZus{}tensors}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{pt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device}\PY{p}{)}
-%             \PY{k}{with} \PY{n}{torch}\PY{o}{.}\PY{n}{no\PYZus{}grad}\PY{p}{(}\PY{p}{)}\PY{p}{:}
-%                 \PY{n}{outputs} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model}\PY{o}{.}\PY{n}{generate}\PY{p}{(}
-%                     \PY{n}{input\PYZus{}ids}\PY{o}{=}\PY{n}{inputs}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{input\PYZus{}ids}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
-%                     \PY{n}{attention\PYZus{}mask}\PY{o}{=}\PY{n}{inputs}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{attention\PYZus{}mask}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
-%                     \PY{n}{max\PYZus{}length}\PY{o}{=}\PY{n}{max\PYZus{}length}\PY{p}{,}
-%                     \PY{n}{num\PYZus{}beams}\PY{o}{=}\PY{n}{num\PYZus{}beams}\PY{p}{,}
-%                     \PY{n}{early\PYZus{}stopping}\PY{o}{=}\PY{k+kc}{True}
-%                 \PY{p}{)}
-%             \PY{n}{decoded\PYZus{}output} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{o}{.}\PY{n}{decode}\PY{p}{(}\PY{n}{outputs}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{skip\PYZus{}special\PYZus{}tokens}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
-%             \PY{k}{return} \PY{n}{decoded\PYZus{}output}
-%         \PY{k}{except} \PY{n+ne}{Exception} \PY{k}{as} \PY{n}{e}\PY{p}{:}
-%             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error generating text for }\PY{l+s+si}{\PYZob{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{: }\PY{l+s+si}{\PYZob{}}\PY{n}{e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-%             \PY{k}{return} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error generating text for }\PY{l+s+si}{\PYZob{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}
-
-
-% \PY{c+c1}{\PYZsh{} QA Model Generator Class}
-% \PY{k}{class} \PY{n+nc}{QAModelGenerator}\PY{p}{:}
-%     \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{model\PYZus{}name}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{device}\PY{o}{=}\PY{k+kc}{None}\PY{p}{)}\PY{p}{:}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device} \PY{o}{=} \PY{n}{device} \PY{k}{if} \PY{n}{device} \PY{k}{else} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name} \PY{o}{=} \PY{n}{model\PYZus{}name}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model} \PY{o}{=} \PY{n}{AutoModelForQuestionAnswering}\PY{o}{.}\PY{n}{from\PYZus{}pretrained}\PY{p}{(}\PY{n}{model\PYZus{}name}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device}\PY{p}{)}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer} \PY{o}{=} \PY{n}{AutoTokenizer}\PY{o}{.}\PY{n}{from\PYZus{}pretrained}\PY{p}{(}\PY{n}{model\PYZus{}name}\PY{p}{)}
-
-%     \PY{k}{def} \PY{n+nf}{generate}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{context}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{question}\PY{p}{:} \PY{n+nb}{str}\PY{p}{)}\PY{p}{:}
-%         \PY{k}{try}\PY{p}{:}
-%             \PY{k}{if} \PY{o+ow}{not} \PY{n}{question}\PY{p}{:}
-%                 \PY{k}{raise} \PY{n+ne}{ValueError}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{QA models require both context and question.}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-%             \PY{n}{inputs} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{o}{.}\PY{n}{encode\PYZus{}plus}\PY{p}{(}\PY{n}{question}\PY{p}{,} \PY{n}{context}\PY{p}{,} \PY{n}{add\PYZus{}special\PYZus{}tokens}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{return\PYZus{}tensors}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{pt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device}\PY{p}{)}
-%             \PY{k}{with} \PY{n}{torch}\PY{o}{.}\PY{n}{no\PYZus{}grad}\PY{p}{(}\PY{p}{)}\PY{p}{:}
-%                 \PY{n}{outputs} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model}\PY{p}{(}\PY{o}{*}\PY{o}{*}\PY{n}{inputs}\PY{p}{)}
-%             \PY{n}{answer\PYZus{}start} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{argmax}\PY{p}{(}\PY{n}{outputs}\PY{o}{.}\PY{n}{start\PYZus{}logits}\PY{p}{)}
-%             \PY{n}{answer\PYZus{}end} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{argmax}\PY{p}{(}\PY{n}{outputs}\PY{o}{.}\PY{n}{end\PYZus{}logits}\PY{p}{)} \PY{o}{+} \PY{l+m+mi}{1}
-%             \PY{k}{return} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{o}{.}\PY{n}{convert\PYZus{}tokens\PYZus{}to\PYZus{}string}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{o}{.}\PY{n}{convert\PYZus{}ids\PYZus{}to\PYZus{}tokens}\PY{p}{(}\PY{n}{inputs}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{input\PYZus{}ids}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{n}{answer\PYZus{}start}\PY{p}{:}\PY{n}{answer\PYZus{}end}\PY{p}{]}\PY{p}{)}\PY{p}{)}
-%         \PY{k}{except} \PY{n+ne}{Exception} \PY{k}{as} \PY{n}{e}\PY{p}{:}
-%             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error generating text for }\PY{l+s+si}{\PYZob{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{: }\PY{l+s+si}{\PYZob{}}\PY{n}{e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-%             \PY{k}{return} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error generating text for }\PY{l+s+si}{\PYZob{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}
-
-% \PY{c+c1}{\PYZsh{} T5 Model Generator Class}
-% \PY{k}{class} \PY{n+nc}{T5ModelGenerator}\PY{p}{:}
-%     \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{model\PYZus{}name}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{device}\PY{o}{=}\PY{k+kc}{None}\PY{p}{)}\PY{p}{:}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device} \PY{o}{=} \PY{n}{device} \PY{k}{if} \PY{n}{device} \PY{k}{else} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name} \PY{o}{=} \PY{n}{model\PYZus{}name}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model} \PY{o}{=} \PY{n}{T5ForConditionalGeneration}\PY{o}{.}\PY{n}{from\PYZus{}pretrained}\PY{p}{(}\PY{n}{model\PYZus{}name}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device}\PY{p}{)}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer} \PY{o}{=} \PY{n}{T5Tokenizer}\PY{o}{.}\PY{n}{from\PYZus{}pretrained}\PY{p}{(}\PY{n}{model\PYZus{}name}\PY{p}{,} \PY{n}{legacy}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
-
-%     \PY{k}{def} \PY{n+nf}{generate}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{context}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{question}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{max\PYZus{}length}\PY{o}{=}\PY{l+m+mi}{150}\PY{p}{,} \PY{n}{num\PYZus{}beams}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{)}\PY{p}{:}
-%         \PY{k}{try}\PY{p}{:}
-%             \PY{n}{input\PYZus{}text} \PY{o}{=} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Answer the question: }\PY{l+s+si}{\PYZob{}}\PY{n}{question}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ Given context: }\PY{l+s+si}{\PYZob{}}\PY{n}{context}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}
-%             \PY{n}{inputs} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{p}{(}\PY{n}{input\PYZus{}text}\PY{p}{,} \PY{n}{return\PYZus{}tensors}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{pt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device}\PY{p}{)}
-%             \PY{k}{with} \PY{n}{torch}\PY{o}{.}\PY{n}{no\PYZus{}grad}\PY{p}{(}\PY{p}{)}\PY{p}{:}
-%                 \PY{n}{outputs} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model}\PY{o}{.}\PY{n}{generate}\PY{p}{(}
-%                     \PY{n}{input\PYZus{}ids}\PY{o}{=}\PY{n}{inputs}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{input\PYZus{}ids}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
-%                     \PY{n}{attention\PYZus{}mask}\PY{o}{=}\PY{n}{inputs}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{attention\PYZus{}mask}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
-%                     \PY{n}{max\PYZus{}length}\PY{o}{=}\PY{n}{max\PYZus{}length}\PY{p}{,}
-%                     \PY{n}{num\PYZus{}beams}\PY{o}{=}\PY{n}{num\PYZus{}beams}\PY{p}{,}
-%                     \PY{n}{early\PYZus{}stopping}\PY{o}{=}\PY{k+kc}{True}
-%                 \PY{p}{)}
-%             \PY{n}{decoded\PYZus{}output} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{o}{.}\PY{n}{decode}\PY{p}{(}\PY{n}{outputs}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{skip\PYZus{}special\PYZus{}tokens}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
-%             \PY{k}{return} \PY{n}{decoded\PYZus{}output}
-%         \PY{k}{except} \PY{n+ne}{Exception} \PY{k}{as} \PY{n}{e}\PY{p}{:}
-%             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error generating text for }\PY{l+s+si}{\PYZob{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{: }\PY{l+s+si}{\PYZob{}}\PY{n}{e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-%             \PY{k}{return} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error generating text for }\PY{l+s+si}{\PYZob{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}
-        
-% \PY{k}{class} \PY{n+nc}{DocumentQAModelGenerator}\PY{p}{:}
-%     \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{model\PYZus{}name}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{device}\PY{o}{=}\PY{k+kc}{None}\PY{p}{)}\PY{p}{:}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device} \PY{o}{=} \PY{n}{device} \PY{k}{if} \PY{n}{device} \PY{k}{else} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name} \PY{o}{=} \PY{n}{model\PYZus{}name}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model} \PY{o}{=} \PY{n}{AutoModelForDocumentQuestionAnswering}\PY{o}{.}\PY{n}{from\PYZus{}pretrained}\PY{p}{(}\PY{n}{model\PYZus{}name}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device}\PY{p}{)}
-%         \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer} \PY{o}{=} \PY{n}{AutoTokenizer}\PY{o}{.}\PY{n}{from\PYZus{}pretrained}\PY{p}{(}\PY{n}{model\PYZus{}name}\PY{p}{)}
-
-%     \PY{k}{def} \PY{n+nf}{generate}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{context}\PY{p}{:} \PY{n+nb}{str}\PY{p}{,} \PY{n}{question}\PY{p}{:} \PY{n+nb}{str}\PY{p}{)}\PY{p}{:}
-%         \PY{k}{try}\PY{p}{:}
-%             \PY{n}{context\PYZus{}tokens} \PY{o}{=} \PY{n}{context}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{p}{)}
-%             \PY{n}{question\PYZus{}tokens} \PY{o}{=} \PY{n}{question}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{p}{)}
-            
-%             \PY{n}{inputs} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{p}{(}
-%                 \PY{n}{question\PYZus{}tokens}\PY{p}{,}
-%                 \PY{n}{context\PYZus{}tokens}\PY{p}{,}
-%                 \PY{n}{return\PYZus{}tensors}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{pt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
-%                 \PY{n}{is\PYZus{}split\PYZus{}into\PYZus{}words}\PY{o}{=}\PY{k+kc}{True}  
-%             \PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device}\PY{p}{)}
-%             \PY{n}{bbox} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{tensor}\PY{p}{(}\PY{p}{[}\PY{p}{[}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1000}\PY{p}{,} \PY{l+m+mi}{1000}\PY{p}{]}\PY{p}{]} \PY{o}{*} \PY{n+nb}{len}\PY{p}{(}\PY{n}{inputs}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{input\PYZus{}ids}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{]}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n}{torch}\PY{o}{.}\PY{n}{int}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{device}\PY{p}{)}
-%             \PY{k}{with} \PY{n}{torch}\PY{o}{.}\PY{n}{no\PYZus{}grad}\PY{p}{(}\PY{p}{)}\PY{p}{:}
-%                 \PY{n}{outputs} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model}\PY{p}{(}\PY{n}{input\PYZus{}ids}\PY{o}{=}\PY{n}{inputs}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{input\PYZus{}ids}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{bbox}\PY{o}{=}\PY{n}{bbox}\PY{p}{,} \PY{n}{attention\PYZus{}mask}\PY{o}{=}\PY{n}{inputs}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{attention\PYZus{}mask}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
-%             \PY{n}{answer\PYZus{}start} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{argmax}\PY{p}{(}\PY{n}{outputs}\PY{o}{.}\PY{n}{start\PYZus{}logits}\PY{p}{)}
-%             \PY{n}{answer\PYZus{}end} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{argmax}\PY{p}{(}\PY{n}{outputs}\PY{o}{.}\PY{n}{end\PYZus{}logits}\PY{p}{)} \PY{o}{+} \PY{l+m+mi}{1}
-%             \PY{n}{answer} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tokenizer}\PY{o}{.}\PY{n}{decode}\PY{p}{(}\PY{n}{inputs}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{input\PYZus{}ids}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{n}{answer\PYZus{}start}\PY{p}{:}\PY{n}{answer\PYZus{}end}\PY{p}{]}\PY{p}{)}
-%             \PY{k}{return} \PY{n}{answer}
-%         \PY{k}{except} \PY{n+ne}{Exception} \PY{k}{as} \PY{n}{e}\PY{p}{:}
-%             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error generating text for }\PY{l+s+si}{\PYZob{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{: }\PY{l+s+si}{\PYZob{}}\PY{n}{e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-%             \PY{k}{return} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error generating text for }\PY{l+s+si}{\PYZob{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{model\PYZus{}name}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}
-
-% \PY{k}{class} \PY{n+nc}{ModelGeneratorFactory}\PY{p}{:}
-%     \PY{n}{distilbert\PYZus{}66M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{distilbert\PYZhy{}base\PYZhy{}uncased\PYZhy{}distilled\PYZhy{}squad}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{66M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
-%     \PY{n}{blenderbot\PYZus{}90M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{facebook/blenderbot\PYZhy{}90M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{90M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
-%     \PY{n}{gpt\PYZus{}2\PYZus{}124M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gpt2}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{124M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
-%     \PY{n}{gpt\PYZus{}neo\PYZus{}125M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{EleutherAI/gpt\PYZhy{}neo\PYZhy{}125M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{125M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
-%     \PY{n}{roberta\PYZus{}base\PYZus{}125M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{deepset/roberta\PYZhy{}base\PYZhy{}squad2}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{125M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
-%     \PY{n}{bart\PYZus{}base\PYZus{}139M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{facebook/bart\PYZhy{}base}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{139M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
-%     \PY{n}{layoutLMv2\PYZus{}base\PYZus{}200M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{microsoft/layoutlmv2\PYZhy{}base\PYZhy{}uncased}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{200M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
-%     \PY{n}{t5\PYZus{}base\PYZus{}220M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{t5\PYZhy{}base}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{220M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
-%     \PY{n}{bert\PYZus{}large\PYZus{}340M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bert\PYZhy{}large\PYZhy{}uncased\PYZhy{}whole\PYZhy{}word\PYZhy{}masking\PYZhy{}finetuned\PYZhy{}squad}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{340M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
-%     \PY{n}{gpt\PYZus{}2\PYZus{}medium\PYZus{}355M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gpt2\PYZhy{}medium}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{355M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
-%     \PY{n}{pegasus\PYZus{}xsum\PYZus{}568M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{google/pegasus\PYZhy{}xsum}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{568M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
-%     \PY{n}{gpt\PYZus{}2\PYZus{}large\PYZus{}762M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gpt2\PYZhy{}large}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{762M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
-%     \PY{n}{dialoGPT\PYZus{}large\PYZus{}762M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{microsoft/DialoGPT\PYZhy{}large}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{762M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
-%     \PY{n}{t5\PYZus{}large\PYZus{}770M} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{t5\PYZhy{}large}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{770M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
-%     \PY{n}{gpt\PYZus{}neo\PYZus{}1\PYZus{}3B} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{EleutherAI/gpt\PYZhy{}neo\PYZhy{}1.3B}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{1.3B}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
-
-%     \PY{n}{causal\PYZus{}models} \PY{o}{=} \PY{p}{[}
-%         \PY{n}{blenderbot\PYZus{}90M}\PY{p}{,}
-%         \PY{n}{gpt\PYZus{}2\PYZus{}124M}\PY{p}{,} 
-%         \PY{n}{gpt\PYZus{}neo\PYZus{}125M}\PY{p}{,} 
-%         \PY{n}{gpt\PYZus{}2\PYZus{}medium\PYZus{}355M}\PY{p}{,} 
-%         \PY{n}{gpt\PYZus{}2\PYZus{}large\PYZus{}762M}\PY{p}{,}
-%         \PY{c+c1}{\PYZsh{} dialoGPT\PYZus{}large\PYZus{}762M,}
-%         \PY{n}{gpt\PYZus{}neo\PYZus{}1\PYZus{}3B}\PY{p}{,}  
-%     \PY{p}{]}
-%     \PY{n}{seq2seq\PYZus{}models} \PY{o}{=} \PY{p}{[}
-%         \PY{n}{bart\PYZus{}base\PYZus{}139M}\PY{p}{,}
-%         \PY{n}{pegasus\PYZus{}xsum\PYZus{}568M}
-%     \PY{p}{]}
-%     \PY{n}{qa\PYZus{}models} \PY{o}{=} \PY{p}{[}
-%         \PY{n}{distilbert\PYZus{}66M}\PY{p}{,} 
-%         \PY{n}{roberta\PYZus{}base\PYZus{}125M}\PY{p}{,} 
-%         \PY{n}{bert\PYZus{}large\PYZus{}340M}
-%     \PY{p}{]}
-%     \PY{n}{document\PYZus{}qa\PYZus{}models} \PY{o}{=} \PY{p}{[}
-%         \PY{n}{layoutLMv2\PYZus{}base\PYZus{}200M}
-%     \PY{p}{]}
-%     \PY{n}{t5\PYZus{}models} \PY{o}{=} \PY{p}{[}
-%         \PY{n}{t5\PYZus{}base\PYZus{}220M}\PY{p}{,}
-%         \PY{n}{t5\PYZus{}large\PYZus{}770M} 
-%     \PY{p}{]}
-
-%     \PY{n+nd}{@staticmethod}
-%     \PY{k}{def} \PY{n+nf}{create\PYZus{}generator}\PY{p}{(}\PY{n}{model}\PY{p}{:} \PY{n}{Dict}\PY{p}{[}\PY{n+nb}{str}\PY{p}{,} \PY{n+nb}{str}\PY{p}{]}\PY{p}{,} \PY{n}{device}\PY{o}{=}\PY{k+kc}{None}\PY{p}{)}\PY{p}{:}
-%         \PY{k}{if} \PY{n}{model} \PY{o+ow}{in} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{causal\PYZus{}models}\PY{p}{:}
-%             \PY{k}{return} \PY{n}{CausalModelGenerator}\PY{p}{(}\PY{n}{model}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{device}\PY{p}{)}
-%         \PY{k}{elif} \PY{n}{model} \PY{o+ow}{in} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{seq2seq\PYZus{}models}\PY{p}{:}
-%             \PY{k}{return} \PY{n}{Seq2SeqModelGenerator}\PY{p}{(}\PY{n}{model}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{device}\PY{p}{)}
-%         \PY{k}{elif} \PY{n}{model} \PY{o+ow}{in} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{qa\PYZus{}models}\PY{p}{:}
-%             \PY{k}{return} \PY{n}{QAModelGenerator}\PY{p}{(}\PY{n}{model}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{device}\PY{p}{)}
-%         \PY{k}{elif} \PY{n}{model} \PY{o+ow}{in} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{t5\PYZus{}models}\PY{p}{:}
-%             \PY{k}{return} \PY{n}{T5ModelGenerator}\PY{p}{(}\PY{n}{model}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{device}\PY{p}{)}
-%         \PY{k}{elif} \PY{n}{model} \PY{o+ow}{in} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{document\PYZus{}qa\PYZus{}models}\PY{p}{:}
-%             \PY{k}{return} \PY{n}{DocumentQAModelGenerator}\PY{p}{(}\PY{n}{model}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{device}\PY{p}{)}
-%         \PY{k}{else}\PY{p}{:}
-%             \PY{k}{raise} \PY{n+ne}{ValueError}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Model name }\PY{l+s+si}{\PYZob{}}\PY{n}{model}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ is not recognized or supported.}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-% \end{Verbatim}
-% \end{tcolorbox}
-
-%     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-% \prompt{In}{incolor}{125}{\boxspacing}
-% \begin{Verbatim}[commandchars=\\\{\}]
-% \PY{n}{device} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-% \end{Verbatim}
-% \end{tcolorbox}
-
-%     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-% \prompt{In}{incolor}{126}{\boxspacing}
-% \begin{Verbatim}[commandchars=\\\{\}]
-% \PY{k}{def} \PY{n+nf}{run\PYZus{}llm\PYZus{}experiment}\PY{p}{(}\PY{n}{llms\PYZus{}list\PYZus{}in}\PY{p}{,} \PY{n}{question\PYZus{}in}\PY{p}{,} \PY{n}{retrieved\PYZus{}documents\PYZus{}in}\PY{p}{,} \PY{n}{device\PYZus{}in}\PY{p}{,} \PY{n}{output\PYZus{}file\PYZus{}in} \PY{o}{=} \PY{k+kc}{None}\PY{p}{,} \PY{n}{model\PYZus{}type\PYZus{}in}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Causal}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
-%     \PY{n}{results} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-
-%     \PY{k}{for} \PY{n}{llm} \PY{o+ow}{in} \PY{n}{llms\PYZus{}list\PYZus{}in}\PY{p}{:}
-%         \PY{n}{single\PYZus{}result} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
-%         \PY{n}{single\PYZus{}result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{modelType}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{model\PYZus{}type\PYZus{}in}
-%         \PY{n}{single\PYZus{}result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{llm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{llm}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
-%         \PY{n}{single\PYZus{}result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{llm}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
-%         \PY{n}{single\PYZus{}result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{question\PYZus{}in}
-%         \PY{n}{single\PYZus{}result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{retrieved\PYZus{}documents}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{retrieved\PYZus{}documents\PYZus{}in}   
-%         \PY{k}{try}\PY{p}{:}
-%             \PY{n}{generator} \PY{o}{=} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{create\PYZus{}generator}\PY{p}{(}\PY{n}{llm}\PY{p}{,} \PY{n}{device\PYZus{}in}\PY{p}{)}
-%             \PY{n}{single\PYZus{}result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{LLM Answer}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{generator}\PY{o}{.}\PY{n}{generate}\PY{p}{(}\PY{n}{question}\PY{o}{=}\PY{n}{question\PYZus{}in}\PY{p}{,} \PY{n}{context}\PY{o}{=}\PY{k+kc}{None}\PY{p}{)}
-%             \PY{n}{single\PYZus{}result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{RAG Answer}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{generator}\PY{o}{.}\PY{n}{generate}\PY{p}{(}\PY{n}{question}\PY{o}{=}\PY{n}{question\PYZus{}in}\PY{p}{,} \PY{n}{context}\PY{o}{=}\PY{n}{retrieved\PYZus{}documents\PYZus{}in}\PY{p}{)}
-%             \PY{n}{results}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{single\PYZus{}result}\PY{p}{)}
-%         \PY{k}{except} \PY{n+ne}{Exception} \PY{k}{as} \PY{n}{e}\PY{p}{:}
-%             \PY{n}{error\PYZus{}message} \PY{o}{=} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error creating generator for }\PY{l+s+si}{\PYZob{}}\PY{n}{llm}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{: }\PY{l+s+si}{\PYZob{}}\PY{n}{e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}
-%             \PY{n+nb}{print}\PY{p}{(}\PY{n}{error\PYZus{}message}\PY{p}{)}
-%             \PY{n}{single\PYZus{}result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{LLM Answer}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{error\PYZus{}message}
-%             \PY{n}{single\PYZus{}result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{RAG Answer}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{error\PYZus{}message}
-%             \PY{n}{results}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{single\PYZus{}result}\PY{p}{)}
-%         \PY{k}{if}\PY{p}{(}\PY{n}{output\PYZus{}file\PYZus{}in}\PY{p}{)}\PY{p}{:}
-%             \PY{n}{save\PYZus{}dict\PYZus{}to\PYZus{}json\PYZus{}file}\PY{p}{(}\PY{n}{results}\PY{p}{,} \PY{n}{output\PYZus{}file\PYZus{}in}\PY{p}{)}
-%     \PY{k}{return} \PY{n}{results}   
-
-% \PY{k}{def} \PY{n+nf}{clean\PYZus{}and\PYZus{}join\PYZus{}sentences}\PY{p}{(}\PY{n}{sentences}\PY{p}{)}\PY{p}{:}
-%     \PY{n}{cleaned\PYZus{}sentences} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-%     \PY{k}{for} \PY{n}{sentence} \PY{o+ow}{in} \PY{n}{sentences}\PY{p}{:}
-%         \PY{n}{sentence} \PY{o}{=} \PY{n}{sentence}\PY{o}{.}\PY{n}{strip}\PY{p}{(}\PY{p}{)}
-%         \PY{k}{if} \PY{o+ow}{not} \PY{n}{re}\PY{o}{.}\PY{n}{search}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[.!?]\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{sentence}\PY{p}{)}\PY{p}{:}
-%             \PY{n}{sentence} \PY{o}{+}\PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}
-%         \PY{n}{cleaned\PYZus{}sentences}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{sentence}\PY{p}{)}
-%     \PY{n}{paragraph} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ }\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{cleaned\PYZus{}sentences}\PY{p}{)}
-%     \PY{k}{return} \PY{n}{paragraph}
-% \PY{k+kn}{import} \PY{n+nn}{re}
-
-% \PY{k}{def} \PY{n+nf}{clean\PYZus{}and\PYZus{}combine\PYZus{}sentences}\PY{p}{(}\PY{n}{sentences}\PY{p}{)}\PY{p}{:}
-%     \PY{n}{cleaned\PYZus{}sentences} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-    
-%     \PY{k}{for} \PY{n}{sentence} \PY{o+ow}{in} \PY{n}{sentences}\PY{p}{:}
-%         \PY{n}{sentence} \PY{o}{=} \PY{n}{sentence}\PY{o}{.}\PY{n}{strip}\PY{p}{(}\PY{p}{)}
-%         \PY{k}{if} \PY{n}{sentence} \PY{o+ow}{and} \PY{n}{sentence}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{isupper}\PY{p}{(}\PY{p}{)}\PY{p}{:}
-%             \PY{n}{sentence} \PY{o}{=} \PY{n}{sentence}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{lower}\PY{p}{(}\PY{p}{)} \PY{o}{+} \PY{n}{sentence}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}
-%         \PY{n}{sentence} \PY{o}{=} \PY{n}{re}\PY{o}{.}\PY{n}{sub}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[.!?]\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{sentence}\PY{p}{)}
-%         \PY{n}{cleaned\PYZus{}sentences}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{sentence}\PY{p}{)}
-%     \PY{n}{combined\PYZus{}sentence} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ and }\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{cleaned\PYZus{}sentences}\PY{p}{)}
-%     \PY{n}{combined\PYZus{}sentence} \PY{o}{+}\PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}
-%     \PY{k}{return} \PY{n}{combined\PYZus{}sentence}
-% \end{Verbatim}
-% \end{tcolorbox}
-
-%     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-% \prompt{In}{incolor}{ }{\boxspacing}
-% \begin{Verbatim}[commandchars=\\\{\}]
-% \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{} Experiment 1}
-% \PY{c+c1}{\PYZsh{} Question Type: Fact\PYZhy{}based Question}
-% \PY{c+c1}{\PYZsh{} Question: \PYZdq{}How tall is the Pyramid of Giza?\PYZdq{}}
-% \PY{c+c1}{\PYZsh{} Retrieval type: Sentence retrieval}
-% \PY{c+c1}{\PYZsh{} Retrievals : 1}
-
-% \PY{n}{question} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{How tall is the Pyramid of Giza?}\PY{l+s+s2}{\PYZdq{}}
-
-% \PY{n}{experiment\PYZus{}info} \PY{o}{=} \PY{p}{\PYZob{}}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question Type}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Fact\PYZhy{}based Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{question}\PY{p}{,}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrieval type}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Sentence retrieval}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrievals}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}
-% \PY{p}{\PYZcb{}}
-
-% \PY{n}{sentence\PYZus{}retriever\PYZus{}in} \PY{o}{=} \PY{n}{Retriever}\PY{p}{(}\PY{p}{)}
-% \PY{n}{sentence\PYZus{}retriever\PYZus{}in}\PY{o}{.}\PY{n}{add\PYZus{}documents}\PY{p}{(}\PY{n}{read\PYZus{}and\PYZus{}split\PYZus{}sentences}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{facts\PYZus{}sentences}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
-% \PY{n}{device} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-
-% \PY{n}{dictionaryModels} \PY{o}{=} \PY{p}{\PYZob{}}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{casual\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{causal\PYZus{}models}\PY{p}{,} 
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{qa\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{qa\PYZus{}models} \PY{p}{,}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{t5\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{t5\PYZus{}models} 
-%     \PY{p}{\PYZcb{}}
-% \PY{n}{results} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-% \PY{n}{results}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{experiment\PYZus{}info}\PY{p}{)}
-% \PY{k}{for} \PY{n}{llms\PYZus{}key} \PY{o+ow}{in} \PY{n}{dictionaryModels}\PY{p}{:}
-%     \PY{n}{single\PYZus{}llm\PYZus{}result} \PY{o}{=} \PY{n}{run\PYZus{}llm\PYZus{}experiment}\PY{p}{(}
-%         \PY{n}{model\PYZus{}type\PYZus{}in} \PY{o}{=} \PY{n}{llms\PYZus{}key}\PY{p}{,}
-%         \PY{n}{llms\PYZus{}list\PYZus{}in} \PY{o}{=} \PY{n}{dictionaryModels}\PY{p}{[}\PY{n}{llms\PYZus{}key}\PY{p}{]}\PY{p}{,}
-%         \PY{n}{question\PYZus{}in} \PY{o}{=} \PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}
-%         \PY{n}{retrieved\PYZus{}documents\PYZus{}in} \PY{o}{=}\PY{n}{clean\PYZus{}and\PYZus{}join\PYZus{}sentences}\PY{p}{(}\PY{n}{sentence\PYZus{}retriever\PYZus{}in}\PY{o}{.}\PY{n}{retrieve\PYZus{}documents}\PY{p}{(}\PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrievals}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{,}
-%         \PY{n}{device\PYZus{}in} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
-%     \PY{n}{results}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{single\PYZus{}llm\PYZus{}result}\PY{p}{)}
-% \PY{n}{save\PYZus{}dict\PYZus{}to\PYZus{}json\PYZus{}file}\PY{p}{(}\PY{n}{results}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{experiments/Experiment1.json}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}    
-% \end{Verbatim}
-% \end{tcolorbox}
-
-%     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-% \prompt{In}{incolor}{ }{\boxspacing}
-% \begin{Verbatim}[commandchars=\\\{\}]
-% \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{} Experiment 3}
-% \PY{c+c1}{\PYZsh{} Question Type: Fact\PYZhy{}based Question}
-% \PY{c+c1}{\PYZsh{} Question: How tall is the Pyramid of Giza?}
-% \PY{c+c1}{\PYZsh{} Retrieval type: Paragraph retrieval}
-% \PY{c+c1}{\PYZsh{} Retrievals: 1}
-
-% \PY{n}{question} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{How tall is the Pyramid of Giza?}\PY{l+s+s2}{\PYZdq{}}
-% \PY{n}{experiment\PYZus{}info} \PY{o}{=} \PY{p}{\PYZob{}}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question Type}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Fact\PYZhy{}based Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{question}\PY{p}{,}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrieval type}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Paragraph retrieval}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrievals}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}
-% \PY{p}{\PYZcb{}}
-% \PY{n}{sentence\PYZus{}retriever\PYZus{}in} \PY{o}{=} \PY{n}{Retriever}\PY{p}{(}\PY{p}{)}
-% \PY{n}{sentence\PYZus{}retriever\PYZus{}in}\PY{o}{.}\PY{n}{add\PYZus{}documents}\PY{p}{(}\PY{n}{read\PYZus{}and\PYZus{}split\PYZus{}paragraphs}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{facts\PYZus{}sentences}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
-% \PY{n}{device} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-
-% \PY{n}{dictionaryModels} \PY{o}{=} \PY{p}{\PYZob{}}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{casual\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{causal\PYZus{}models}\PY{p}{,} 
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{qa\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{qa\PYZus{}models} \PY{p}{,}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{t5\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{t5\PYZus{}models} 
-%     \PY{p}{\PYZcb{}}
-
-% \PY{n}{results} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-% \PY{n}{results}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{experiment\PYZus{}info}\PY{p}{)}
-% \PY{k}{for} \PY{n}{llms\PYZus{}key} \PY{o+ow}{in} \PY{n}{dictionaryModels}\PY{p}{:}
-%     \PY{n}{result\PYZus{}llm} \PY{o}{=} \PY{n}{run\PYZus{}llm\PYZus{}experiment}\PY{p}{(}
-%         \PY{n}{model\PYZus{}type\PYZus{}in} \PY{o}{=} \PY{n}{llms\PYZus{}key}\PY{p}{,}
-%         \PY{n}{llms\PYZus{}list\PYZus{}in} \PY{o}{=} \PY{n}{dictionaryModels}\PY{p}{[}\PY{n}{llms\PYZus{}key}\PY{p}{]}\PY{p}{,}
-%         \PY{n}{question\PYZus{}in} \PY{o}{=} \PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}
-%         \PY{n}{retrieved\PYZus{}documents\PYZus{}in} \PY{o}{=}\PY{n}{clean\PYZus{}and\PYZus{}join\PYZus{}sentences}\PY{p}{(}\PY{n}{sentence\PYZus{}retriever\PYZus{}in}\PY{o}{.}\PY{n}{retrieve\PYZus{}documents}\PY{p}{(}\PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrievals}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{,}
-%         \PY{n}{device\PYZus{}in} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
-%     \PY{n}{results}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{result\PYZus{}llm}\PY{p}{)}
-% \PY{n}{save\PYZus{}dict\PYZus{}to\PYZus{}json\PYZus{}file}\PY{p}{(}\PY{n}{results}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{experiments/Experiment3.json}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}    
-% \end{Verbatim}
-% \end{tcolorbox}
-
-%     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-% \prompt{In}{incolor}{ }{\boxspacing}
-% \begin{Verbatim}[commandchars=\\\{\}]
-% \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{} Experiment 4}
-% \PY{c+c1}{\PYZsh{} Question Type: List\PYZhy{}based Question}
-% \PY{c+c1}{\PYZsh{} Question: What materials were used in constructing the Great Wall of China?}
-% \PY{c+c1}{\PYZsh{} Retrieval type: Paragraph retrieval}
-% \PY{c+c1}{\PYZsh{} Retrievals : 1}
-
-% \PY{n}{question} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{What materials were used in constructing the Great Wall of China?}\PY{l+s+s2}{\PYZdq{}}
-
-% \PY{n}{experiment\PYZus{}info} \PY{o}{=} \PY{p}{\PYZob{}}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question Type}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{List\PYZhy{}based Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{question}\PY{p}{,}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrieval type}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Paragraph retrieval}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrievals}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}
-% \PY{p}{\PYZcb{}}
-
-% \PY{n}{sentence\PYZus{}retriever\PYZus{}in} \PY{o}{=} \PY{n}{Retriever}\PY{p}{(}\PY{p}{)}
-% \PY{n}{sentence\PYZus{}retriever\PYZus{}in}\PY{o}{.}\PY{n}{add\PYZus{}documents}\PY{p}{(}\PY{n}{read\PYZus{}and\PYZus{}split\PYZus{}paragraphs}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{facts\PYZus{}sentences}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
-% \PY{n}{device} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-
-% \PY{n}{dictionaryModels} \PY{o}{=} \PY{p}{\PYZob{}}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{casual\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{causal\PYZus{}models}\PY{p}{,} 
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{qa\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{qa\PYZus{}models} \PY{p}{,}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{t5\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{t5\PYZus{}models} 
-%     \PY{p}{\PYZcb{}}
-
-% \PY{n}{results} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-% \PY{n}{results}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{experiment\PYZus{}info}\PY{p}{)}
-% \PY{k}{for} \PY{n}{llms\PYZus{}key} \PY{o+ow}{in} \PY{n}{dictionaryModels}\PY{p}{:}
-%     \PY{n}{result\PYZus{}llm} \PY{o}{=} \PY{n}{run\PYZus{}llm\PYZus{}experiment}\PY{p}{(}
-%         \PY{n}{model\PYZus{}type\PYZus{}in} \PY{o}{=} \PY{n}{llms\PYZus{}key}\PY{p}{,}
-%         \PY{n}{llms\PYZus{}list\PYZus{}in} \PY{o}{=} \PY{n}{dictionaryModels}\PY{p}{[}\PY{n}{llms\PYZus{}key}\PY{p}{]}\PY{p}{,}
-%         \PY{n}{question\PYZus{}in} \PY{o}{=} \PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}
-%         \PY{n}{retrieved\PYZus{}documents\PYZus{}in} \PY{o}{=}\PY{n}{clean\PYZus{}and\PYZus{}join\PYZus{}sentences}\PY{p}{(}\PY{n}{sentence\PYZus{}retriever\PYZus{}in}\PY{o}{.}\PY{n}{retrieve\PYZus{}documents}\PY{p}{(}\PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}  \PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrievals}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{,}
-%         \PY{n}{device\PYZus{}in} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
-%     \PY{n}{results}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{result\PYZus{}llm}\PY{p}{)}
-% \PY{n}{save\PYZus{}dict\PYZus{}to\PYZus{}json\PYZus{}file}\PY{p}{(}\PY{n}{results}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{experiments/Experiment4.json}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}  
-% \end{Verbatim}
-% \end{tcolorbox}
-
-%     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-% \prompt{In}{incolor}{ }{\boxspacing}
-% \begin{Verbatim}[commandchars=\\\{\}]
-% \PY{n}{newpage}
-
-% \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{} Experiment 5}
-% \PY{c+c1}{\PYZsh{} Question Type: Synthesis\PYZhy{}based Question}
-% \PY{c+c1}{\PYZsh{} Question: Which famous structures, both designed or structurally influenced by Gustave Eiffel?}
-% \PY{c+c1}{\PYZsh{} Retrieval type: Paragraph retrieval}
-% \PY{c+c1}{\PYZsh{} Retrievals : 3}
-
-% \PY{n}{question} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Which famous structures, both designed or structurally influenced by Gustave Eiffel?}\PY{l+s+s2}{\PYZdq{}}
-% \PY{n}{experiment\PYZus{}info} \PY{o}{=} \PY{p}{\PYZob{}}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question Type}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Synthesis\PYZhy{}based Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{question}\PY{p}{,}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrieval type}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Paragraph retrieval}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrievals}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{3}
-% \PY{p}{\PYZcb{}}
-
-% \PY{n}{sentence\PYZus{}retriever\PYZus{}in} \PY{o}{=} \PY{n}{Retriever}\PY{p}{(}\PY{p}{)}
-% \PY{n}{sentence\PYZus{}retriever\PYZus{}in}\PY{o}{.}\PY{n}{add\PYZus{}documents}\PY{p}{(}\PY{n}{read\PYZus{}and\PYZus{}split\PYZus{}paragraphs}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{facts\PYZus{}sentences}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
-% \PY{n}{device} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-
-% \PY{n}{dictionaryModels} \PY{o}{=} \PY{p}{\PYZob{}}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{casual\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{causal\PYZus{}models}\PY{p}{,} 
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{qa\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{qa\PYZus{}models} \PY{p}{,}
-%     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{t5\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{ModelGeneratorFactory}\PY{o}{.}\PY{n}{t5\PYZus{}models} 
-%     \PY{p}{\PYZcb{}}
-% \PY{n}{results} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-% \PY{n}{results}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{experiment\PYZus{}info}\PY{p}{)}
-% \PY{k}{for} \PY{n}{llms\PYZus{}key} \PY{o+ow}{in} \PY{n}{dictionaryModels}\PY{p}{:}
-%     \PY{n}{results\PYZus{}llm} \PY{o}{=} \PY{n}{run\PYZus{}llm\PYZus{}experiment}\PY{p}{(}
-%         \PY{n}{model\PYZus{}type\PYZus{}in} \PY{o}{=} \PY{n}{llms\PYZus{}key}\PY{p}{,}
-%         \PY{n}{llms\PYZus{}list\PYZus{}in} \PY{o}{=} \PY{n}{dictionaryModels}\PY{p}{[}\PY{n}{llms\PYZus{}key}\PY{p}{]}\PY{p}{,}
-%         \PY{n}{question\PYZus{}in} \PY{o}{=} \PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}
-%         \PY{n}{retrieved\PYZus{}documents\PYZus{}in} \PY{o}{=}\PY{n}{clean\PYZus{}and\PYZus{}join\PYZus{}sentences}\PY{p}{(}\PY{n}{sentence\PYZus{}retriever\PYZus{}in}\PY{o}{.}\PY{n}{retrieve\PYZus{}documents}\PY{p}{(}\PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Question}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{experiment\PYZus{}info}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Retrievals}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{,}
-%         \PY{n}{device\PYZus{}in} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mps}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{backends}\PY{o}{.}\PY{n}{mps}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
-%     \PY{n}{results}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{results\PYZus{}llm}\PY{p}{)}
-% \PY{n}{save\PYZus{}dict\PYZus{}to\PYZus{}json\PYZus{}file}\PY{p}{(}\PY{n}{results}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{experiments/Experiment5.json}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}  
-% \end{Verbatim}
-% \end{tcolorbox}
-
-
-%     % Add a bibliography block to the postdoc
-    
-    
-

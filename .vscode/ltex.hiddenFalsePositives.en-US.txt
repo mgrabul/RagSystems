@@ -1,0 +1,2 @@
+{"rule":"DT_RB_IN","sentence":"^\\QExtremely important is the first point as it consequently leads to the not up to date information that the LLMs have.\\E$"}
+{"rule":"ENGLISH_WORD_REPEAT_BEGINNING_RULE","sentence":"^\\QThis paper aims to highlight the challenges associated with LLMs, explore the potential of RAG systems to enhance their performance, and compare the effectiveness of various LLMs with and without RAG systems.\\E$"}

@@ -37,7 +37,7 @@ https://code.visualstudio.com/docs/python/python-quick-start
 ```bash
 jupyter nbconvert --to pdf Retrieval-Augmented\ Generation.ipynb
 
-jupyter nbconvert --to pdf Retrieval-Augmented\ Generation.ipynb --output Retrieval-Augmented\ Generation_v1.pdf
+jupyter nbconvert --to pdf Retrieval-Augmented\ Generation.ipynb --output Retrieval-Augmented\ Generation_v2.pdf
 
 jupyter nbconvert --to latex Retrieval-Augmented\ Generation.ipynb --output Retrieval-Augmented\ Generation.tex
 

@@ -145,8 +145,8 @@ done in three phases:
 
 \item
   Phase 1 Retrieval, Knowledge retrieval, When asked a question the RAG
-  retrieval system will retrieve all known information by submitting an
-  appropriate query to the non-parametric memory.
+  retrieval system will retrieve all known information by submitting query 
+  to the non-parametric memory.
 \item
   Phase 2 Augmentation, with the retrieved information, a context around
   the question is created, the context should contain all information
@@ -155,7 +155,6 @@ done in three phases:
   Phase 3 Generation, The context and question will be passed to an LLM
   that will generate an answer.
 \end{itemize}
-
 
 
 \begin{figure}[htbp]
@@ -756,7 +755,7 @@ flexible and modular enough so can use different LLMS as generators. The
 system will also have a Retriever that will be able to create embeddings
 based on sentences and also on paragraphs. The retriever will also
 retrieve embeddings based on a question/query. All the chosen LLMs and
-their appropriate RAGs will be asked three different type of Open-domain
+their corresponding RAGs will be asked three different type of Open-domain
 question. This is a type of question that can't be answered with simple
 yes or no and requires accessing a broad range of information to provide
 an answer.
@@ -895,7 +894,7 @@ The RAG system will be a manual solution, not an existing RAG system.
 The idea is to show that even a simple RAG system can extend the
 capabilities of the LLM.
 
-\subsection{Sentence Embedder}
+\subsubsection{Sentence Embedder}
 
 For sentence embedder a SBART based embedder will be used:
 
@@ -908,6 +907,14 @@ sentence_transformers import SentenceTransformer
 For non-parametric library \texttt{faiss} will be used, it is more than
 enough to handle this experiment.
 
+\subsubsection{LLM generator placeholder}
+
+The LLM placeholder is a component that allows to attach different LLMs in the
+RAG solution. The reason for this is to test how different LLMs perform.
+
+\subsection{In memory database}
+Key value database will be used to store records, that are hold the embedding as a key
+and its corresponding text as a value. This will implement as simple in memory database.
 \subsubsection{Environment}
 
 Jupyter notebook.
@@ -918,17 +925,37 @@ For the particular reasons an open sourced LLMs will be used that can be
 run locally on the pc. The chosen hardware is a m3 processor with 36GB
 of RAM.
 
+\subsection{System architecture}
+The architecture of the RAG developed solution for testing the LLMs can be seen in the Figure \ref{fig:rag_system_diagram_figure}. 
+Where the important processes are numerated and described in the following list: 
+
+\begin{enumerate}
+  \item Storing phase, the documents containing facts are passed to the storing phase component with the purpose of permanent storage.
+  \item Storing phase, storing phase component embedder creates embeddings for the documents and stores them in the non-parametric memory.
+  \item Storing phase, each vector embeddings with its corresponding text is stored a key-value pair in the in-memory database.
+  \item Retrieval augmentation phase, the actor, user asks a question, this question is passed to the embedder.
+  \item Retrieval augmentation phase, the embedder creates an embedding for the question and queries the non-parametric memory for the k-closest embeddings.
+  \item Retrieval augmentation phase, the retrieved k-closest embeddings are used to obtain their corresponding texts from the in-memory key-value database, forming the context.
+  \item Retrieval augmentation phase, the context with the question is passed to the LLM generator and the LLM generator creates an answer for the users question.
+\end{enumerate}
+
+\begin{figure*}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{resources/v1/ragSystemArhitecture.png}
+  \caption{RAG system diagram}
+  \label{fig:rag_system_diagram_figure}
+\end{figure*}
 \subsubsection{Experiments definition}
 
+
 In total five experiments will be performed. The questions type, the retrieved type of information(text), 
-and the number of retrievals for each experiment are shown in the table \ref{tab:experiment_questions_table}. 
+and the number of retrievals for each experiment are shown in the Table \ref{tab:experiment_questions_table}. 
 
 \begin{table*}[htbp]
-  \caption{Experiment description} % Optional caption
-  \label{tab:experiment_questions_table}  % Adding label for referencing  
+  \caption{Experiment description} 
+  \label{tab:experiment_questions_table}
     \centering
-    \resizebox{\textwidth}{!}{
-      \begin{tabular} {|p{0.15\linewidth}|p{0.35\linewidth}|p{0.30\linewidth}|p{0.20\linewidth}|}
+      \begin{tabular} {|p{0.15\linewidth}|p{0.35\linewidth}|p{0.25\linewidth}|p{0.15\linewidth}|}
         \hline
         \textbf{Experiment} & \textbf{Question Type} & \textbf{Augmentation Type} & \textbf{Augmentations} \\ \hline
         1 & Fact-based question & Sentence & 1 \\ \hline
@@ -937,7 +964,6 @@ and the number of retrievals for each experiment are shown in the table \ref{tab
         4 & List-based question & Paragraph & 1 \\ \hline
         5 & Synthesis-based Fact question & Paragraph & 3 \\ \hline
       \end{tabular}
-    }
 \end{table*}
 
     
@@ -966,12 +992,11 @@ experiment parameters are as follows:
 
 \subsubsection{Causal Models}
 
-The results of the experiment are shown in the table \ref{tab:experiment_R_1_sentence_Q_fact_M_casual_table}.
+The results of the experiment are shown in the Table \ref{tab:experiment_R_1_sentence_Q_fact_M_casual_table}.
 \begin{table*}[htbp]
   \centering
-  \caption{Fact-based question, single sentence retrieval, causal models} % Optional caption
-  \label{tab:experiment_R_1_sentence_Q_fact_M_casual_table}  % Adding label for referencing  
-  % \resizebox{\textwidth}{!}{  % Adjusts table to fit the width of the text
+  \caption{Fact-based question, single sentence retrieval, causal models}
+  \label{tab:experiment_R_1_sentence_Q_fact_M_casual_table}
     \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
       \hline
       \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
@@ -982,7 +1007,6 @@ The results of the experiment are shown in the table \ref{tab:experiment_R_1_sen
       gpt2-large & The Pyramid of Giza is the tallest structure in the world. How tall is the Taj Mahal? \ldots{} & The Great Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
       EleutherAI gpt-neo-1.3B & The Pyramid of Giza is one of the Seven Wonders of the Ancient World. It is one of the Seven Wonders of the Modern World \ldots{} & The pyramid of Giza, also known as the Pyramid of Khufu \ldots{} and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
     \end{tabular}
-  % }
 \end{table*}
 In this experiment setup, in all the cases the casual models generated a wrong LLM answer. Except
 the \texttt{facebook/blenderbot-90M} they all generated grammatically
@@ -1000,7 +1024,6 @@ correct answer was GPT2 with 90M.
   \caption{Fact-based question, single sentence retrieval, question answering models. "How tall is the Pyramid of Giza?"} % Optional caption
   \centering
   \label{tab:experiment_R_1_sentence_Q_fact_M_question_answering_table}  % Adding label for referencing  
-  % \resizebox{\textwidth}{!}{  % Adjusts table to fit the width of the text
     \begin{tabular}{|p{0.2\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
       \hline
       \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
@@ -1008,10 +1031,9 @@ correct answer was GPT2 with 90M.
       deepset roberta-base-squad2\_125M &  & 146.6 meters (481 feet) \\ \hline
       bert-large-uncased-whole-word-masking-finetuned-squad\_340M & tall & 146.6 meters \\ \hline
     \end{tabular}
-  % }
 \end{table*}
 The results of the question answering models for the experiment of the 
-current section are shown in the table \ref{tab:experiment_R_1_sentence_Q_fact_M_question_answering_table}.
+current section are shown in Table \ref{tab:experiment_R_1_sentence_Q_fact_M_question_answering_table}.
 The QA models are also answered correctly. Compared to the casual LLMs
 RAG generated answer, here the models perform better as a model of 66M
 was able to answer the question correctly. The generated LLM answer was
@@ -1031,7 +1053,7 @@ wrong for every model.
   \end{tabular}
 \end{table}
 The results of the T5 conversational models for the experiment of the 
-current section are shown in the table \ref{tab:experiment_R_1_sentence_Q_fact_M_T5_table}.
+current section are shown in Table \ref{tab:experiment_R_1_sentence_Q_fact_M_T5_table}.
 The T5 models RAG generated answer is also correct for all the models.
 At this point they perform the quality of the answer is on the same
 level of the QA models and Casual models. But the models a bigger than
@@ -1085,7 +1107,7 @@ Great Wall of China?'. The experiment parameters are as follows:
 \end{table*}
 
 The results of the causal models for the experiment of the current section 
-are documented in table \ref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_casualModel_table}.
+are documented in Table \ref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_casualModel_table}.
 In all cases, the causal models generated incorrect or irrelevant LLM
 answers. The RAG approach, however, performed significantly better, with
 all models providing correct information about the materials used in
@@ -1112,7 +1134,7 @@ model's output is flawed.
 
 
 The results of the QA models for the experiment of the current section 
-are documented in table \ref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_QaModels_table}.
+are documented in Table \ref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_QaModels_table}.
 
 The QA models performed well in generating correct RAG answers,
 accurately listing the materials used in constructing the Great Wall of
@@ -1137,7 +1159,7 @@ accurate information.
 \end{table*}
 
 The results of the T5 conversational models for the experiment of this
-can be seen in the table \ref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_T5Models_table}.
+can be seen in the Table \ref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_T5Models_table}.
 
 Here, the T5 models also demonstrated strong performance in the RAG approach.
 They correctly listed the materials used in constructing the Great Wall of
@@ -1195,7 +1217,7 @@ The experiment parameters are as follows:
 \end{table*}
 
 This experiment's results for the casual models can be observed in 
-table \ref{tab:experiment_R_1_paragraph_Q_fact_M_casual_table}.
+Table \ref{tab:experiment_R_1_paragraph_Q_fact_M_casual_table}.
 
 In this experiment, the causal models generally provided incorrect or
 nonsensical LLM answers. However, the RAG approach performed
@@ -1217,7 +1239,7 @@ and presenting the relevant information from the paragraph.
   \end{tabular}
 \end{table*}
 
-The experiment results for the QA models are shown in table \ref{tab:experiment_R_1_paragraph_Q_fact_M_QaModels_table}.
+The experiment results for the QA models are shown Table \ref{tab:experiment_R_1_paragraph_Q_fact_M_QaModels_table}.
 
 The QA models continued to perform well, with the RAG approach providing
 correct and relevant answers. Despite the direct LLM answers being
@@ -1240,7 +1262,7 @@ presented.
 \end{table*}
 
 The results of the T5 conversational models for the experiment of the current section 
-are shown in the table \ref{tab:experiment_R_1_paragraph_Q_fact_M_T5Models_table}.
+are shown in Table \ref{tab:experiment_R_1_paragraph_Q_fact_M_T5Models_table}.
 
 The T5 models also demonstrated strong performance in the RAG approach,
 consistently providing the correct height of the Pyramid of Giza. As
@@ -1304,7 +1326,7 @@ document. The experiment parameters are as follows:
 \end{table*}
 
 The results of the causal models for the experiment of the current section can be seen 
-in the table \ref{tab:experiment_R_1_paragraph_Q_listBased_M_casual_table}.
+in Table \ref{tab:experiment_R_1_paragraph_Q_listBased_M_casual_table}.
 
 In this experiment, the causal models generally provided incorrect or
 nonsensical LLM answers. The RAG approach, however, showed improvement,
@@ -1332,7 +1354,7 @@ used in the construction of the Great Wall of China.
 \end{table*}
 
 The results of the QA models for the experiment of the current section
-can be seen in the table \ref{tab:experiment_R_1_paragraph_Q_listBased_M_QaModels_table}.
+can be seen in Table \ref{tab:experiment_R_1_paragraph_Q_listBased_M_QaModels_table}.
 
 The QA models performed exceptionally well in generating correct RAG
 answers, accurately listing the materials used in constructing the Great
@@ -1360,7 +1382,7 @@ information.
 \end{table*}
 
 The results of the T5 conversational models for the experiment of the
-current section can be seen in the table \ref{tab:experiment_R_1_paragraph_Q_listBased_M_T5Models_table}.
+current section can be seen in Table \ref{tab:experiment_R_1_paragraph_Q_listBased_M_T5Models_table}.
 
 The T5 models also performed well in the RAG approach, consistently
 providing the correct list of materials used in constructing the Great
@@ -1437,7 +1459,7 @@ the LLM needs to combine the facts in to a conclusion and generate the answer.
 \end{table*}
 
 The results of the causal models for the experiment of the current section
-are stored in table \ref{tab:experiment_R_3_paragraph_Q_synthesis_M_casual_table}.
+are stored in Table \ref{tab:experiment_R_3_paragraph_Q_synthesis_M_casual_table}.
 
 In this experiment, the causal models struggled to produce accurate or
 relevant LLM answers. The RAG approach helped improve the accuracy but
@@ -1468,7 +1490,7 @@ best choice for complex synthesis-based questions.
 \end{table*}
 
 The results of the QA models for the experiment of the current section
-are documented in table \ref{tab:experiment_R_3_paragraph_Q_synthesis_M_QaModels_table}.
+are documented in Table \ref{tab:experiment_R_3_paragraph_Q_synthesis_M_QaModels_table}.
 
 The QA models had mixed performance in this experiment. While the direct
 LLM answers were often uninformative, the RAG answers did manage to
@@ -1495,7 +1517,7 @@ challenging for these models.
 \end{table*}
 
 The results of the T5 conversational models for the experiment of the current section
-are documented in table \ref{tab:experiment_R_3_paragraph_Q_synthesis_M_T5Models_table}.
+are documented in Table \ref{tab:experiment_R_3_paragraph_Q_synthesis_M_T5Models_table}.
 
 The T5 models performed relatively well in the RAG approach, with the
 larger model (T5-large) being able to correctly list both the Eiffel

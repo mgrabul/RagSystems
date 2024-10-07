@@ -304,7 +304,7 @@ project in this paper.
 \emph{The Faiss library is dedicated to vector similarity search, a core
 functionality of vector databases. Faiss is a toolkit of indexing
 methods and related primitives used to search, cluster, compress, and
-transform vectors} (Douze et al., 2024, p.~1) \cite{cite2}.
+transform vectors} \cite{cite2}.
 
 According to the referenced research, the Faiss database was tested with
 768-dimensional ContrieverDb (name of the database from where vectors
@@ -343,9 +343,7 @@ Currently, (as of 2024), these are the options for dense vector storage:
   Postges, pgvector - open-sourced
 \end{itemize}
 
-\emph{The previous information is taken form various blog posts (Ali, M.
-2023; Cloudflare Docs, no date; Kehrer, K. 2023; Benedict, 2023;
-Bratanič, T., 2023; Pondhouse Data 2023)} \cite{cite9} \cite{cite10} \cite{cite11} 
+\emph{The previous information is taken form various blog posts} \cite{cite9} \cite{cite10} \cite{cite11} 
 \cite{cite12} \cite{cite13} \cite{cite14} \cite{cite15} \cite{cite16}
 
 \subsubsection{Sentence embedding models}
@@ -618,7 +616,7 @@ optimization * Storage optimization and retrieval * Extending the stored
 data with metadata In the \textbf{post-retrieval} phase idea is to
 create more usable context from the retrieved data. The data now is
 re-ranked and compressed, cleaned up. This concept is derived from the
-work of Gao et al.~(2023) \cite{cite4}.
+work of Gao et al. \cite{cite4}.
 
 \subsubsection{Modular RAG}
 
@@ -645,7 +643,7 @@ document as a single latent variable that is marginalized to get the
 seq2seq probability p(y\textbar x) via a top-K approximation.
 Concretely, the top K documents are retrieved using the retriever, and
 the generator produces the output sequence probability for each
-document, which are then marginalized} (Lewis et al., 2024, p.~3) \cite{cite3}
+document, which are then marginalized} \cite{cite3}
 
 \subsubsection{RAG-Token Model}
 
@@ -656,8 +654,8 @@ sends the context and the question as an input to an LLM or the
 generator. The RAG-Token Model retrieves new documents on every
 generated token. Once a token is generated, the token is appended to all
 previously generated tokens and this are appended to the initial
-question. This results in a string of the following form ``Question +
-GenerateTockenList''. This new string is then used again as an input in
+question. This results in a string of the following form "Question +
+GenerateTockenList". This new string is then used again as an input in
 the RAG, or as an input for the RAG retrieved. The process retrieves new
 documents for every new generated token and uses this documents to
 generate the next token. This makes sure that every new generated token
@@ -669,7 +667,7 @@ allows the generator to choose content from several documents when
 producing an answer. Concretely, the top K documents are retrieved using
 the retriever, and then the generator produces a distribution for the
 next output token for each document, before marginalizing, and repeating
-the process with the following output token} (Lewis et al., 2024, p.~3)
+the process with the following output token}
 \cite{cite3}
 
 \subsection{Iterative RAG}
@@ -1035,7 +1033,8 @@ level of the QA models and Casual models. But the models a bigger than
 the QA models.
 
 % TODO perhaps add experiment conclusion
-Conclusion: Given the size of the models the QA models are most
+\textbf{Conclusion:}
+Given the size of the models the QA models are most
 appropriate for answering Fact-based Question.
 
 
@@ -1052,8 +1051,7 @@ Great Wall of China?'. The experiment parameters are as follows:
 \item
   \textbf{Question Type}: List-based Question
 \item
-  \textbf{Question}: ``What materials were used in constructing the
-  Great Wall of China?''
+  \textbf{Question}: "What materials were used in constructing the Great Wall of China?"''"
 \item
   \textbf{Retrieval Type}: Sentence retrieval
 \item
@@ -1149,9 +1147,7 @@ Given the size of the models the QA models are most appropriate for
 answering List-based Question.
 
 
-\subsection{Experiment 3: Fact-based Question - 'How tall is the
-Pyramid of
-Giza?'}
+\subsection{Experiment 3: Fact-based Question - 'How tall is the Pyramid of Giza?'}
 
 \subsubsection{Experiment Description}
 
@@ -1564,81 +1560,123 @@ for excessively large and complex models.
 
 % \begin{enumerate}
 % \def\labelenumi{\arabic{enumi}.}
+% \begin{thebibliography}{9}
+% \bibitem{cite1} Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., \& Polosukhin, I. (2017). Attention Is All You Need. Retrieved from \url{https://arxiv.org/pdf/1706.03762}
+% \bibitem{cite2} 
+%   Douze, M., Guzhva, A., Deng, C., Johnson, J., Szilvasy, G., Mazaré,
+%   P-E., Lomeli, M., Hosseini, L., \& Jégou, H. (2024). The Faiss
+%   Library. Retrieved from \url{https://arxiv.org/pdf/2401.08281}
+% \bibitem{cite3} 
+%   Lewis, P., Yih, W., Rocktäschel, T., \& Riedel, S. (2020).
+%   Retrieval-Augmented Generation (RAG) Explained: Understanding Key
+%   Concepts. Retrieved from \url{https://arxiv.org/pdf/2005.11401v4}
+% \bibitem{cite4} 
+%   Gao, Y., Xiong, Y., Gao, X., Jia, K., Pan, J., Bi, Y., Dai, Y., Sun,
+%   J., Guo, Q., Wang, M., \& Wang, H. (2023). Retrieval-Augmented
+%   Generation for Large Language Models: A Survey. Retrieved from
+%   \url{https://arxiv.org/pdf/2312.10997}
+% \bibitem{cite5} 
+%   Reimers, N., \& Gurevych, I. (2019). Sentence-BERT: Sentence
+%   Embeddings using Siamese BERT-Networks. Retrieved from
+%   \url{https://arxiv.org/pdf/1908.10084}
+% \bibitem{cite6} 
+%   Miesle, P. (no date). Retrieval-augmented Generation (RAG) Explained:
+%   Understanding Key Concepts. DataStax. Retrieved from
+%   \url{https://www.datastax.com/guides/what-is-retrieval-augmented-generation}
+% \bibitem{cite7} 
+%   Owczarek, D. (2023). The Comprehensive Guide to Retrieval Augmented
+%   Generation LLMs: Transforming Data into Knowledge. Nexocode. Retrieved
+%   from
+%   \url{https://nexocode.com/blog/posts/retrieval-augmented-generation-rag-llms}
+% \bibitem{cite8} 
+%   Alkestrup, J., \& Purup, N. S. (n.d.). Building high-quality RAG
+%   systems. Implement Consulting Group. Retrieved from
+%   \url{https://implementconsultinggroup.com/article/building-high-quality-rag-systems}
+% \bibitem{cite9} 
+%   Ali, M. (2023). Optimizing RAG: A Guide to Choosing the Right Vector
+%   Database. Medium. Retrieved from
+%   \href{https://medium.com/@mutahar789/optimizing-rag-a-guide-to-choosing-the-right-vector-database-480f71a33139}{https://medium.com/@mutahar789/optimizing-rag-a-guide-to-choosing-the-right-vector-database-480f71a33139}
+% \bibitem{cite10} 
+%   Cloudflare Docs. no date. Best Practices: Insert Vectors. Retrieved
+%   from
+%   \url{https://developers.cloudflare.com/vectorize/best-practices/insert-vectors/}
+% \bibitem{cite11} 
+%   Kehrer, K. (2023). Best Vector DBs for Retrieval Augmented Generation
+%   (RAG). Aporia. Retrieved from
+%   \url{https://www.aporia.com/learn/best-vector-dbs-for-retrieval-augmented-generation-rag/}
+% \bibitem{cite12} 
+%   Databricks. (n.d.). Retrieval-Augmented Generation (RAG). Retrieved
+%   from
+%   \url{https://www.databricks.com/glossary/retrieval-augmented-generation-rag}
+% \bibitem{cite13}
+%   MongoDB Docs. (n.d.). Atlas CLI: Deploy Local. Retrieved from
+%   \url{https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-deploy-local/}
+% \bibitem{cite14}
+%   Benedict, V. M. W. (2023). RAG with Atlas Vector Search and MongoDB.
+%   Medium. Retrieved from
+%   \href{https://medium.com/@if-21062/rag-with-atlas-vector-search-mongodb-0d2420e00b64}{https://medium.com/@if-21062/rag-with-atlas-vector-search-mongodb-0d2420e00b64}
+% \bibitem{cite15}
+%   Bratanič, T. (2023). Neo4j Langchain Vector Index Implementation.
+%   Neo4j. Retrieved from
+%   \url{https://neo4j.com/developer-blog/neo4j-langchain-vector-index-implementation/}
+% \bibitem{cite16}
+%   Pondhouse Data. (2023). Advanced RAG: Recursive Retrieval with
+%   llamaindex. Retrieved from
+%   \url{https://www.pondhouse-data.com/blog/advanced-rag-recursive-retrieval-with-llamaindex}
+% \bibitem{cite17}
+%   Karpukhin, V., Oguz, B., Min, S., Lewis, P., Wu, L., Edunov, S., Chen,
+%   D., \& Yih, W. (2020). Dense Passage Retrieval for Open-Domain
+%   Question Answering. Retrieved from
+%   \url{https://arxiv.org/pdf/2004.04906}
+% \bibitem{cite18}
+%   Wang, Z., Wang, Z., Le, L., Zheng, H. S., Mishra, S., Perot, V.,
+%   Zhang, Y., Mattapalli, A., Taly, A., Shang, J., Lee, C-Y., \& Pfister,
+%   T. (2024). Speculative RAG: Enhancing Retrieval Augmented Generation
+%   through Drafting. Retrieved from
+%   \url{https://arxiv.org/pdf/2407.08223}
+
+% \end{thebibliography}
+
+% \end{document}    
+
 \begin{thebibliography}{9}
-\bibitem{cite1} Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., \& Polosukhin, I. (2017). Attention Is All You Need. Retrieved from \url{https://arxiv.org/pdf/1706.03762}
-\bibitem{cite2} 
-  Douze, M., Guzhva, A., Deng, C., Johnson, J., Szilvasy, G., Mazaré,
-  P-E., Lomeli, M., Hosseini, L., \& Jégou, H. (2024). The Faiss
-  Library. Retrieved from \url{https://arxiv.org/pdf/2401.08281}
-\bibitem{cite3} 
-  Lewis, P., Yih, W., Rocktäschel, T., \& Riedel, S. (2020).
-  Retrieval-Augmented Generation (RAG) Explained: Understanding Key
-  Concepts. Retrieved from \url{https://arxiv.org/pdf/2005.11401v4}
-\bibitem{cite4} 
-  Gao, Y., Xiong, Y., Gao, X., Jia, K., Pan, J., Bi, Y., Dai, Y., Sun,
-  J., Guo, Q., Wang, M., \& Wang, H. (2023). Retrieval-Augmented
-  Generation for Large Language Models: A Survey. Retrieved from
-  \url{https://arxiv.org/pdf/2312.10997}
-\bibitem{cite5} 
-  Reimers, N., \& Gurevych, I. (2019). Sentence-BERT: Sentence
-  Embeddings using Siamese BERT-Networks. Retrieved from
-  \url{https://arxiv.org/pdf/1908.10084}
-\bibitem{cite6} 
-  Miesle, P. (no date). Retrieval-augmented Generation (RAG) Explained:
-  Understanding Key Concepts. DataStax. Retrieved from
-  \url{https://www.datastax.com/guides/what-is-retrieval-augmented-generation}
-\bibitem{cite7} 
-  Owczarek, D. (2023). The Comprehensive Guide to Retrieval Augmented
-  Generation LLMs: Transforming Data into Knowledge. Nexocode. Retrieved
-  from
-  \url{https://nexocode.com/blog/posts/retrieval-augmented-generation-rag-llms}
-\bibitem{cite8} 
-  Alkestrup, J., \& Purup, N. S. (n.d.). Building high-quality RAG
-  systems. Implement Consulting Group. Retrieved from
-  \url{https://implementconsultinggroup.com/article/building-high-quality-rag-systems}
-\bibitem{cite9} 
-  Ali, M. (2023). Optimizing RAG: A Guide to Choosing the Right Vector
-  Database. Medium. Retrieved from
-  \href{https://medium.com/@mutahar789/optimizing-rag-a-guide-to-choosing-the-right-vector-database-480f71a33139}{https://medium.com/@mutahar789/optimizing-rag-a-guide-to-choosing-the-right-vector-database-480f71a33139}
-\bibitem{cite10} 
-  Cloudflare Docs. no date. Best Practices: Insert Vectors. Retrieved
-  from
-  \url{https://developers.cloudflare.com/vectorize/best-practices/insert-vectors/}
-\bibitem{cite11} 
-  Kehrer, K. (2023). Best Vector DBs for Retrieval Augmented Generation
-  (RAG). Aporia. Retrieved from
-  \url{https://www.aporia.com/learn/best-vector-dbs-for-retrieval-augmented-generation-rag/}
-\bibitem{cite12} 
-  Databricks. (n.d.). Retrieval-Augmented Generation (RAG). Retrieved
-  from
-  \url{https://www.databricks.com/glossary/retrieval-augmented-generation-rag}
-\bibitem{cite13}
-  MongoDB Docs. (n.d.). Atlas CLI: Deploy Local. Retrieved from
-  \url{https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-deploy-local/}
-\bibitem{cite14}
-  Benedict, V. M. W. (2023). RAG with Atlas Vector Search and MongoDB.
-  Medium. Retrieved from
-  \href{https://medium.com/@if-21062/rag-with-atlas-vector-search-mongodb-0d2420e00b64}{https://medium.com/@if-21062/rag-with-atlas-vector-search-mongodb-0d2420e00b64}
-\bibitem{cite15}
-  Bratanič, T. (2023). Neo4j Langchain Vector Index Implementation.
-  Neo4j. Retrieved from
-  \url{https://neo4j.com/developer-blog/neo4j-langchain-vector-index-implementation/}
-\bibitem{cite16}
-  Pondhouse Data. (2023). Advanced RAG: Recursive Retrieval with
-  llamaindex. Retrieved from
-  \url{https://www.pondhouse-data.com/blog/advanced-rag-recursive-retrieval-with-llamaindex}
-\bibitem{cite17}
-  Karpukhin, V., Oguz, B., Min, S., Lewis, P., Wu, L., Edunov, S., Chen,
-  D., \& Yih, W. (2020). Dense Passage Retrieval for Open-Domain
-  Question Answering. Retrieved from
-  \url{https://arxiv.org/pdf/2004.04906}
-\bibitem{cite18}
-  Wang, Z., Wang, Z., Le, L., Zheng, H. S., Mishra, S., Perot, V.,
-  Zhang, Y., Mattapalli, A., Taly, A., Shang, J., Lee, C-Y., \& Pfister,
-  T. (2024). Speculative RAG: Enhancing Retrieval Augmented Generation
-  through Drafting. Retrieved from
-  \url{https://arxiv.org/pdf/2407.08223}
 
-\end{thebibliography}
-
+  \bibitem{cite1} A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, Ł. Kaiser, and I. Polosukhin, "Attention Is All You Need," \textit{arXiv preprint arXiv:1706.03762}, 2017.
+  
+  \bibitem{cite2} M. Douze, A. Guzhva, C. Deng, J. Johnson, G. Szilvasy, P.-E. Mazaré, M. Lomeli, L. Hosseini, and H. Jégou, "The Faiss Library," \textit{arXiv preprint arXiv:2401.08281}, 2024.
+  
+  \bibitem{cite3} P. Lewis, W. Yih, T. Rocktäschel, and S. Riedel, "Retrieval-Augmented Generation (RAG) Explained: Understanding Key Concepts," \textit{arXiv preprint arXiv:2005.11401v4}, 2020.
+  
+  \bibitem{cite4} Y. Gao, Y. Xiong, X. Gao, K. Jia, J. Pan, Y. Bi, Y. Dai, J. Sun, Q. Guo, M. Wang, and H. Wang, "Retrieval-Augmented Generation for Large Language Models: A Survey," \textit{arXiv preprint arXiv:2312.10997}, 2023.
+  
+  \bibitem{cite5} N. Reimers and I. Gurevych, "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks," \textit{arXiv preprint arXiv:1908.10084}, 2019.
+  
+  \bibitem{cite6} P. Miesle, "Retrieval-Augmented Generation (RAG) Explained: Understanding Key Concepts," \textit{DataStax}. Retrieved from \url{https://www.datastax.com/guides/what-is-retrieval-augmented-generation}.
+  
+  \bibitem{cite7} D. Owczarek, "The Comprehensive Guide to Retrieval-Augmented Generation LLMs: Transforming Data into Knowledge," \textit{Nexocode}, 2023. Retrieved from \url{https://nexocode.com/blog/posts/retrieval-augmented-generation-rag-llms}.
+  
+  \bibitem{cite8} J. Alkestrup and N. S. Purup, "Building High-Quality RAG Systems," \textit{Implement Consulting Group}. Retrieved from \url{https://implementconsultinggroup.com/article/building-high-quality-rag-systems}.
+  
+  \bibitem{cite9} M. Ali, "Optimizing RAG: A Guide to Choosing the Right Vector Database," \textit{Medium}, 2023. Retrieved from \url{https://medium.com/@mutahar789/optimizing-rag-a-guide-to-choosing-the-right-vector-database-480f71a33139}.
+  
+  \bibitem{cite10} Cloudflare Docs, "Best Practices: Insert Vectors," \textit{Cloudflare}. Retrieved from \url{https://developers.cloudflare.com/vectorize/best-practices/insert-vectors/}.
+  
+  \bibitem{cite11} K. Kehrer, "Best Vector DBs for Retrieval Augmented Generation (RAG)," \textit{Aporia}, 2023. Retrieved from \url{https://www.aporia.com/learn/best-vector-dbs-for-retrieval-augmented-generation-rag/}.
+  
+  \bibitem{cite12} Databricks, "Retrieval-Augmented Generation (RAG)," \textit{Databricks}. Retrieved from \url{https://www.databricks.com/glossary/retrieval-augmented-generation-rag}.
+  
+  \bibitem{cite13} MongoDB Docs, "Atlas CLI: Deploy Local," \textit{MongoDB}. Retrieved from \url{https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-deploy-local/}.
+  
+  \bibitem{cite14} V. M. W. Benedict, "RAG with Atlas Vector Search and MongoDB," \textit{Medium}, 2023. Retrieved from \url{https://medium.com/@if-21062/rag-with-atlas-vector-search-mongodb-0d2420e00b64}.
+  
+  \bibitem{cite15} T. Bratanič, "Neo4j Langchain Vector Index Implementation," \textit{Neo4j}, 2023. Retrieved from \url{https://neo4j.com/developer-blog/neo4j-langchain-vector-index-implementation/}.
+  
+  \bibitem{cite16} Pondhouse Data, "Advanced RAG: Recursive Retrieval with LlamaIndex," \textit{Pondhouse Data}, 2023. Retrieved from \url{https://www.pondhouse-data.com/blog/advanced-rag-recursive-retrieval-with-llamaindex}.
+  
+  \bibitem{cite17} V. Karpukhin, B. Oguz, S. Min, P. Lewis, L. Wu, S. Edunov, D. Chen, and W. Yih, "Dense Passage Retrieval for Open-Domain Question Answering," \textit{arXiv preprint arXiv:2004.04906}, 2020.
+  
+  \bibitem{cite18} Z. Wang, Z. Wang, L. Le, H. S. Zheng, S. Mishra, V. Perot, Y. Zhang, A. Mattapalli, A. Taly, J. Shang, C.-Y. Lee, and T. Pfister, "Speculative RAG: Enhancing Retrieval-Augmented Generation through Drafting," \textit{arXiv preprint arXiv:2407.08223}, 2024.
+  
+  \end{thebibliography}
+  
 \end{document}    

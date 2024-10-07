@@ -15,7 +15,7 @@ https://code.visualstudio.com/docs/python/python-quick-start
 * https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter
 
 ## VS Commands
-* Command Palette  Cmd+Shift+P
+* Command Palette Cmd+Shift+P
 
 ## install exporter
 * conda install nbconvert
@@ -38,6 +38,8 @@ https://code.visualstudio.com/docs/python/python-quick-start
 jupyter nbconvert --to pdf Retrieval-Augmented\ Generation.ipynb
 
 jupyter nbconvert --to pdf Retrieval-Augmented\ Generation.ipynb --output Retrieval-Augmented\ Generation_v2.pdf
+
+jupyter nbconvert --to latex Retrieval-Augmented\ Generation.ipynb --output Retrieval-Augmented\ Generation.tex
 
 ```
 In visual studio code

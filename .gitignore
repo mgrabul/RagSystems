@@ -18,4 +18,14 @@
 /temp/*
 /.quarto/
 /notes/*
+# LaTeX
+*.log
+*.aux
+*.gz
+*.xdv
+*.fdb_latexmk
+*.fls
+*.out
+*.dvi
+*.toc
 /ML-Retrieval-Augmented Generation.pdf

@@ -12,8 +12,10 @@
             "size": "90M",
             "question": "How tall is the Pyramid of Giza?",
             "retrieved_documents": "The Pyramids of Giza, located near Cairo, Egypt, are ancient pyramids that were built as tombs for the Pharaohs of Egypt.\nThe Great Pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.\nThe Pyramids of Giza are the only remaining structure of the Seven Wonders of the Ancient World.\nThe Great Pyramid of Giza was the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311.\nThe Pyramids of Giza were originally covered in casing stones made of highly polished Tura limestone, which reflected the sun\u2019s light and made the pyramids shine.\nThe Sphinx, a limestone statue with the body of a lion and the head of a Pharaoh, stands guard in front of the Pyramids of Giza.",
-            "LLM Answer": "pickbalfiers fiers predators mutations bender mutations mutations eston mutations eston predators kicker mutations mutations predators mutations pment eston eston eston trout mutations fiers eston eston bender eston eston kicker eston eston fiers eston joreston __end__",
-            "RAG Answer": "design mutpuwillis willis design lease orpotbee willis potpotdistribution fatty fatty composition lease mutfatty fatty willis strip spy lease willis distribution willis strip distribution mutdraft mutpupumutspy __end__"
+            "LLM Answer": "bender bender mutations bender mutations eston eston eston bender bender eston eston teau eston eston cousins eston eston st eston eston pment eston eston yacht jorst eston vert eston eston claueston eston vert st eston __end__",
+            "lmm_time": 1.6887190341949463,
+            "RAG Answer": "composition design lease distribution strip distribution lease lease formation willis distribution fatty willis puorfatty strip puwillis puspy willis willis willis formation bee beta strip mutfatty willis ormutspy willis strip willis __end__",
+            "rag_time": 2.2042009830474854
         },
         {
             "modelType": "casual_model",
@@ -21,8 +23,10 @@
             "size": "124M",
             "question": "How tall is the Pyramid of Giza?",
             "retrieved_documents": "The Pyramids of Giza, located near Cairo, Egypt, are ancient pyramids that were built as tombs for the Pharaohs of Egypt.\nThe Great Pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.\nThe Pyramids of Giza are the only remaining structure of the Seven Wonders of the Ancient World.\nThe Great Pyramid of Giza was the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311.\nThe Pyramids of Giza were originally covered in casing stones made of highly polished Tura limestone, which reflected the sun\u2019s light and made the pyramids shine.\nThe Sphinx, a limestone statue with the body of a lion and the head of a Pharaoh, stands guard in front of the Pyramids of Giza.",
-            "LLM Answer": "\n\nThe Pyramid of Giza is the tallest building in the world. It is located in the northern part of the country of Egypt. It is one of the tallest buildings in the world",
-            "RAG Answer": " The Great Pyramid of Giza is the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311. The Sphinx is"
+            "LLM Answer": "\n\nThe Pyramid of Giza is the tallest building in the world. It was built by the Egyptians in the 4th century B.C.E. The Pyramid of Giza is",
+            "lmm_time": 3.6968331336975098,
+            "RAG Answer": "\nThe Great Pyramid of Giza is the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311.\nThe Sph",
+            "rag_time": 3.665040969848633
         },
         {
             "modelType": "casual_model",
@@ -30,8 +34,10 @@
             "size": "125M",
             "question": "How tall is the Pyramid of Giza?",
             "retrieved_documents": "The Pyramids of Giza, located near Cairo, Egypt, are ancient pyramids that were built as tombs for the Pharaohs of Egypt.\nThe Great Pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.\nThe Pyramids of Giza are the only remaining structure of the Seven Wonders of the Ancient World.\nThe Great Pyramid of Giza was the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311.\nThe Pyramids of Giza were originally covered in casing stones made of highly polished Tura limestone, which reflected the sun\u2019s light and made the pyramids shine.\nThe Sphinx, a limestone statue with the body of a lion and the head of a Pharaoh, stands guard in front of the Pyramids of Giza.",
-            "LLM Answer": "\n\nHow tall is the Pyramid of Giza?\n\nHow tall is the Pyramid of Giza?\n\nHow tall is the Pyramid of Giza?\n\nHow tall is",
-            "RAG Answer": "\nThe Great Pyramid of Giza was the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311.\nThe Great"
+            "LLM Answer": "\n\nThe Pyramid of Giza is a pyramid that was built in the 5th century CE by the Egyptian king Tutankhamun. The pyramid is the tallest building in the world,",
+            "lmm_time": 3.6848669052124023,
+            "RAG Answer": "\nThe Pyramid of Giza is the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311.\nThe Pyramid of",
+            "rag_time": 4.186850070953369
         },
         {
             "modelType": "casual_model",
@@ -39,8 +45,10 @@
             "size": "355M",
             "question": "How tall is the Pyramid of Giza?",
             "retrieved_documents": "The Pyramids of Giza, located near Cairo, Egypt, are ancient pyramids that were built as tombs for the Pharaohs of Egypt.\nThe Great Pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.\nThe Pyramids of Giza are the only remaining structure of the Seven Wonders of the Ancient World.\nThe Great Pyramid of Giza was the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311.\nThe Pyramids of Giza were originally covered in casing stones made of highly polished Tura limestone, which reflected the sun\u2019s light and made the pyramids shine.\nThe Sphinx, a limestone statue with the body of a lion and the head of a Pharaoh, stands guard in front of the Pyramids of Giza.",
-            "LLM Answer": "\n\nThe Pyramid of Giza, also known as the Great Pyramid of Giza or Pyramid of the Sun, is one of the world's largest pyramids. It was built in Egypt",
-            "RAG Answer": " The Pyramid of Giza is the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311.\nThe Sphinx,"
+            "LLM Answer": "\n\nThe Pyramid of Giza is the tallest structure in the world.\n\nIt is the tallest structure in the world.\n\nIt is the tallest structure in the world.\n",
+            "lmm_time": 8.954421758651733,
+            "RAG Answer": "\nThe Great Pyramid of Giza is approximately 146.6 meters (481 feet) tall. The pyramid was built as a tomb for the Pharaohs of Egypt, and it is believed that",
+            "rag_time": 8.645253896713257
         },
         {
             "modelType": "casual_model",
@@ -48,8 +56,10 @@
             "size": "762M",
             "question": "How tall is the Pyramid of Giza?",
             "retrieved_documents": "The Pyramids of Giza, located near Cairo, Egypt, are ancient pyramids that were built as tombs for the Pharaohs of Egypt.\nThe Great Pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.\nThe Pyramids of Giza are the only remaining structure of the Seven Wonders of the Ancient World.\nThe Great Pyramid of Giza was the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311.\nThe Pyramids of Giza were originally covered in casing stones made of highly polished Tura limestone, which reflected the sun\u2019s light and made the pyramids shine.\nThe Sphinx, a limestone statue with the body of a lion and the head of a Pharaoh, stands guard in front of the Pyramids of Giza.",
-            "LLM Answer": "\n\nThe Pyramid of Giza is believed to be the tallest structure in the world. The Pyramid of Giza is located in Egypt.\n\nThe Pyramid of Giza was built between",
-            "RAG Answer": " The height of the Great Pyramid of Giza is 146.6 meters (481 feet). This is the tallest man-made structure in the world for over 3,800 years.\nThe"
+            "LLM Answer": "\n\nThe Pyramid of Giza is the tallest building in the world. It is also the largest pyramid in the world.\n\nHow tall is the Great Pyramid of Giza?\n",
+            "lmm_time": 16.52136492729187,
+            "RAG Answer": "\nThe Great Pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet",
+            "rag_time": 15.6335928440094
         },
         {
             "modelType": "casual_model",
@@ -57,8 +67,10 @@
             "size": "1.3B",
             "question": "How tall is the Pyramid of Giza?",
             "retrieved_documents": "The Pyramids of Giza, located near Cairo, Egypt, are ancient pyramids that were built as tombs for the Pharaohs of Egypt.\nThe Great Pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.\nThe Pyramids of Giza are the only remaining structure of the Seven Wonders of the Ancient World.\nThe Great Pyramid of Giza was the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311.\nThe Pyramids of Giza were originally covered in casing stones made of highly polished Tura limestone, which reflected the sun\u2019s light and made the pyramids shine.\nThe Sphinx, a limestone statue with the body of a lion and the head of a Pharaoh, stands guard in front of the Pyramids of Giza.",
-            "LLM Answer": "\n\nThis is a question that has been asked many times, but the answer is not always so simple. Some of the tallest buildings in the world are located in the United States, and",
-            "RAG Answer": "\n\nThe Pyramids of Giza are the only remaining structure of the Seven Wonders of the Ancient World.\nThe Great Pyramid of Giza, also known as the Pyramid of Khuf"
+            "LLM Answer": "\n\nHow tall is the Pyramid of Giza?\n\nHow tall is the Pyramid of Giza?\n\nHow tall is the Pyramid of Giza?\n\nHow tall is",
+            "lmm_time": 21.88231110572815,
+            "RAG Answer": "\nThe Pyramid of Khufu is the second largest of the three pyramids.\nThe Pyramid of Khufu is the largest of the three pyramids.\nThe Pyramid of Kh",
+            "rag_time": 27.92295503616333
         }
     ],
     [
@@ -69,7 +81,9 @@
             "question": "How tall is the Pyramid of Giza?",
             "retrieved_documents": "The Pyramids of Giza, located near Cairo, Egypt, are ancient pyramids that were built as tombs for the Pharaohs of Egypt.\nThe Great Pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.\nThe Pyramids of Giza are the only remaining structure of the Seven Wonders of the Ancient World.\nThe Great Pyramid of Giza was the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311.\nThe Pyramids of Giza were originally covered in casing stones made of highly polished Tura limestone, which reflected the sun\u2019s light and made the pyramids shine.\nThe Sphinx, a limestone statue with the body of a lion and the head of a Pharaoh, stands guard in front of the Pyramids of Giza.",
             "LLM Answer": "how tall is the pyramid of giza? [SEP]",
-            "RAG Answer": "146. 6 meters"
+            "lmm_time": 0.15774202346801758,
+            "RAG Answer": "146. 6 meters",
+            "rag_time": 0.17870688438415527
         },
         {
             "modelType": "qa_model",
@@ -78,7 +92,9 @@
             "question": "How tall is the Pyramid of Giza?",
             "retrieved_documents": "The Pyramids of Giza, located near Cairo, Egypt, are ancient pyramids that were built as tombs for the Pharaohs of Egypt.\nThe Great Pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.\nThe Pyramids of Giza are the only remaining structure of the Seven Wonders of the Ancient World.\nThe Great Pyramid of Giza was the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311.\nThe Pyramids of Giza were originally covered in casing stones made of highly polished Tura limestone, which reflected the sun\u2019s light and made the pyramids shine.\nThe Sphinx, a limestone statue with the body of a lion and the head of a Pharaoh, stands guard in front of the Pyramids of Giza.",
             "LLM Answer": "<s>",
-            "RAG Answer": " 146.6 meters (481 feet)"
+            "lmm_time": 0.31932520866394043,
+            "RAG Answer": " 146.6 meters (481 feet)",
+            "rag_time": 0.35346198081970215
         },
         {
             "modelType": "qa_model",
@@ -87,7 +103,9 @@
             "question": "How tall is the Pyramid of Giza?",
             "retrieved_documents": "The Pyramids of Giza, located near Cairo, Egypt, are ancient pyramids that were built as tombs for the Pharaohs of Egypt.\nThe Great Pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.\nThe Pyramids of Giza are the only remaining structure of the Seven Wonders of the Ancient World.\nThe Great Pyramid of Giza was the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311.\nThe Pyramids of Giza were originally covered in casing stones made of highly polished Tura limestone, which reflected the sun\u2019s light and made the pyramids shine.\nThe Sphinx, a limestone statue with the body of a lion and the head of a Pharaoh, stands guard in front of the Pyramids of Giza.",
             "LLM Answer": "tall",
-            "RAG Answer": "146. 6 meters"
+            "lmm_time": 1.2929248809814453,
+            "RAG Answer": "146. 6 meters",
+            "rag_time": 1.1184210777282715
         }
     ],
     [
@@ -98,7 +116,9 @@
             "question": "How tall is the Pyramid of Giza?",
             "retrieved_documents": "The Pyramids of Giza, located near Cairo, Egypt, are ancient pyramids that were built as tombs for the Pharaohs of Egypt.\nThe Great Pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.\nThe Pyramids of Giza are the only remaining structure of the Seven Wonders of the Ancient World.\nThe Great Pyramid of Giza was the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311.\nThe Pyramids of Giza were originally covered in casing stones made of highly polished Tura limestone, which reflected the sun\u2019s light and made the pyramids shine.\nThe Sphinx, a limestone statue with the body of a lion and the head of a Pharaoh, stands guard in front of the Pyramids of Giza.",
             "LLM Answer": "None",
-            "RAG Answer": "146.6 meters (481 feet)"
+            "lmm_time": 1.3323118686676025,
+            "RAG Answer": "146.6 meters (481 feet)",
+            "rag_time": 1.540910243988037
         },
         {
             "modelType": "t5_model",
@@ -107,7 +127,9 @@
             "question": "How tall is the Pyramid of Giza?",
             "retrieved_documents": "The Pyramids of Giza, located near Cairo, Egypt, are ancient pyramids that were built as tombs for the Pharaohs of Egypt.\nThe Great Pyramid of Giza, also known as the Pyramid of Khufu, is the largest and oldest of the three pyramids, standing at 146.6 meters (481 feet) originally.\nThe Pyramids of Giza are the only remaining structure of the Seven Wonders of the Ancient World.\nThe Great Pyramid of Giza was the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311.\nThe Pyramids of Giza were originally covered in casing stones made of highly polished Tura limestone, which reflected the sun\u2019s light and made the pyramids shine.\nThe Sphinx, a limestone statue with the body of a lion and the head of a Pharaoh, stands guard in front of the Pyramids of Giza.",
             "LLM Answer": "False",
-            "RAG Answer": "146.6 meters"
+            "lmm_time": 3.659910202026367,
+            "RAG Answer": "146.6 meters",
+            "rag_time": 3.382434129714966
         }
     ]
 ]

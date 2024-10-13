@@ -12,8 +12,10 @@
             "size": "90M",
             "question": "What materials were used in constructing the Great Wall of China?",
             "retrieved_documents": "The Great Wall of China is over 13,000 miles long.\nConstruction of the Great Wall of China began in the 7th century BC.\nThe Great Wall of China was built to protect against invasions from northern tribes.\nThe Great Wall of China is a UNESCO World Heritage site.\nThe Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.\nThe height of the Great Wall of China varies, with the tallest sections reaching up to 7.8 meters (25.6 feet).\nThe total length of the Great Wall of China, including all its branches, is approximately 21,196 kilometers (13,171 miles).\nThe Great Wall of China is not a single continuous wall but a series of walls and fortifications built by different dynasties over centuries.",
-            "LLM Answer": "horn ba ba squba ba ba da ba ba bal ba ba phba ba eling ba ba sheet ba ba itba da phth ba ba muba da da audprba da __end__",
-            "RAG Answer": "potpotscistrip scipotorscizarpotdistribution scipotstrip strip cupotstrip sciscistrip potsciscibee qpotstrip cuqstrip potqsciqstrip sci__end__"
+            "LLM Answer": "ba ba ba da ba ba bee ba ba scratch ba ba ses ba ba phba ba ar bee ba ar ba ba elba ba itba ba selba ba bruba ba ta__end__",
+            "lmm_time": 2.088247060775757,
+            "RAG Answer": "sciqstrip staff comscistrip sciscibal strip qorqscirs strip qstaff scistrip mostrip qstrip qqqocstaff strip strip potqcomqor__end__",
+            "rag_time": 2.7848758697509766
         },
         {
             "modelType": "casual_model",
@@ -21,8 +23,10 @@
             "size": "124M",
             "question": "What materials were used in constructing the Great Wall of China?",
             "retrieved_documents": "The Great Wall of China is over 13,000 miles long.\nConstruction of the Great Wall of China began in the 7th century BC.\nThe Great Wall of China was built to protect against invasions from northern tribes.\nThe Great Wall of China is a UNESCO World Heritage site.\nThe Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.\nThe height of the Great Wall of China varies, with the tallest sections reaching up to 7.8 meters (25.6 feet).\nThe total length of the Great Wall of China, including all its branches, is approximately 21,196 kilometers (13,171 miles).\nThe Great Wall of China is not a single continuous wall but a series of walls and fortifications built by different dynasties over centuries.",
-            "LLM Answer": "\n\nThere are many materials that were used in the construction of the Great Wall of China, but only a few were used for the construction of the Great Wall of China.\n\nThe",
-            "RAG Answer": "\nThe Great Wall of China was built to protect against invasions from northern tribes.\nThe Great Wall of China is made of various materials, including stone, brick, tamped earth,"
+            "LLM Answer": "\n\nIn the late 19th century, the Chinese government constructed the Great Wall of China. It was completed in 1839.\n\nThe Great Wall of China was constructed by the Chinese",
+            "lmm_time": 4.11237096786499,
+            "RAG Answer": "\nThe Great Wall of China is a UNESCO World Heritage site. The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.\nThe",
+            "rag_time": 4.317705869674683
         },
         {
             "modelType": "casual_model",
@@ -30,8 +34,10 @@
             "size": "125M",
             "question": "What materials were used in constructing the Great Wall of China?",
             "retrieved_documents": "The Great Wall of China is over 13,000 miles long.\nConstruction of the Great Wall of China began in the 7th century BC.\nThe Great Wall of China was built to protect against invasions from northern tribes.\nThe Great Wall of China is a UNESCO World Heritage site.\nThe Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.\nThe height of the Great Wall of China varies, with the tallest sections reaching up to 7.8 meters (25.6 feet).\nThe total length of the Great Wall of China, including all its branches, is approximately 21,196 kilometers (13,171 miles).\nThe Great Wall of China is not a single continuous wall but a series of walls and fortifications built by different dynasties over centuries.",
-            "LLM Answer": "\n\nThe Great Wall of China was built by the Chinese government during the reign of the Qing dynasty.\n\nThe Great Wall of China was built by the Chinese government during the reign of",
-            "RAG Answer": "\n\nThe Great Wall of China is over 13,000 miles long.\nConstruction of the Great Wall of China began in the 7th century BC.\nThe Great Wall of China was"
+            "LLM Answer": "\n\nThe Great Wall of China was constructed in 1853 by the Chinese government. The Chinese government built the Wall of China, which is now called the Great Wall of China. The Wall",
+            "lmm_time": 4.6635332107543945,
+            "RAG Answer": "\nThe Great Wall of China is one of the most important parts of China.\nThe Great Wall of China is one of the most important parts of China.\nThe Great Wall of China",
+            "rag_time": 4.512377023696899
         },
         {
             "modelType": "casual_model",
@@ -39,8 +45,10 @@
             "size": "355M",
             "question": "What materials were used in constructing the Great Wall of China?",
             "retrieved_documents": "The Great Wall of China is over 13,000 miles long.\nConstruction of the Great Wall of China began in the 7th century BC.\nThe Great Wall of China was built to protect against invasions from northern tribes.\nThe Great Wall of China is a UNESCO World Heritage site.\nThe Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.\nThe height of the Great Wall of China varies, with the tallest sections reaching up to 7.8 meters (25.6 feet).\nThe total length of the Great Wall of China, including all its branches, is approximately 21,196 kilometers (13,171 miles).\nThe Great Wall of China is not a single continuous wall but a series of walls and fortifications built by different dynasties over centuries.",
-            "LLM Answer": "\n\nThe Great Wall of China was constructed by a team of Chinese engineers, engineers, and architects. The Great Wall of China was constructed by a team of Chinese engineers, engineers, and",
-            "RAG Answer": "\nThe Great Wall of China was constructed of various materials, including stone, brick, tamped earth, and wood.\nThe height of the Great Wall of China varies, with the tallest"
+            "LLM Answer": "\n\nThe Great Wall of China was constructed by the Qing Dynasty (1644-1911). The Great Wall of China was built as a tribute to the Qing Dynasty, and it was",
+            "lmm_time": 10.923272132873535,
+            "RAG Answer": "\nThe Great Wall of China was constructed of various materials, including stone, brick, tamped earth, and wood. The walls were built using stone, brick, tamped earth, and",
+            "rag_time": 10.451375961303711
         },
         {
             "modelType": "casual_model",
@@ -48,8 +56,10 @@
             "size": "762M",
             "question": "What materials were used in constructing the Great Wall of China?",
             "retrieved_documents": "The Great Wall of China is over 13,000 miles long.\nConstruction of the Great Wall of China began in the 7th century BC.\nThe Great Wall of China was built to protect against invasions from northern tribes.\nThe Great Wall of China is a UNESCO World Heritage site.\nThe Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.\nThe height of the Great Wall of China varies, with the tallest sections reaching up to 7.8 meters (25.6 feet).\nThe total length of the Great Wall of China, including all its branches, is approximately 21,196 kilometers (13,171 miles).\nThe Great Wall of China is not a single continuous wall but a series of walls and fortifications built by different dynasties over centuries.",
-            "LLM Answer": "\n\nThe Great Wall of China was constructed by the Han Dynasty (206 BC \u2013 220 AD). It was built to protect the kingdom of China from invasion by the Mongols, who were",
-            "RAG Answer": " The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.\nThe height of the Great Wall of China varies, with the tallest sections"
+            "LLM Answer": "\n\nThe Great Wall of China was built between the 9th and 11th centuries CE. It consisted of a series of fortifications, walls, and other fortifications. The Great Wall",
+            "lmm_time": 17.457023859024048,
+            "RAG Answer": "\nThe Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.\nThe height of the Great Wall of China varies, with the tallest",
+            "rag_time": 14.155988931655884
         },
         {
             "modelType": "casual_model",
@@ -57,8 +67,10 @@
             "size": "1.3B",
             "question": "What materials were used in constructing the Great Wall of China?",
             "retrieved_documents": "The Great Wall of China is over 13,000 miles long.\nConstruction of the Great Wall of China began in the 7th century BC.\nThe Great Wall of China was built to protect against invasions from northern tribes.\nThe Great Wall of China is a UNESCO World Heritage site.\nThe Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.\nThe height of the Great Wall of China varies, with the tallest sections reaching up to 7.8 meters (25.6 feet).\nThe total length of the Great Wall of China, including all its branches, is approximately 21,196 kilometers (13,171 miles).\nThe Great Wall of China is not a single continuous wall but a series of walls and fortifications built by different dynasties over centuries.",
-            "LLM Answer": "\n\nThe Great Wall of China is one of the most famous examples of ancient Chinese architecture. It consists of a series of walls built along the Great Wall of China, which stretches for nearly",
-            "RAG Answer": "\nThe Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.\nThe height of the Great Wall of China varies, with the tallest"
+            "LLM Answer": "\n\nThe Great Wall of China was constructed using stone, brick, and mortar. The stone used in the construction of the Great Wall was quarried from the mountains of Inner Mongolia. The",
+            "lmm_time": 19.06287980079651,
+            "RAG Answer": "\nThe Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.\nThe height of the Great Wall of China varies, with the tallest",
+            "rag_time": 22.329849004745483
         }
     ],
     [
@@ -69,7 +81,9 @@
             "question": "What materials were used in constructing the Great Wall of China?",
             "retrieved_documents": "The Great Wall of China is over 13,000 miles long.\nConstruction of the Great Wall of China began in the 7th century BC.\nThe Great Wall of China was built to protect against invasions from northern tribes.\nThe Great Wall of China is a UNESCO World Heritage site.\nThe Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.\nThe height of the Great Wall of China varies, with the tallest sections reaching up to 7.8 meters (25.6 feet).\nThe total length of the Great Wall of China, including all its branches, is approximately 21,196 kilometers (13,171 miles).\nThe Great Wall of China is not a single continuous wall but a series of walls and fortifications built by different dynasties over centuries.",
             "LLM Answer": "what materials were used in constructing the great wall of china? [SEP]",
-            "RAG Answer": "stone, brick, tamped earth, and wood"
+            "lmm_time": 0.18912672996520996,
+            "RAG Answer": "stone, brick, tamped earth, and wood",
+            "rag_time": 0.17331910133361816
         },
         {
             "modelType": "qa_model",
@@ -78,7 +92,9 @@
             "question": "What materials were used in constructing the Great Wall of China?",
             "retrieved_documents": "The Great Wall of China is over 13,000 miles long.\nConstruction of the Great Wall of China began in the 7th century BC.\nThe Great Wall of China was built to protect against invasions from northern tribes.\nThe Great Wall of China is a UNESCO World Heritage site.\nThe Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.\nThe height of the Great Wall of China varies, with the tallest sections reaching up to 7.8 meters (25.6 feet).\nThe total length of the Great Wall of China, including all its branches, is approximately 21,196 kilometers (13,171 miles).\nThe Great Wall of China is not a single continuous wall but a series of walls and fortifications built by different dynasties over centuries.",
             "LLM Answer": "<s>",
-            "RAG Answer": " stone, brick, tamped earth, and wood"
+            "lmm_time": 0.5451128482818604,
+            "RAG Answer": " stone, brick, tamped earth, and wood",
+            "rag_time": 0.2977619171142578
         },
         {
             "modelType": "qa_model",
@@ -87,7 +103,9 @@
             "question": "What materials were used in constructing the Great Wall of China?",
             "retrieved_documents": "The Great Wall of China is over 13,000 miles long.\nConstruction of the Great Wall of China began in the 7th century BC.\nThe Great Wall of China was built to protect against invasions from northern tribes.\nThe Great Wall of China is a UNESCO World Heritage site.\nThe Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.\nThe height of the Great Wall of China varies, with the tallest sections reaching up to 7.8 meters (25.6 feet).\nThe total length of the Great Wall of China, including all its branches, is approximately 21,196 kilometers (13,171 miles).\nThe Great Wall of China is not a single continuous wall but a series of walls and fortifications built by different dynasties over centuries.",
             "LLM Answer": "",
-            "RAG Answer": "stone, brick, tamped earth, and wood"
+            "lmm_time": 1.3979079723358154,
+            "RAG Answer": "stone, brick, tamped earth, and wood",
+            "rag_time": 0.8550410270690918
         }
     ],
     [
@@ -98,7 +116,9 @@
             "question": "What materials were used in constructing the Great Wall of China?",
             "retrieved_documents": "The Great Wall of China is over 13,000 miles long.\nConstruction of the Great Wall of China began in the 7th century BC.\nThe Great Wall of China was built to protect against invasions from northern tribes.\nThe Great Wall of China is a UNESCO World Heritage site.\nThe Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.\nThe height of the Great Wall of China varies, with the tallest sections reaching up to 7.8 meters (25.6 feet).\nThe total length of the Great Wall of China, including all its branches, is approximately 21,196 kilometers (13,171 miles).\nThe Great Wall of China is not a single continuous wall but a series of walls and fortifications built by different dynasties over centuries.",
             "LLM Answer": "None",
-            "RAG Answer": "stone, brick, tamped earth, and wood"
+            "lmm_time": 1.164128065109253,
+            "RAG Answer": "stone, brick, tamped earth, and wood",
+            "rag_time": 1.4074029922485352
         },
         {
             "modelType": "t5_model",
@@ -107,7 +127,9 @@
             "question": "What materials were used in constructing the Great Wall of China?",
             "retrieved_documents": "The Great Wall of China is over 13,000 miles long.\nConstruction of the Great Wall of China began in the 7th century BC.\nThe Great Wall of China was built to protect against invasions from northern tribes.\nThe Great Wall of China is a UNESCO World Heritage site.\nThe Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.\nThe height of the Great Wall of China varies, with the tallest sections reaching up to 7.8 meters (25.6 feet).\nThe total length of the Great Wall of China, including all its branches, is approximately 21,196 kilometers (13,171 miles).\nThe Great Wall of China is not a single continuous wall but a series of walls and fortifications built by different dynasties over centuries.",
             "LLM Answer": "False",
-            "RAG Answer": "stone, brick, tamped earth, and wood"
+            "lmm_time": 3.5912082195281982,
+            "RAG Answer": "stone, brick, tamped earth, and wood",
+            "rag_time": 4.717585802078247
         }
     ]
 ]

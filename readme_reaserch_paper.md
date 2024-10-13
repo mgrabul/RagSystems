@@ -8,3 +8,6 @@
 Link to papers:
     https://wseas.com/journals/isa/archive.php
     https://wseas.com/journals/isa/2024.php
+
+wseas format:
+* https://wseas.com/format.php

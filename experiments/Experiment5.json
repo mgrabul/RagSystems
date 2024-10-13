@@ -1,7 +1,7 @@
 [
     {
         "Question Type": "Synthesis-based Question",
-        "Question": "Which famous structures, both designed or structurally influenced by Gustave Eiffel?",
+        "Question": "Which famous structures, were designed or structurally influenced by Gustave Eiffel?",
         "Retrieval type": "Paragraph retrieval",
         "Retrievals": 3
     },
@@ -10,55 +10,67 @@
             "modelType": "casual_model",
             "llm": "facebook/blenderbot-90M",
             "size": "90M",
-            "question": "Which famous structures, both designed or structurally influenced by Gustave Eiffel?",
+            "question": "Which famous structures, were designed or structurally influenced by Gustave Eiffel?",
             "retrieved_documents": "The Eiffel Tower is located in Paris, France.\nThe Eiffel Tower was completed in 1889.\nThe Eiffel Tower is 324 meters tall.\nThe Eiffel Tower was designed by Gustave Eiffel.\nThe Eiffel Tower is painted every seven years to prevent it from rusting.\nThe Eiffel Tower has three levels accessible to the public, with restaurants on the first and second levels.\nThe Eiffel Tower was the tallest man-made structure in the world until the completion of the Chrysler Building in New York City in 1930.\nDuring the winter, the Eiffel Tower shrinks by about 6 inches (15 cm) due to the cold. The Statue of Liberty is located in New York City, USA.\nThe Statue of Liberty was a gift from France to the United States.\nThe Statue of Liberty was dedicated on October 28, 1886.\nThe Statue of Liberty is 93 meters tall from the ground to the tip of the torch.\nThe Statue of Liberty's full name is \"Liberty Enlightening the World.\"\nThe seven spikes on the Statue of Liberty's crown represent the seven seas and seven continents of the world.\nThe internal structure of the Statue of Liberty was designed by Gustave Eiffel, who also designed the Eiffel Tower.\nThe torch of the Statue of Liberty was originally designed to serve as a lighthouse, but the torch was never used for this purpose. The Colosseum is located in Rome, Italy.\nThe Colosseum was completed in AD 80.\nThe Colosseum could hold up to 80,000 spectators.\nThe Colosseum was used for gladiatorial contests and public spectacles.\nThe Colosseum had a retractable awning, called the \"velarium,\" to protect spectators from the sun and rain.\nThe Colosseum is elliptical in shape, with a length of 189 meters (620 feet) and a width of 156 meters (512 feet).\nThe floor of the Colosseum was made of wood and covered with sand to absorb the blood from gladiatorial contests.\nThe Colosseum is partially ruined due to earthquakes and stone-robbers who used its material for other constructions.",
-            "LLM Answer": "etically ication ix belle ication belle ication judgment ication belle le tacication belle conception ication le le belle ication planted le tacdden ication tacication judge ix ication le ication judge belle ication ication le __end__",
-            "RAG Answer": "Error generating text for facebook/blenderbot-90M"
+            "LLM Answer": "belle belle conception conception etically belle ication etically etically etically belle etically tacle belle belle belle ication conception etically ication belle le belle construction judgment belle planted judge belle le le planted judge reproduce judge ication __end__",
+            "lmm_time": 2.190959930419922,
+            "RAG Answer": "Error generating text for facebook/blenderbot-90M",
+            "rag_time": 3.0939981937408447
         },
         {
             "modelType": "casual_model",
             "llm": "gpt2",
             "size": "124M",
-            "question": "Which famous structures, both designed or structurally influenced by Gustave Eiffel?",
+            "question": "Which famous structures, were designed or structurally influenced by Gustave Eiffel?",
             "retrieved_documents": "The Eiffel Tower is located in Paris, France.\nThe Eiffel Tower was completed in 1889.\nThe Eiffel Tower is 324 meters tall.\nThe Eiffel Tower was designed by Gustave Eiffel.\nThe Eiffel Tower is painted every seven years to prevent it from rusting.\nThe Eiffel Tower has three levels accessible to the public, with restaurants on the first and second levels.\nThe Eiffel Tower was the tallest man-made structure in the world until the completion of the Chrysler Building in New York City in 1930.\nDuring the winter, the Eiffel Tower shrinks by about 6 inches (15 cm) due to the cold. The Statue of Liberty is located in New York City, USA.\nThe Statue of Liberty was a gift from France to the United States.\nThe Statue of Liberty was dedicated on October 28, 1886.\nThe Statue of Liberty is 93 meters tall from the ground to the tip of the torch.\nThe Statue of Liberty's full name is \"Liberty Enlightening the World.\"\nThe seven spikes on the Statue of Liberty's crown represent the seven seas and seven continents of the world.\nThe internal structure of the Statue of Liberty was designed by Gustave Eiffel, who also designed the Eiffel Tower.\nThe torch of the Statue of Liberty was originally designed to serve as a lighthouse, but the torch was never used for this purpose. The Colosseum is located in Rome, Italy.\nThe Colosseum was completed in AD 80.\nThe Colosseum could hold up to 80,000 spectators.\nThe Colosseum was used for gladiatorial contests and public spectacles.\nThe Colosseum had a retractable awning, called the \"velarium,\" to protect spectators from the sun and rain.\nThe Colosseum is elliptical in shape, with a length of 189 meters (620 feet) and a width of 156 meters (512 feet).\nThe floor of the Colosseum was made of wood and covered with sand to absorb the blood from gladiatorial contests.\nThe Colosseum is partially ruined due to earthquakes and stone-robbers who used its material for other constructions.",
-            "LLM Answer": " They're not, but it's hard not to feel a twinge of nostalgia for them.\n\nAdvertisement\n\nAdvertisement\n\nAdvertisement\n\nAdvertisement\n\nAdvertisement\n\nAdvertisement\n",
-            "RAG Answer": "\nThe Eiffel Tower is located in Paris, France.\nThe Eiffel Tower was completed in 1889.\nThe Eiffel Tower was painted every seven years to prevent it"
+            "LLM Answer": "\n\nI don't think so. Eiffel's work is a major influence on modern architecture. In many ways, he was the most influential architect of the 20th century. E",
+            "lmm_time": 4.964699983596802,
+            "RAG Answer": "\nGustave Eiffel was born in Paris, France.\nGustave Eiffel was born in a small town on the outskirts of Paris, France.\nGust",
+            "rag_time": 5.565961837768555
         },
         {
             "modelType": "casual_model",
             "llm": "EleutherAI/gpt-neo-125M",
             "size": "125M",
-            "question": "Which famous structures, both designed or structurally influenced by Gustave Eiffel?",
+            "question": "Which famous structures, were designed or structurally influenced by Gustave Eiffel?",
             "retrieved_documents": "The Eiffel Tower is located in Paris, France.\nThe Eiffel Tower was completed in 1889.\nThe Eiffel Tower is 324 meters tall.\nThe Eiffel Tower was designed by Gustave Eiffel.\nThe Eiffel Tower is painted every seven years to prevent it from rusting.\nThe Eiffel Tower has three levels accessible to the public, with restaurants on the first and second levels.\nThe Eiffel Tower was the tallest man-made structure in the world until the completion of the Chrysler Building in New York City in 1930.\nDuring the winter, the Eiffel Tower shrinks by about 6 inches (15 cm) due to the cold. The Statue of Liberty is located in New York City, USA.\nThe Statue of Liberty was a gift from France to the United States.\nThe Statue of Liberty was dedicated on October 28, 1886.\nThe Statue of Liberty is 93 meters tall from the ground to the tip of the torch.\nThe Statue of Liberty's full name is \"Liberty Enlightening the World.\"\nThe seven spikes on the Statue of Liberty's crown represent the seven seas and seven continents of the world.\nThe internal structure of the Statue of Liberty was designed by Gustave Eiffel, who also designed the Eiffel Tower.\nThe torch of the Statue of Liberty was originally designed to serve as a lighthouse, but the torch was never used for this purpose. The Colosseum is located in Rome, Italy.\nThe Colosseum was completed in AD 80.\nThe Colosseum could hold up to 80,000 spectators.\nThe Colosseum was used for gladiatorial contests and public spectacles.\nThe Colosseum had a retractable awning, called the \"velarium,\" to protect spectators from the sun and rain.\nThe Colosseum is elliptical in shape, with a length of 189 meters (620 feet) and a width of 156 meters (512 feet).\nThe floor of the Colosseum was made of wood and covered with sand to absorb the blood from gladiatorial contests.\nThe Colosseum is partially ruined due to earthquakes and stone-robbers who used its material for other constructions.",
-            "LLM Answer": "\n\nThis article is part of a series of articles that explore Gustave Eiffel\u2019s influence on architecture and design.\n\nGustave Eiffel\u2019s",
-            "RAG Answer": "\nThe Colosseum was completed in AD 80.\nThe Colosseum was designed by Gustave Eiffel, who also designed the Eiffel Tower.\nThe"
+            "LLM Answer": "\n\nA few years ago, I wrote about the construction of Gustave Eiffel\u2019s \u2018Gustave Eiffel\u2019, which was designed by Gustave",
+            "lmm_time": 4.140110969543457,
+            "RAG Answer": "\nThe Colosseum was built by Gustave Eiffel, who also designed the Eiffel Tower.\nThe Colosseum was the tallest man-made structure in",
+            "rag_time": 5.9186930656433105
         },
         {
             "modelType": "casual_model",
             "llm": "gpt2-medium",
             "size": "355M",
-            "question": "Which famous structures, both designed or structurally influenced by Gustave Eiffel?",
+            "question": "Which famous structures, were designed or structurally influenced by Gustave Eiffel?",
             "retrieved_documents": "The Eiffel Tower is located in Paris, France.\nThe Eiffel Tower was completed in 1889.\nThe Eiffel Tower is 324 meters tall.\nThe Eiffel Tower was designed by Gustave Eiffel.\nThe Eiffel Tower is painted every seven years to prevent it from rusting.\nThe Eiffel Tower has three levels accessible to the public, with restaurants on the first and second levels.\nThe Eiffel Tower was the tallest man-made structure in the world until the completion of the Chrysler Building in New York City in 1930.\nDuring the winter, the Eiffel Tower shrinks by about 6 inches (15 cm) due to the cold. The Statue of Liberty is located in New York City, USA.\nThe Statue of Liberty was a gift from France to the United States.\nThe Statue of Liberty was dedicated on October 28, 1886.\nThe Statue of Liberty is 93 meters tall from the ground to the tip of the torch.\nThe Statue of Liberty's full name is \"Liberty Enlightening the World.\"\nThe seven spikes on the Statue of Liberty's crown represent the seven seas and seven continents of the world.\nThe internal structure of the Statue of Liberty was designed by Gustave Eiffel, who also designed the Eiffel Tower.\nThe torch of the Statue of Liberty was originally designed to serve as a lighthouse, but the torch was never used for this purpose. The Colosseum is located in Rome, Italy.\nThe Colosseum was completed in AD 80.\nThe Colosseum could hold up to 80,000 spectators.\nThe Colosseum was used for gladiatorial contests and public spectacles.\nThe Colosseum had a retractable awning, called the \"velarium,\" to protect spectators from the sun and rain.\nThe Colosseum is elliptical in shape, with a length of 189 meters (620 feet) and a width of 156 meters (512 feet).\nThe floor of the Colosseum was made of wood and covered with sand to absorb the blood from gladiatorial contests.\nThe Colosseum is partially ruined due to earthquakes and stone-robbers who used its material for other constructions.",
-            "LLM Answer": "\n\nThere are many, many, many. Some of the most famous of them are:\n\nThe Eiffel Tower, Paris\n\nThe Eiffel Tower, Paris The",
-            "RAG Answer": " The Eiffel Tower The Eiffel Tower is located in Paris, France. The Eiffel Tower was completed in 1889. The Eiffel Tower is 324 meters tall. The"
+            "LLM Answer": "\n\nGustave Eiffel: Yes, I think so. He was very interested in the architecture of Paris, but also in the architecture of New York City, and he was",
+            "lmm_time": 9.49160122871399,
+            "RAG Answer": " The Eiffel Tower is located in Paris, France. The Eiffel Tower was completed in 1889. The Eiffel Tower is 324 meters tall. The Eiffel Tower was",
+            "rag_time": 13.543174028396606
         },
         {
             "modelType": "casual_model",
             "llm": "gpt2-large",
             "size": "762M",
-            "question": "Which famous structures, both designed or structurally influenced by Gustave Eiffel?",
+            "question": "Which famous structures, were designed or structurally influenced by Gustave Eiffel?",
             "retrieved_documents": "The Eiffel Tower is located in Paris, France.\nThe Eiffel Tower was completed in 1889.\nThe Eiffel Tower is 324 meters tall.\nThe Eiffel Tower was designed by Gustave Eiffel.\nThe Eiffel Tower is painted every seven years to prevent it from rusting.\nThe Eiffel Tower has three levels accessible to the public, with restaurants on the first and second levels.\nThe Eiffel Tower was the tallest man-made structure in the world until the completion of the Chrysler Building in New York City in 1930.\nDuring the winter, the Eiffel Tower shrinks by about 6 inches (15 cm) due to the cold. The Statue of Liberty is located in New York City, USA.\nThe Statue of Liberty was a gift from France to the United States.\nThe Statue of Liberty was dedicated on October 28, 1886.\nThe Statue of Liberty is 93 meters tall from the ground to the tip of the torch.\nThe Statue of Liberty's full name is \"Liberty Enlightening the World.\"\nThe seven spikes on the Statue of Liberty's crown represent the seven seas and seven continents of the world.\nThe internal structure of the Statue of Liberty was designed by Gustave Eiffel, who also designed the Eiffel Tower.\nThe torch of the Statue of Liberty was originally designed to serve as a lighthouse, but the torch was never used for this purpose. The Colosseum is located in Rome, Italy.\nThe Colosseum was completed in AD 80.\nThe Colosseum could hold up to 80,000 spectators.\nThe Colosseum was used for gladiatorial contests and public spectacles.\nThe Colosseum had a retractable awning, called the \"velarium,\" to protect spectators from the sun and rain.\nThe Colosseum is elliptical in shape, with a length of 189 meters (620 feet) and a width of 156 meters (512 feet).\nThe floor of the Colosseum was made of wood and covered with sand to absorb the blood from gladiatorial contests.\nThe Colosseum is partially ruined due to earthquakes and stone-robbers who used its material for other constructions.",
-            "LLM Answer": "\n\nThe Louvre, Paris, France\n\nThe Eiffel Tower, Paris, France\n\nThe Eiffel Tower, Paris, France\n\nThe Eiffel Tower",
-            "RAG Answer": " The Eiffel Tower is located in Paris, France. The Eiffel Tower is 324 meters tall. The Eiffel Tower was designed by Gustave Eiffel. The E"
+            "LLM Answer": "\n\nGustave Eiffel was a French architect who designed some of the most famous buildings in the world, including the Eiffel Tower, the Louvre, the Arc de",
+            "lmm_time": 18.671204090118408,
+            "RAG Answer": " The Eiffel Tower is located in Paris, France. The Eiffel Tower is 324 meters tall. The Eiffel Tower was designed by Gustave Eiffel. The E",
+            "rag_time": 24.568648099899292
         },
         {
             "modelType": "casual_model",
             "llm": "EleutherAI/gpt-neo-1.3B",
             "size": "1.3B",
-            "question": "Which famous structures, both designed or structurally influenced by Gustave Eiffel?",
+            "question": "Which famous structures, were designed or structurally influenced by Gustave Eiffel?",
             "retrieved_documents": "The Eiffel Tower is located in Paris, France.\nThe Eiffel Tower was completed in 1889.\nThe Eiffel Tower is 324 meters tall.\nThe Eiffel Tower was designed by Gustave Eiffel.\nThe Eiffel Tower is painted every seven years to prevent it from rusting.\nThe Eiffel Tower has three levels accessible to the public, with restaurants on the first and second levels.\nThe Eiffel Tower was the tallest man-made structure in the world until the completion of the Chrysler Building in New York City in 1930.\nDuring the winter, the Eiffel Tower shrinks by about 6 inches (15 cm) due to the cold. The Statue of Liberty is located in New York City, USA.\nThe Statue of Liberty was a gift from France to the United States.\nThe Statue of Liberty was dedicated on October 28, 1886.\nThe Statue of Liberty is 93 meters tall from the ground to the tip of the torch.\nThe Statue of Liberty's full name is \"Liberty Enlightening the World.\"\nThe seven spikes on the Statue of Liberty's crown represent the seven seas and seven continents of the world.\nThe internal structure of the Statue of Liberty was designed by Gustave Eiffel, who also designed the Eiffel Tower.\nThe torch of the Statue of Liberty was originally designed to serve as a lighthouse, but the torch was never used for this purpose. The Colosseum is located in Rome, Italy.\nThe Colosseum was completed in AD 80.\nThe Colosseum could hold up to 80,000 spectators.\nThe Colosseum was used for gladiatorial contests and public spectacles.\nThe Colosseum had a retractable awning, called the \"velarium,\" to protect spectators from the sun and rain.\nThe Colosseum is elliptical in shape, with a length of 189 meters (620 feet) and a width of 156 meters (512 feet).\nThe floor of the Colosseum was made of wood and covered with sand to absorb the blood from gladiatorial contests.\nThe Colosseum is partially ruined due to earthquakes and stone-robbers who used its material for other constructions.",
-            "LLM Answer": "\n\nThe Eiffel Tower in Paris.\n\nThe Eiffel Tower in Paris.\n\nThe Eiffel Tower in Paris.\n\nThe Eiffel Tower in",
-            "RAG Answer": "\nThe Eiffel Tower is located in Paris, France.\nThe Eiffel Tower was completed in 1889.\nThe Eiffel Tower is 324 meters tall.\nThe E"
+            "LLM Answer": "\n\nGustave Eiffel\n\nGustave Eiffel\n\nGustave Eiffel\n\nGustave Eiffel\n\nGustave E",
+            "lmm_time": 18.4095721244812,
+            "RAG Answer": "\nThe Eiffel Tower is located in Paris, France.\nThe Eiffel Tower was completed in 1889.\nThe Eiffel Tower is 324 meters tall.\nThe E",
+            "rag_time": 37.47492599487305
         }
     ],
     [
@@ -66,28 +78,34 @@
             "modelType": "qa_model",
             "llm": "distilbert-base-uncased-distilled-squad",
             "size": "66M",
-            "question": "Which famous structures, both designed or structurally influenced by Gustave Eiffel?",
+            "question": "Which famous structures, were designed or structurally influenced by Gustave Eiffel?",
             "retrieved_documents": "The Eiffel Tower is located in Paris, France.\nThe Eiffel Tower was completed in 1889.\nThe Eiffel Tower is 324 meters tall.\nThe Eiffel Tower was designed by Gustave Eiffel.\nThe Eiffel Tower is painted every seven years to prevent it from rusting.\nThe Eiffel Tower has three levels accessible to the public, with restaurants on the first and second levels.\nThe Eiffel Tower was the tallest man-made structure in the world until the completion of the Chrysler Building in New York City in 1930.\nDuring the winter, the Eiffel Tower shrinks by about 6 inches (15 cm) due to the cold. The Statue of Liberty is located in New York City, USA.\nThe Statue of Liberty was a gift from France to the United States.\nThe Statue of Liberty was dedicated on October 28, 1886.\nThe Statue of Liberty is 93 meters tall from the ground to the tip of the torch.\nThe Statue of Liberty's full name is \"Liberty Enlightening the World.\"\nThe seven spikes on the Statue of Liberty's crown represent the seven seas and seven continents of the world.\nThe internal structure of the Statue of Liberty was designed by Gustave Eiffel, who also designed the Eiffel Tower.\nThe torch of the Statue of Liberty was originally designed to serve as a lighthouse, but the torch was never used for this purpose. The Colosseum is located in Rome, Italy.\nThe Colosseum was completed in AD 80.\nThe Colosseum could hold up to 80,000 spectators.\nThe Colosseum was used for gladiatorial contests and public spectacles.\nThe Colosseum had a retractable awning, called the \"velarium,\" to protect spectators from the sun and rain.\nThe Colosseum is elliptical in shape, with a length of 189 meters (620 feet) and a width of 156 meters (512 feet).\nThe floor of the Colosseum was made of wood and covered with sand to absorb the blood from gladiatorial contests.\nThe Colosseum is partially ruined due to earthquakes and stone-robbers who used its material for other constructions.",
-            "LLM Answer": "which famous structures, both designed or structurally influenced by gustave eiffel? [SEP]",
-            "RAG Answer": "statue of liberty"
+            "LLM Answer": "which famous structures, were designed or structurally influenced by gustave eiffel? [SEP]",
+            "lmm_time": 0.13754987716674805,
+            "RAG Answer": "statue of liberty",
+            "rag_time": 0.3137500286102295
         },
         {
             "modelType": "qa_model",
             "llm": "deepset/roberta-base-squad2",
             "size": "125M",
-            "question": "Which famous structures, both designed or structurally influenced by Gustave Eiffel?",
+            "question": "Which famous structures, were designed or structurally influenced by Gustave Eiffel?",
             "retrieved_documents": "The Eiffel Tower is located in Paris, France.\nThe Eiffel Tower was completed in 1889.\nThe Eiffel Tower is 324 meters tall.\nThe Eiffel Tower was designed by Gustave Eiffel.\nThe Eiffel Tower is painted every seven years to prevent it from rusting.\nThe Eiffel Tower has three levels accessible to the public, with restaurants on the first and second levels.\nThe Eiffel Tower was the tallest man-made structure in the world until the completion of the Chrysler Building in New York City in 1930.\nDuring the winter, the Eiffel Tower shrinks by about 6 inches (15 cm) due to the cold. The Statue of Liberty is located in New York City, USA.\nThe Statue of Liberty was a gift from France to the United States.\nThe Statue of Liberty was dedicated on October 28, 1886.\nThe Statue of Liberty is 93 meters tall from the ground to the tip of the torch.\nThe Statue of Liberty's full name is \"Liberty Enlightening the World.\"\nThe seven spikes on the Statue of Liberty's crown represent the seven seas and seven continents of the world.\nThe internal structure of the Statue of Liberty was designed by Gustave Eiffel, who also designed the Eiffel Tower.\nThe torch of the Statue of Liberty was originally designed to serve as a lighthouse, but the torch was never used for this purpose. The Colosseum is located in Rome, Italy.\nThe Colosseum was completed in AD 80.\nThe Colosseum could hold up to 80,000 spectators.\nThe Colosseum was used for gladiatorial contests and public spectacles.\nThe Colosseum had a retractable awning, called the \"velarium,\" to protect spectators from the sun and rain.\nThe Colosseum is elliptical in shape, with a length of 189 meters (620 feet) and a width of 156 meters (512 feet).\nThe floor of the Colosseum was made of wood and covered with sand to absorb the blood from gladiatorial contests.\nThe Colosseum is partially ruined due to earthquakes and stone-robbers who used its material for other constructions.",
             "LLM Answer": "<s>",
-            "RAG Answer": "<s>"
+            "lmm_time": 0.37583494186401367,
+            "RAG Answer": "<s>",
+            "rag_time": 0.7083730697631836
         },
         {
             "modelType": "qa_model",
             "llm": "bert-large-uncased-whole-word-masking-finetuned-squad",
             "size": "340M",
-            "question": "Which famous structures, both designed or structurally influenced by Gustave Eiffel?",
+            "question": "Which famous structures, were designed or structurally influenced by Gustave Eiffel?",
             "retrieved_documents": "The Eiffel Tower is located in Paris, France.\nThe Eiffel Tower was completed in 1889.\nThe Eiffel Tower is 324 meters tall.\nThe Eiffel Tower was designed by Gustave Eiffel.\nThe Eiffel Tower is painted every seven years to prevent it from rusting.\nThe Eiffel Tower has three levels accessible to the public, with restaurants on the first and second levels.\nThe Eiffel Tower was the tallest man-made structure in the world until the completion of the Chrysler Building in New York City in 1930.\nDuring the winter, the Eiffel Tower shrinks by about 6 inches (15 cm) due to the cold. The Statue of Liberty is located in New York City, USA.\nThe Statue of Liberty was a gift from France to the United States.\nThe Statue of Liberty was dedicated on October 28, 1886.\nThe Statue of Liberty is 93 meters tall from the ground to the tip of the torch.\nThe Statue of Liberty's full name is \"Liberty Enlightening the World.\"\nThe seven spikes on the Statue of Liberty's crown represent the seven seas and seven continents of the world.\nThe internal structure of the Statue of Liberty was designed by Gustave Eiffel, who also designed the Eiffel Tower.\nThe torch of the Statue of Liberty was originally designed to serve as a lighthouse, but the torch was never used for this purpose. The Colosseum is located in Rome, Italy.\nThe Colosseum was completed in AD 80.\nThe Colosseum could hold up to 80,000 spectators.\nThe Colosseum was used for gladiatorial contests and public spectacles.\nThe Colosseum had a retractable awning, called the \"velarium,\" to protect spectators from the sun and rain.\nThe Colosseum is elliptical in shape, with a length of 189 meters (620 feet) and a width of 156 meters (512 feet).\nThe floor of the Colosseum was made of wood and covered with sand to absorb the blood from gladiatorial contests.\nThe Colosseum is partially ruined due to earthquakes and stone-robbers who used its material for other constructions.",
             "LLM Answer": "",
-            "RAG Answer": "statue of liberty"
+            "lmm_time": 0.9208388328552246,
+            "RAG Answer": "statue of liberty",
+            "rag_time": 1.703279972076416
         }
     ],
     [
@@ -95,19 +113,23 @@
             "modelType": "t5_model",
             "llm": "t5-base",
             "size": "220M",
-            "question": "Which famous structures, both designed or structurally influenced by Gustave Eiffel?",
+            "question": "Which famous structures, were designed or structurally influenced by Gustave Eiffel?",
             "retrieved_documents": "The Eiffel Tower is located in Paris, France.\nThe Eiffel Tower was completed in 1889.\nThe Eiffel Tower is 324 meters tall.\nThe Eiffel Tower was designed by Gustave Eiffel.\nThe Eiffel Tower is painted every seven years to prevent it from rusting.\nThe Eiffel Tower has three levels accessible to the public, with restaurants on the first and second levels.\nThe Eiffel Tower was the tallest man-made structure in the world until the completion of the Chrysler Building in New York City in 1930.\nDuring the winter, the Eiffel Tower shrinks by about 6 inches (15 cm) due to the cold. The Statue of Liberty is located in New York City, USA.\nThe Statue of Liberty was a gift from France to the United States.\nThe Statue of Liberty was dedicated on October 28, 1886.\nThe Statue of Liberty is 93 meters tall from the ground to the tip of the torch.\nThe Statue of Liberty's full name is \"Liberty Enlightening the World.\"\nThe seven spikes on the Statue of Liberty's crown represent the seven seas and seven continents of the world.\nThe internal structure of the Statue of Liberty was designed by Gustave Eiffel, who also designed the Eiffel Tower.\nThe torch of the Statue of Liberty was originally designed to serve as a lighthouse, but the torch was never used for this purpose. The Colosseum is located in Rome, Italy.\nThe Colosseum was completed in AD 80.\nThe Colosseum could hold up to 80,000 spectators.\nThe Colosseum was used for gladiatorial contests and public spectacles.\nThe Colosseum had a retractable awning, called the \"velarium,\" to protect spectators from the sun and rain.\nThe Colosseum is elliptical in shape, with a length of 189 meters (620 feet) and a width of 156 meters (512 feet).\nThe floor of the Colosseum was made of wood and covered with sand to absorb the blood from gladiatorial contests.\nThe Colosseum is partially ruined due to earthquakes and stone-robbers who used its material for other constructions.",
             "LLM Answer": "None",
-            "RAG Answer": "The Eiffel Tower"
+            "lmm_time": 0.9946699142456055,
+            "RAG Answer": "The Eiffel Tower",
+            "rag_time": 1.5254778861999512
         },
         {
             "modelType": "t5_model",
             "llm": "t5-large",
             "size": "770M",
-            "question": "Which famous structures, both designed or structurally influenced by Gustave Eiffel?",
+            "question": "Which famous structures, were designed or structurally influenced by Gustave Eiffel?",
             "retrieved_documents": "The Eiffel Tower is located in Paris, France.\nThe Eiffel Tower was completed in 1889.\nThe Eiffel Tower is 324 meters tall.\nThe Eiffel Tower was designed by Gustave Eiffel.\nThe Eiffel Tower is painted every seven years to prevent it from rusting.\nThe Eiffel Tower has three levels accessible to the public, with restaurants on the first and second levels.\nThe Eiffel Tower was the tallest man-made structure in the world until the completion of the Chrysler Building in New York City in 1930.\nDuring the winter, the Eiffel Tower shrinks by about 6 inches (15 cm) due to the cold. The Statue of Liberty is located in New York City, USA.\nThe Statue of Liberty was a gift from France to the United States.\nThe Statue of Liberty was dedicated on October 28, 1886.\nThe Statue of Liberty is 93 meters tall from the ground to the tip of the torch.\nThe Statue of Liberty's full name is \"Liberty Enlightening the World.\"\nThe seven spikes on the Statue of Liberty's crown represent the seven seas and seven continents of the world.\nThe internal structure of the Statue of Liberty was designed by Gustave Eiffel, who also designed the Eiffel Tower.\nThe torch of the Statue of Liberty was originally designed to serve as a lighthouse, but the torch was never used for this purpose. The Colosseum is located in Rome, Italy.\nThe Colosseum was completed in AD 80.\nThe Colosseum could hold up to 80,000 spectators.\nThe Colosseum was used for gladiatorial contests and public spectacles.\nThe Colosseum had a retractable awning, called the \"velarium,\" to protect spectators from the sun and rain.\nThe Colosseum is elliptical in shape, with a length of 189 meters (620 feet) and a width of 156 meters (512 feet).\nThe floor of the Colosseum was made of wood and covered with sand to absorb the blood from gladiatorial contests.\nThe Colosseum is partially ruined due to earthquakes and stone-robbers who used its material for other constructions.",
-            "LLM Answer": "False",
-            "RAG Answer": "Eiffel Tower and The Statue of Liberty"
+            "LLM Answer": "None",
+            "lmm_time": 3.5560178756713867,
+            "RAG Answer": "The Eiffel Tower and The Statue of Liberty",
+            "rag_time": 5.779507160186768
         }
     ]
 ]

@@ -11,12 +11,12 @@
 % \related to fond size
 \usepackage{fix-cm}
 
+
 % custom setup of how tables are rendered
 % \usepackage{multirow}
 
-\author{Marko Grabuloski}
+\author{MARKO GRABULOSKI}
 \title{Enhancing Language models with RAG}  
-    
 \begin{document}
 \twocolumn[
 \begin{@twocolumnfalse}
@@ -46,10 +46,9 @@
 \vspace{2ex} 
 ]
 
-
 \section{Introduction}
 
-LLMs are quite useful and have taken the world of AI by storm. They have
+Large language models (LLMs) are quite useful and have taken the world of AI by storm. They have
 extensive usages, and we are still rediscovering what they can be used
 for. However, there are some aspects that are not ideal, for example:
 
@@ -75,14 +74,17 @@ for. However, there are some aspects that are not ideal, for example:
 Extremely important is the first point as it consequently leads to
 not up-to-date information been stored in the LLMs. This in reality means that
 the LLMs will not be able to answer up-to-date questions or even worse, will
-answer questions inaccurately or falsely. This is causes a problem, as it 
+answer questions inaccurately or falsely. This causes a problem, as it 
 introduces limitation on the type of systems that LLMs can be used in.
 
-This paper is motivated by the need to address this LLMs problems.
+The paper is motivated by the need to address this LLMs problems.
 It aims to point out the challenges associated with LLMs and offer solutions
 using retrieval augmentation generation techniques (RAG). 
 Further on it will explore different RAG techniques and how they can be used  
-to enhance the LLMs.
+to enhance the LLMs. For the purpose of testing the properties and performance 
+of different LLMs in a RAG system in different scenarios, a RAG system is implemented. 
+The entire code, experiment definitions and results can be found on the 
+\cite{cite_github_solution}.
 
 \section{What is Retrieval augmented generation}
 
@@ -90,7 +92,7 @@ to enhance the LLMs.
  artificial intelligence (AI) technique that combines information 
  retrieval with text generation, allowing AI models to retrieve 
  relevant information from a knowledge source and incorporate it 
- into generated text.} (Miesle, P. no date) \cite{cite6}
+ into generated text.}\cite{website_deffinition_rag}
 
 
 The basic idea around a RAG system is extending the capabilities of an
@@ -107,23 +109,28 @@ occurs in LLMs and machine models in general is that perhaps the LLM is
 not powerful enough for the given task. Example for the second case is
 that if a model is asked extremely difficult question, even though the
 model has been trained on all the relevant data it might still not
-produce correct output in case of a difficult task.
+produce correct output as it does not contain enough memory or parameters
+to learn the test. This problem in machine learning is known as underfitting.
 
-Rag systems do not suffer as much as other models from this problem,
-their memory can be extended without the need for training or adding
-additional parameters. The system has two types of memory:
+RAG systems do not suffer as much as other machine learning techniques 
+from this problem, their memory can be extended without the need for 
+re-training or adding additional parameters. 
+
+The system has two types of memory:
 
 \begin{itemize}
 
 \item
-  \textbf{Parametric memory} - refers to the knowledge in the LLM
-  generative model
+  \textbf{Parametric memory} - refers to the knowledge that is stored a neural network's parameters.
+  In the case of RAG it is a neural network that is part of the LLM model that the RAG system uses.
 \item
   \textbf{Non-parametric memory} - stored in special types of databases.
   This non-parametric memory can be extended with additional knowledge
-  easily and it still can be used by the LLM. \textbf{This is the core
+  easily, and it still can be used by the LLM.
+
+  \textbf{This is the core
   idea in RAG. Without any additional training new knowledge can be made
-  available to the LLM.}
+  available to the system.}
 \end{itemize}
 
 The RAG technique integrates a retrieval model and generative model. RAG
@@ -135,30 +142,33 @@ LLMs is build from 2 sub-systems:
 \begin{itemize}
 
 \item
-  \textbf{Retrieval and Augmentation}
+  \textbf{Retrieval and Augmentation}, manages the storing and retrieval of 
+  data from and to the parametric memory. Synthesizes the data and creates a context.
 \item
-  \textbf{Generative AI component} or parametric memory, it is usually
-  language generation tool like LLMs
+  \textbf{Generative AI component}, it is usually a component that contains
+  language generation tool like LLMs. It generates text, answers based on the data 
+  provided by the retrieval and augmentation system.
 \end{itemize}
 
 From the perspective of usage of the RAG system, the answer generation is
 done in three phases:
 
 \begin{itemize}
-
 \item
-  Phase 1 Retrieval, Knowledge retrieval, When asked a question the RAG
+  \textbf{Phase 1 Knowledge retrieval}, when asked a question the RAG
   retrieval system will retrieve all known information by submitting query 
   to the non-parametric memory.
 \item
-  Phase 2 Augmentation, with the retrieved information, a context around
+  \textbf{Phase 2 Augmentation}, with the retrieved information, a context around
   the question is created, the context should contain all information
   for answering the question.
 \item
-  Phase 3 Generation, The context and question will be passed to an LLM
+  \textbf{Phase 3 Generation}, the context and question will be passed to an LLM
   that will generate an answer.
 \end{itemize}
 
+Usually phase one and two are part of retrieval and augmentation component. The 
+simplified RAG process can be seen in the figure \ref{fig:rag_system_figure}.
 
 \begin{figure}[htbp]
   \centering
@@ -169,8 +179,8 @@ done in three phases:
 
 \section{Generative AI component or a LLM transformer}
 
-The Generative AI component is an LLM transformer. Typically, the
-transformer has two main components, the encoder and the decoder. The
+The generative AI component is an LLM transformer. Typically, the
+transformer has two main subcomponents, encoder and decoder. The
 input text is initially tokenized, meaning it is split into small
 continuous lists of characters. In the next step, the model transforms
 the tokens into fixed-size vectors called embeddings. In the final step,
@@ -184,31 +194,25 @@ part of a RAG system.
 \emph{Embeddings are vector representations, typically produced by a
 neural network, whose main objective is to map (embed) the input media
 item into a vector space, where the locality encodes the semantics of
-the input} \cite{cite2}.
+the input} \cite{the_faiss_library}.
 
-% TODO: add reference to the paper
-% TODO: there are double : in the same sentence, this should be fixed
+
 The decoder takes the input and generates new embeddings and again
 combines the output with the embedded tokens to produce new tokens. The
 vector transformation where token embeddings are transformed to
 different ones to capture the context of the input text is called
-attention. It is described in the paper by Vaswani et al.~(2017)
-\href{https://arxiv.org/pdf/1706.03762}{Attention Is All You Need}: As a
-result of the initial research paper on transformers: The LLM
-transformers do not suffer from maintaining context and dependencies as
-much as recurrent or convolutional networks.
-Transformers can be trained significantly faster than architectures
-based on recurrent or convolutional layers.
-
-\emph{Transformers outperform the best previously reported models in
-translation.} According to Vaswani et al.~\cite{cite1}
+attention. It is described in the paper "Attention Is All You Need". 
+The result of that research paper, suggests that 
+the LLM transformers do not suffer from problems related to context 
+maintaining as much as recurrent networks. Transformers also outperform the 
+best previously reported models in translation \cite{attention_is_all_you_need}.
 
 The quality of the generated text generally depends on the number of the
 parameters of the model. Regardless of the quality of the output, every
 LLM for a given input is expected to generate grammatically correct text
 and semantically related to the input. For example if I ask even the
-smallest LLM ``What is the capital of France?'' it might return ``Berlin
-is the capital of France''. The answers will perhaps not be correct, but
+smallest LLM "What is the capital of France?" it might return "Berlin
+is the capital of France". The answers will perhaps not be correct, but
 they will contain the context of the question and grammatically correct.
 
 \textbf{The generative component of the RAG system needs to be able for
@@ -229,36 +233,27 @@ here as a text block. The text blocks are stored as embeddings.
 This part of the system is composed of two components or modules:
 
 \begin{itemize}
-
 \item
-  Sentence Embedding Model
+  Sentence Embedding Model - AI model
 \item
   Non-parametric memory
 \end{itemize}
 
 \subsection{Storing Phase}
 
-The idea of the retrieval phase is for a given text block to create
+The idea of the storing phase is for a given text block to create
 embedding and store this embedding in the non-parametric memory.
 
 The process is as follows:
-
-%  TODO: use proper lists, this is probably bad
-\begin{itemize}
+\begin{enumerate}
 \item
-  \begin{enumerate}
     Take a text block, sentence, or paragraph.
-  \end{enumerate}
 \item
-  \begin{enumerate}
     Passes this text to the Sentence Embedding model to get an
     embedding(dense vector).
-  \end{enumerate}
 \item
-  \begin{enumerate}
     Stores this embedding in a non-parametric memory.
-  \end{enumerate}
-\end{itemize}
+\end{enumerate}
 
 \begin{figure}[htbp]
   \centering
@@ -273,9 +268,7 @@ The idea of the retrieval phase is to return all relevant information
 from the non-parametric memory for a given text, query, or question.
 
 The process is as follows:
-
 \begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
 \item
   Takes input text, referred to as a query.
 \item
@@ -298,23 +291,25 @@ The process is as follows:
 
 The non-parametric memory is usually a dense vector database. Besides
 being able to store vectors, a vector database must also have the
-capability to query for the k the closest vectors to a given input
-vector. Like any database, fast storage and querying are important.
-Ideally, these databases should be able to store data on disk to enable
-horizontal scaling and data distribution, which are essential for a RAG
-system to achieve scalability compared to a traditional LLM model. This
-project will use the Faiss library, as it satisfies the conditions for
-vector storage and quering the k closest vectors, it laks the automatic
-distributive scaling but a full DB solution is not required for the
-project in this paper.
+capability to query for the $k$ the closest vectors to a given input
+vector. Like in any other traditional database, fast storage and querying 
+are important. Ideally, these databases should be able to store data on 
+disk to enable horizontal scaling and data distribution, which are essential 
+for a RAG system to achieve scalability compared to a traditional LLM model.
+% italic text is not needed here
+\textit{
+The experiment in this research will use the Faiss library, as it satisfies the conditions for
+vector storage and querying the $k$ closest vectors, it lacks automatic
+distributive scaling, but a full DB solution is not required for the project as the paper
+focuses on comparison on LLMs and not on non-parametric memory storage.}
 
 \emph{The Faiss library is dedicated to vector similarity search, a core
 functionality of vector databases. Faiss is a toolkit of indexing
 methods and related primitives used to search, cluster, compress, and
-transform vectors} \cite{cite2}.
+transform vectors} \cite{the_faiss_library}.
 
-According to the referenced research, the Faiss database was tested with
-768-dimensional ContrieverDb (name of the database from where vectors
+According to the referenced research \cite{the_faiss_library}, the Faiss database 
+was tested with 768-dimensional ContrieverDb (name of the database from where vectors
 are imported) dense vector embeddings with up to 1M vectors with 64
 bytes per dimension and also with 100M vectors from DeepDb that have a
 dimension of 96 and 8 bytes per dimension.
@@ -329,7 +324,6 @@ incorporating vector capabilities.
 Currently, (as of 2024), these are the options for dense vector storage:
 
 \begin{itemize}
-
 \item
   Redis Vector Similarity Search (VSS)
 \item
@@ -350,15 +344,15 @@ Currently, (as of 2024), these are the options for dense vector storage:
   Postges, pgvector - open-sourced
 \end{itemize}
 
-\emph{The previous information is taken form various blog posts} \cite{cite9} \cite{cite10} \cite{cite11} 
-\cite{cite12} \cite{cite13} \cite{cite14} \cite{cite15} \cite{cite16}
+\emph{The previous information is taken form various blog posts} \cite{website_MediumGuideonRAGDatabases} \cite{Website_CloudflareGuideonVectorInsertion}\cite{website_AporiaGuideonVectorDatabasesforRAG} 
+\cite{website_DatabricksGlossaryonRAG} \cite{website_MongoDBAtlasCLIDocumentation}\cite{website_MediumGuideonRAGwithAtlas} \cite{website_Neo4jBlogOnLangchainVectorIndex} \cite{website_PondhouseGuideOnAdvancedRAG}
 
 \subsubsection{Sentence embedding models}
 
 Sentence embedding models are derived from LLM transformer models. LLMs
 transformer contains two general components, encoder and decoder. As
-described in the section ``Generative AI component or a LLM
-transformer'', the input of an encoder is a text, the output is a
+described in the section "Generative AI component or a LLM
+transformer", the input of an encoder is a text, the output is a
 contextual embedding.
 
 From particular interest for the Sentence embedding models and the RAG
@@ -376,7 +370,7 @@ encoder.
   \label{fig:encoder_layer_figure}
 \end{figure}
 
-The Sentence embedding models incorporates the LLM transformers encoder
+The Sentence embedding models incorporate the LLM transformers encoder
 layer and adds additional layer of \emph{pooling}. This layer operates
 on the token embedding and groups them in one embedding. This outputs
 embedding are dependent on the context of the input text, and are called
@@ -384,9 +378,8 @@ sentence contextual embedding or sentence embedding. All the sentence
 contextual embedding have the same size, and it is equal to the size of
 the token embedding.
 
-
-Here is a more visual description on the process of creating sentence
-embedding by a Sentence embedding model:
+Visual description on the process of creating sentence embedding by a 
+Sentence embedding model is shown in \autoref{fig:sentence_embedding_model_figure}.
 
 \textbf{Sentence embedding model}
 
@@ -422,13 +415,13 @@ embedding using the mean:
   meanpool(e_1, e_2, \ldots, e_n) = \frac{1}{n} \sum_{i=1}^{n} e_i
 \end{equation}
 
-According to research paper \cite{cite5} by Miesle et al.~(2023), Mean
-Pooling, Max Pooling, and CLS Token are commonly used techniques.
+According to research paper \cite{sbert}, mean
+pooling, max pooling, and CLS Token are commonly used techniques.
 
 The goal of sentence embedding models is to produce an embedding or
 vector from text. As mentioned before, they are built by adding a layer
-to the LLM's transformer encoder component. LLMs produce token
-embeddings, while sentence embedding models produce embeddings for
+to the LLM's transformer encoder component. The LLMs encoder produce token
+embeddings, where the sentence embedding models produce embeddings for
 entire sentences.
 
 The requirement of the sentence embedding model is as follows:
@@ -462,8 +455,8 @@ including its input and output. Even though the input and output are in
 the required format, sentence embedding models are additionally trained
 to meet the semantic requirements defined above.
 
-The main issue during training is that we don't really know the exact
-output for a block of text, it can be any embedding. It is the relative
+The main issue during training is that it's that the exact output for a 
+block of text is not really know, it can be any embedding. It is the relative
 distance between the embeddings that is important. Semantically close
 embeddings should be closer than embeddings that have different
 meanings. To solve this problem, the model is trained using a Siamese
@@ -503,13 +496,11 @@ In the previous function \(y\) can be 1 or 0. This is because the
 network can be trained on cases with similar and dissimilar embeddings.
 
 \begin{itemize}
-
 \item
   Similar embeddings (y=1), the form of the loss function is: 
   \begin{equation}
     Loss = \frac{1}{2}D(A,C)
   \end{equation}
-
 \item
   Dissimilar embeddings (y=0), the form of the loss function is: 
   \begin{equation}
@@ -519,9 +510,8 @@ network can be trained on cases with similar and dissimilar embeddings.
   function is triggered only for a distance bigger than \(m\).
 \end{itemize}
 
-
 \paragraph{Triplet Loss function}
-
+%  up to here
 Similarly to the Contrastive loss function training method, the triplet
 loss function uses a variation of the Siamese network where instead of
 two networks, three networks are used. One single test case consists of
@@ -547,7 +537,7 @@ a Loss function and its output is used for training.
 
 \begin{equation}
   Loss = max(0, D(A,P) - D(A,N) + margin) 
-\end{equation}\cite{cite5}
+\end{equation}\cite{sbert}
 
 Generally the function does the following:
 \begin{itemize}
@@ -583,19 +573,20 @@ distance like Euclidean distance can be used.
 
 Cosine distance is based on cosine similarity, or the cosine of the
 angle between the two embeddings. Cosine distance does not measure the
-size of the difference between the embeddings but how similar the
-direction is, as embeddings with close directions have values close to
-0. Orthogonal embeddings have cosine values equal to 0, and embeddings
-that are oppositely directed have cosine values close to -1. The loss
-function needs to be a distance function, so just a cosine similarity
+euclidean distance between the embeddings but how similar in
+direction are they. When the embeddings have similar directions the cosine distance
+between then is close to 0. Orthogonal embeddings have cosine values equal to 1, 
+and embeddings that are oppositely directed have cosine values close to 2. The loss
+function needs to be a "distance-like" measure, so just a cosine similarity
 between the embeddings won't be enough since it does not satisfy the
-distance requirements. That's why cosine distance is used:
+distance requirements mainly because it produces negative values. That's why 
+cosine distance is used:
 
 \begin{equation}
   D(A, B) = 1 - \cos(\theta)
 \end{equation}
 
-where \(\theta\) is the angle between \(A\) and \(B\).
+Where \(\theta\) is the angle between \(A\) and \(B\).
 
 At this point, all the components of the sentence embedding model are
 explained. A representative example of a sentence embedding model is
@@ -610,20 +601,27 @@ systematization}
 
 \subsubsection{Naive RAG}
 
-Is the type of rag described in this document.
+Is the simplest form of RAG, it contains all the components that were 
+previously described. This categorization is based the different components 
+that are part of the RAG system not their individual complexity. As an example
+naive RAG might contain a simple or complex LLM generator, simple or complex DB,
+or simple or complex embedder. On the other side, this type of RAG will not 
+use complicated server architecture or complex multiphase retrieval or augmentation. 
 
 \subsubsection{Advanced RAG}
 
 Focuses on improving the retrieval of embeddings or data. It adds
-additional \textbf{pre-retrieval} and \textbf{post-retrieval} phase. In
-the pre-retrieve several optimization methods are employed like: 
-% TODO this should be a list
-* Query
-optimization * Storage optimization and retrieval * Extending the stored
-data with metadata In the \textbf{post-retrieval} phase idea is to
-create more usable context from the retrieved data. The data now is
-re-ranked and compressed, cleaned up. This concept is derived from the
-work of Gao et al. \cite{cite4}.
+additional \textbf{pre-retrieval} and \textbf{post-retrieval} phase. 
+
+In the pre-retrieve several optimization methods are employed like: 
+\begin{itemize}
+  \item Query optimization 
+  \item Storage optimization and retrieval 
+  \item Extending the stored data with metadata 
+\end{itemize}
+  
+In the \textbf{post-retrieval} phase idea is to create more usable context 
+from the retrieved data. The data now is re-ranked and compressed, cleaned up.
 
 \subsubsection{Modular RAG}
 
@@ -631,7 +629,7 @@ This type of architecture tries to split the system in to more modules
 that can be independently scaled and optimized. Example: Query
 Processing Module, Retriever, Re-ranking, Context Management, Generation
 Module.
-
+\cite{Retrieval-Augmented_Generation_for_Large_Language_Models:_A_Survey}
 \subsection{Different RAG methods and
 models}
 
@@ -650,12 +648,12 @@ document as a single latent variable that is marginalized to get the
 seq2seq probability p(y\textbar x) via a top-K approximation.
 Concretely, the top K documents are retrieved using the retriever, and
 the generator produces the output sequence probability for each
-document, which are then marginalized} \cite{cite3}
+document, which are then marginalized} \cite{Retrieval_Augmented_Generation_(RAG)_Explained_Understanding_Key_Concepts}
 
 \subsubsection{RAG-Token Model}
 
 Interesting research has been done using the so-called \emph{RAG-Token
-Model}. The RAG technique described, initially retrieves \(k\) documents
+Model} \cite{Retrieval_Augmented_Generation_(RAG)_Explained_Understanding_Key_Concepts}. The RAG technique described, initially retrieves \(k\) documents
 related to the question then augments the context of the question and
 sends the context and the question as an input to an LLM or the
 generator. The RAG-Token Model retrieves new documents on every
@@ -671,27 +669,27 @@ is equally dependent on the question and the non-parametric memory.
 \emph{RAG-Token Model, In the RAG-Token model we can draw a different
 latent document for each target token and marginalize accordingly. This
 allows the generator to choose content from several documents when
-producing an answer. Concretely, the top K documents are retrieved using
+producing an answer. Concretely, the top $K$ documents are retrieved using
 the retriever, and then the generator produces a distribution for the
 next output token for each document, before marginalizing, and repeating
 the process with the following output token}
-\cite{cite3}
+\cite{Retrieval_Augmented_Generation_(RAG)_Explained_Understanding_Key_Concepts}
 
 \subsection{Iterative RAG}
 
-One example is the ``Speculative RAG'' described in the paper \cite{cite18}
+One example is the "Speculative RAG" described in the paper \cite{SpeculativeRAG_EnhancingRetrieval-AugmentedGenerationThroughDrafting}
 by (Wang 2024). Based on the question it retrieves \(N\) embeddings. The
-embeddings are then clustered in \(k\) classes using K-means. From the
-\(k\) clusters one embedding is selected per cluster, resulting in k
+embeddings are then clustered in \(k\) classes using $K-means$. From the
+\(k\) clusters one embedding is selected per cluster, resulting in $k$
 embeddings. Then the algorithm uses two LLMs so called a drafter and a
-verifier. The drafter is used to generate the answer called a draft and
+verifier. The drafter is used to generate the answer, called a draft and
 explanation called rational. It is important to note that not all LLMs
 generate rationals. There are some that can do this, but usually the
 model needs to be trained to provide the rational. The RAG-Model from
-Hugginface provides explanations that can be used as a rational, also
-the retrieved embeddings might be used as rationals. Once the answer and
-the rational are generated, the quality of the answer and question is
-measured by the verifier.
+\href{https://huggingface.co/}{Hugginface} provides explanations that 
+can be used as a rational, also the retrieved embeddings might be used 
+as rationals. Once the answer and the rational are generated, the quality 
+of the answer and question is measured by the verifier.
 
 \subsubsection{Self-Consistency Score}
 
@@ -720,7 +718,7 @@ answer.
 It tries to determine if the rational sports the answer. For this a new
 question R can be formed: Does the rational $A$ sports the answer
 $B$ for the question $Q$? The new question is called a
-self-reflected statement and denoted with R. Then the probability of Yes
+self-reflected statement and denoted with $R$. Then the probability of Yes
 been generated from the LLM is measured. In general, the self-reflection
 score is the conditional probability of $Yes$ been generated by the
 LLM given the input of a question $Q$, answer $A$, rational $B$ and self
@@ -743,37 +741,40 @@ As any recursive algorithm it repeats its self until the results
 satisfies certain criteria. In case of the retrieval, a naive RAG system
 performs good when all the information required for answering the
 question is in the retrieved embedding, but it fails when this
-information is scattered in different embeddings. The Recursive rag
+information is scattered in different embeddings. The Recursive RAG
 starts examine the semantically similar documents not only of the
 question but also of the embeddings that are initially retrieved. With
 this it tries to capture all the relevant information. The previous is
 described in the paper from (Karpukhin et al.~2020; Pondhouse Data, no
-date) \cite{cite16} \cite{cite17}
+date) \cite{website_PondhouseGuideOnAdvancedRAG} 
+% \section{Dense Passage Retrieval (DPR)}
+ not inculded
+  % \bibitem{cite17} V. Karpukhin, B. Oguz, S. Min, P. Lewis, L. Wu, S. Edunov, D. Chen, and W. Yih, "Dense Passage Retrieval for Open-Domain Question Answering," \textit{arXiv preprint arXiv:2004.04906}, 2020.
 
 
 \section{Research methodology}
 
 In this research, a simple RAG system will be coded. The system will be
 flexible and modular enough so can use different LLMS as generators. The
-system will also have a Retriever that will be able to create embeddings
+system will have a Retriever that will be able to create embeddings
 based on sentences and also on paragraphs. The retriever will also
 retrieve embeddings based on a question/query. All the chosen LLMs and
 their corresponding RAGs will be asked three different type of Open-domain
 question. This is a type of question that can't be answered with simple
 yes or no and requires accessing a broad range of information to provide
-an answer.
+an answer. Find the RAG implementation and the \cite{cite_github_solution}.
 
-% todo make a list
-The purpose of the experiments: 1. Compare the differences between a RAG
-answer and a standard LLM. 2. Assess the quality of the models for
-answering different type of questions
+The purpose of the experiments: 
+\begin{enumerate}
+  \item Compare the differences between a RAG answer and a standard LLM.
+  \item Assess the quality of the models for answering different type of questions.
+\end{enumerate}
 
 \subsection{LLMs}
 
 Depending on the LLMs type, three different LLM models will be used:
 
 \begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
 \item
   Casual models
 \item
@@ -783,11 +784,7 @@ Depending on the LLMs type, three different LLM models will be used:
 \end{enumerate}
 
 Regarding the model size, the experiments will be done on small LLMs
-ranging from 66M up to 1.3B. Models size and type are shown in the table \ref{tab:model_descriptions}.
-
-
-% TODO REFERENCE TABLE IN TEXT
-
+ranging from 66M up to 1.3B. Models size and type are shown in \autoref{tab:model_descriptions}.
 \begin{table*}[htbp]
   \centering
   \caption{Model Descriptions} % Optional caption
@@ -802,9 +799,9 @@ ranging from 66M up to 1.3B. Models size and type are shown in the table \ref{ta
   \hline
   \textbf{GPT-Neo 125M} & EleutherAI's Generative Model & 125M & Causal Model \\
   \hline
-  \textbf{GPT-2 Medium} \\ \textbf{355M} & OpenAI's Generative Model & 355M & Causal Model \\
+  \textbf{GPT-2 Medium 355M} & OpenAI's Generative Model & 355M & Causal Model \\
   \hline
-  \textbf{GPT-2 Large} \\ \textbf{762M} & OpenAI's Generative Model & 762M & Causal Model \\
+  \textbf{GPT-2 Large 762M} & OpenAI's Generative Model & 762M & Causal Model \\
   \hline
   \textbf{GPT-Neo 1.3B} & EleutherAI's Generative Model & 1.3B & Causal Model \\
   \hline
@@ -812,18 +809,14 @@ ranging from 66M up to 1.3B. Models size and type are shown in the table \ref{ta
   \hline
   \textbf{roberta-base} & Facebook AI's Optimized BERT for QA & 125M & Question Answering Model \\
   \hline
-  \textbf{bert-large-uncased-whole-word-masking-finetuned-squad} \\ \textbf{340M} & Google's NLU Model for QA & 340M & Question Answering Model \\
+  \textbf{bert-large-uncased-whole-word-masking-finetuned-squad 340M} & Google's NLU Model for QA & 340M & Question Answering Model \\
   \hline
-  \textbf{T5 Base} \\ \textbf{220M} & Google's Text-to-Text Transfer Transformer & 220M & T5 - Conversational Model \\
+  \textbf{T5 Base 220M} & Google's Text-to-Text Transfer Transformer & 220M & T5 - Conversational Model \\
   \hline
-  \textbf{T5 Large} \\ \textbf{770M} & Google's Text-to-Text Transfer Transformer & 770M & T5 - Conversational Model \\
+  \textbf{T5 Large 770M} & Google's Text-to-Text Transfer Transformer & 770M & T5 - Conversational Model \\
   \hline
   \end{tabular}
-\end{table*}
-  
-  
-  
-  
+\end{table*}  
 
 \emph{For comparison, the currently used production ChatGPT 3.5,
 according to ChatGPT, has a size of around 175B. ChatGPT 4.0 has not
@@ -849,13 +842,13 @@ The questions asked and their types are:
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  Fact-based question - ``How tall is the Pyramid of Giza?''
+  Fact-based question - "How tall is the Pyramid of Giza?"
 \item
-  List-based question - ``What materials were used in constructing the
-  Great Wall of China?''
+  List-based question - "What materials were used in constructing the
+  Great Wall of China?"
 \item
-  Synthesis-based Fact question - ``Which famous structures were either
-  designed or structurally influenced by Gustave Eiffel?''
+  Synthesis-based Fact question - "Which famous structures were either
+  designed or structurally influenced by Gustave Eiffel?"
 \end{enumerate}
 
 The ``Synthesis-based Fact'' question is a type of question where the
@@ -874,7 +867,6 @@ There will be 3 types of RAG augmentation, in this text called
 retrieval:
 
 \begin{itemize}
-
 \item
   Retrieval of one sentence, will create a context for the question from
   one sentence using a facts sentence based database.
@@ -907,13 +899,14 @@ sentence_transformers import SentenceTransformer
 
 \subsubsection{Non-Parametric library}
 
-For non-parametric library \texttt{faiss} will be used, it is more than
+For non-parametric library \textit{faiss} will be used, it is more than
 enough to handle this experiment.
 
 \subsubsection{LLM generator placeholder}
 
-The LLM placeholder is a component that allows to attach different LLMs in the
-RAG solution. The reason for this is to test how different LLMs perform.
+The LLM placeholder is a component that allows the attachment of 
+different LLMs in the RAG solution. The reason for this is to test 
+how different LLMs perform.
 
 \subsection{In memory database}
 Key value database will be used to store records, that are hold the embedding as a key
@@ -1151,6 +1144,7 @@ accurate information.
 %  TODO reference table in text
 \begin{table*}[htbp]
   \centering
+  % TODO Table not referenced
   \label{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_T5Models_table} 
   \caption{List based question, single sentence retrieval, T5 conversational models. "What materials were used in constructing the Great Wall of China?"} % Optional caption
   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
@@ -1608,51 +1602,51 @@ It is an optional section where the authors may write a short text on what shoul
 %   J., Guo, Q., Wang, M., \& Wang, H. (2023). Retrieval-Augmented
 %   Generation for Large Language Models: A Survey. Retrieved from
 %   \url{https://arxiv.org/pdf/2312.10997}
-% \bibitem{cite5} 
+% \bibitem{sbert} 
 %   Reimers, N., \& Gurevych, I. (2019). Sentence-BERT: Sentence
 %   Embeddings using Siamese BERT-Networks. Retrieved from
 %   \url{https://arxiv.org/pdf/1908.10084}
-% \bibitem{cite6} 
+% \bibitem{website_deffinition_rag} 
 %   Miesle, P. (no date). Retrieval-augmented Generation (RAG) Explained:
 %   Understanding Key Concepts. DataStax. Retrieved from
 %   \url{https://www.datastax.com/guides/what-is-retrieval-augmented-generation}
-% \bibitem{cite7} 
+% \bibitem{Website_NexocodeGuideonRAGLLMs} 
 %   Owczarek, D. (2023). The Comprehensive Guide to Retrieval Augmented
 %   Generation LLMs: Transforming Data into Knowledge. Nexocode. Retrieved
 %   from
 %   \url{https://nexocode.com/blog/posts/retrieval-augmented-generation-rag-llms}
-% \bibitem{cite8} 
+% \bibitem{website_ImplementGuideonRAGSystems} 
 %   Alkestrup, J., \& Purup, N. S. (n.d.). Building high-quality RAG
 %   systems. Implement Consulting Group. Retrieved from
 %   \url{https://implementconsultinggroup.com/article/building-high-quality-rag-systems}
-% \bibitem{cite9} 
+% \bibitem{website_MediumGuideonRAGDatabases} 
 %   Ali, M. (2023). Optimizing RAG: A Guide to Choosing the Right Vector
 %   Database. Medium. Retrieved from
 %   \href{https://medium.com/@mutahar789/optimizing-rag-a-guide-to-choosing-the-right-vector-database-480f71a33139}{https://medium.com/@mutahar789/optimizing-rag-a-guide-to-choosing-the-right-vector-database-480f71a33139}
-% \bibitem{cite10} 
+% \bibitem{Website_CloudflareGuideonVectorInsertion}
 %   Cloudflare Docs. no date. Best Practices: Insert Vectors. Retrieved
 %   from
 %   \url{https://developers.cloudflare.com/vectorize/best-practices/insert-vectors/}
-% \bibitem{cite11} 
+% \bibitem{website_AporiaGuideonVectorDatabasesforRAG} 
 %   Kehrer, K. (2023). Best Vector DBs for Retrieval Augmented Generation
 %   (RAG). Aporia. Retrieved from
 %   \url{https://www.aporia.com/learn/best-vector-dbs-for-retrieval-augmented-generation-rag/}
-% \bibitem{cite12} 
+% \bibitem{website_DatabricksGlossaryonRAG} 
 %   Databricks. (n.d.). Retrieval-Augmented Generation (RAG). Retrieved
 %   from
 %   \url{https://www.databricks.com/glossary/retrieval-augmented-generation-rag}
 % \bibitem{cite13}
 %   MongoDB Docs. (n.d.). Atlas CLI: Deploy Local. Retrieved from
 %   \url{https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-deploy-local/}
-% \bibitem{cite14}
+% \bibitem{website_MediumGuideonRAGwithAtlas}
 %   Benedict, V. M. W. (2023). RAG with Atlas Vector Search and MongoDB.
 %   Medium. Retrieved from
 %   \href{https://medium.com/@if-21062/rag-with-atlas-vector-search-mongodb-0d2420e00b64}{https://medium.com/@if-21062/rag-with-atlas-vector-search-mongodb-0d2420e00b64}
-% \bibitem{cite15}
+% \bibitem{website_Neo4jBlogOnLangchainVectorIndex}
 %   Bratanič, T. (2023). Neo4j Langchain Vector Index Implementation.
 %   Neo4j. Retrieved from
 %   \url{https://neo4j.com/developer-blog/neo4j-langchain-vector-index-implementation/}
-% \bibitem{cite16}
+% \bibitem{website_PondhouseGuideOnAdvancedRAG}
 %   Pondhouse Data. (2023). Advanced RAG: Recursive Retrieval with
 %   llamaindex. Retrieved from
 %   \url{https://www.pondhouse-data.com/blog/advanced-rag-recursive-retrieval-with-llamaindex}
@@ -1661,7 +1655,7 @@ It is an optional section where the authors may write a short text on what shoul
 %   D., \& Yih, W. (2020). Dense Passage Retrieval for Open-Domain
 %   Question Answering. Retrieved from
 %   \url{https://arxiv.org/pdf/2004.04906}
-% \bibitem{cite18}
+% \bibitem{SpeculativeRAG_EnhancingRetrieval-AugmentedGenerationThroughDrafting}
 %   Wang, Z., Wang, Z., Le, L., Zheng, H. S., Mishra, S., Perot, V.,
 %   Zhang, Y., Mattapalli, A., Taly, A., Shang, J., Lee, C-Y., \& Pfister,
 %   T. (2024). Speculative RAG: Enhancing Retrieval Augmented Generation
@@ -1682,74 +1676,79 @@ It is an optional section where the authors may write a short text on what shoul
   
 %   \bibitem{cite4} Y. Gao, Y. Xiong, X. Gao, K. Jia, J. Pan, Y. Bi, Y. Dai, J. Sun, Q. Guo, M. Wang, and H. Wang, "Retrieval-Augmented Generation for Large Language Models: A Survey," \textit{arXiv preprint arXiv:2312.10997}, 2023.
   
-%   \bibitem{cite5} N. Reimers and I. Gurevych, "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks," \textit{arXiv preprint arXiv:1908.10084}, 2019.
+%   \bibitem{sbert} N. Reimers and I. Gurevych, "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks," \textit{arXiv preprint arXiv:1908.10084}, 2019.
   
-%   \bibitem{cite6} P. Miesle, "Retrieval-Augmented Generation (RAG) Explained: Understanding Key Concepts," \textit{DataStax}. Retrieved from \url{https://www.datastax.com/guides/what-is-retrieval-augmented-generation}.
+%   \bibitem{website_deffinition_rag} P. Miesle, "Retrieval-Augmented Generation (RAG) Explained: Understanding Key Concepts," \textit{DataStax}. Retrieved from \url{https://www.datastax.com/guides/what-is-retrieval-augmented-generation}.
   
-%   \bibitem{cite7} D. Owczarek, "The Comprehensive Guide to Retrieval-Augmented Generation LLMs: Transforming Data into Knowledge," \textit{Nexocode}, 2023. Retrieved from \url{https://nexocode.com/blog/posts/retrieval-augmented-generation-rag-llms}.
+%   \bibitem{Website_NexocodeGuideonRAGLLMs} D. Owczarek, "The Comprehensive Guide to Retrieval-Augmented Generation LLMs: Transforming Data into Knowledge," \textit{Nexocode}, 2023. Retrieved from \url{https://nexocode.com/blog/posts/retrieval-augmented-generation-rag-llms}.
   
-%   \bibitem{cite8} J. Alkestrup and N. S. Purup, "Building High-Quality RAG Systems," \textit{Implement Consulting Group}. Retrieved from \url{https://implementconsultinggroup.com/article/building-high-quality-rag-systems}.
+%   \bibitem{website_ImplementGuideonRAGSystems} J. Alkestrup and N. S. Purup, "Building High-Quality RAG Systems," \textit{Implement Consulting Group}. Retrieved from \url{https://implementconsultinggroup.com/article/building-high-quality-rag-systems}.
   
-%   \bibitem{cite9} M. Ali, "Optimizing RAG: A Guide to Choosing the Right Vector Database," \textit{Medium}, 2023. Retrieved from \url{https://medium.com/@mutahar789/optimizing-rag-a-guide-to-choosing-the-right-vector-database-480f71a33139}.
+%   \bibitem{website_MediumGuideonRAGDatabases} M. Ali, "Optimizing RAG: A Guide to Choosing the Right Vector Database," \textit{Medium}, 2023. Retrieved from \url{https://medium.com/@mutahar789/optimizing-rag-a-guide-to-choosing-the-right-vector-database-480f71a33139}.
   
-%   \bibitem{cite10} Cloudflare Docs, "Best Practices: Insert Vectors," \textit{Cloudflare}. Retrieved from \url{https://developers.cloudflare.com/vectorize/best-practices/insert-vectors/}.
+%   \bibitem{Website_CloudflareGuideonVectorInsertion}Cloudflare Docs, "Best Practices: Insert Vectors," \textit{Cloudflare}. Retrieved from \url{https://developers.cloudflare.com/vectorize/best-practices/insert-vectors/}.
   
-%   \bibitem{cite11} K. Kehrer, "Best Vector DBs for Retrieval Augmented Generation (RAG)," \textit{Aporia}, 2023. Retrieved from \url{https://www.aporia.com/learn/best-vector-dbs-for-retrieval-augmented-generation-rag/}.
+%   \bibitem{website_AporiaGuideonVectorDatabasesforRAG} K. Kehrer, "Best Vector DBs for Retrieval Augmented Generation (RAG)," \textit{Aporia}, 2023. Retrieved from \url{https://www.aporia.com/learn/best-vector-dbs-for-retrieval-augmented-generation-rag/}.
   
-%   \bibitem{cite12} Databricks, "Retrieval-Augmented Generation (RAG)," \textit{Databricks}. Retrieved from \url{https://www.databricks.com/glossary/retrieval-augmented-generation-rag}.
+%   \bibitem{website_DatabricksGlossaryonRAG} Databricks, "Retrieval-Augmented Generation (RAG)," \textit{Databricks}. Retrieved from \url{https://www.databricks.com/glossary/retrieval-augmented-generation-rag}.
   
-%   \bibitem{cite13} MongoDB Docs, "Atlas CLI: Deploy Local," \textit{MongoDB}. Retrieved from \url{https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-deploy-local/}.
+%   \bibitem{website_MongoDBAtlasCLIDocumentation}MongoDB Docs, "Atlas CLI: Deploy Local," \textit{MongoDB}. Retrieved from \url{https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-deploy-local/}.
   
-%   \bibitem{cite14} V. M. W. Benedict, "RAG with Atlas Vector Search and MongoDB," \textit{Medium}, 2023. Retrieved from \url{https://medium.com/@if-21062/rag-with-atlas-vector-search-mongodb-0d2420e00b64}.
+%   \bibitem{website_MediumGuideonRAGwithAtlas} V. M. W. Benedict, "RAG with Atlas Vector Search and MongoDB," \textit{Medium}, 2023. Retrieved from \url{https://medium.com/@if-21062/rag-with-atlas-vector-search-mongodb-0d2420e00b64}.
   
-%   \bibitem{cite15} T. Bratanič, "Neo4j Langchain Vector Index Implementation," \textit{Neo4j}, 2023. Retrieved from \url{https://neo4j.com/developer-blog/neo4j-langchain-vector-index-implementation/}.
+%   \bibitem{website_Neo4jBlogOnLangchainVectorIndex} T. Bratanič, "Neo4j Langchain Vector Index Implementation," \textit{Neo4j}, 2023. Retrieved from \url{https://neo4j.com/developer-blog/neo4j-langchain-vector-index-implementation/}.
   
-%   \bibitem{cite16} Pondhouse Data, "Advanced RAG: Recursive Retrieval with LlamaIndex," \textit{Pondhouse Data}, 2023. Retrieved from \url{https://www.pondhouse-data.com/blog/advanced-rag-recursive-retrieval-with-llamaindex}.
+%   \bibitem{website_PondhouseGuideOnAdvancedRAG} Pondhouse Data, "Advanced RAG: Recursive Retrieval with LlamaIndex," \textit{Pondhouse Data}, 2023. Retrieved from \url{https://www.pondhouse-data.com/blog/advanced-rag-recursive-retrieval-with-llamaindex}.
   
 %   \bibitem{cite17} V. Karpukhin, B. Oguz, S. Min, P. Lewis, L. Wu, S. Edunov, D. Chen, and W. Yih, "Dense Passage Retrieval for Open-Domain Question Answering," \textit{arXiv preprint arXiv:2004.04906}, 2020.
   
-%   \bibitem{cite18} Z. Wang, Z. Wang, L. Le, H. S. Zheng, S. Mishra, V. Perot, Y. Zhang, A. Mattapalli, A. Taly, J. Shang, C.-Y. Lee, and T. Pfister, "Speculative RAG: Enhancing Retrieval-Augmented Generation through Drafting," \textit{arXiv preprint arXiv:2407.08223}, 2024.
+%   \bibitem{SpeculativeRAG_EnhancingRetrieval-AugmentedGenerationThroughDrafting} Z. Wang, Z. Wang, L. Le, H. S. Zheng, S. Mishra, V. Perot, Y. Zhang, A. Mattapalli, A. Taly, J. Shang, C.-Y. Lee, and T. Pfister, "Speculative RAG: Enhancing Retrieval-Augmented Generation through Drafting," \textit{arXiv preprint arXiv:2407.08223}, 2024.
   
 %   \end{thebibliography}
 
 \begin{thebibliography}{9}
 
-  \bibitem{cite1} A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, Ł. Kaiser, and I. Polosukhin, "Attention Is All You Need," \textit{arXiv preprint arXiv:1706.03762}, 2017.
+  \bibitem{attention_is_all_you_need} A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, Ł. Kaiser, and I. Polosukhin, "Attention Is All You Need," \textit{arXiv preprint arXiv:1706.03762}, 2017, pp. 8-10.
   
-  \bibitem{cite2} M. Douze, A. Guzhva, C. Deng, J. Johnson, G. Szilvasy, P.-E. Mazaré, M. Lomeli, L. Hosseini, and H. Jégou, "The Faiss Library," \textit{arXiv preprint arXiv:2401.08281}, 2024.
+  \bibitem{the_faiss_library} M. Douze, A. Guzhva, C. Deng, J. Johnson, G. Szilvasy, P.-E. Mazaré, M. Lomeli, L. Hosseini, and H. Jégou, "The Faiss Library," \textit{arXiv preprint arXiv:2401.08281}, 2024. pp. 1-13.
   
-  \bibitem{cite3} P. Lewis, W. Yih, T. Rocktäschel, and S. Riedel, "Retrieval-Augmented Generation (RAG) Explained: Understanding Key Concepts," \textit{arXiv preprint arXiv:2005.11401v4}, 2020.
+  \bibitem{Retrieval_Augmented_Generation_(RAG)_Explained_Understanding_Key_Concepts} P. Lewis, W. Yih, T. Rocktäschel, and S. Riedel, "Retrieval-Augmented Generation (RAG) Explained: Understanding Key Concepts," \textit{arXiv preprint arXiv:2005.11401v4}, 2020. pp. 3
   
-  \bibitem{cite4} Y. Gao, Y. Xiong, X. Gao, K. Jia, J. Pan, Y. Bi, Y. Dai, J. Sun, Q. Guo, M. Wang, and H. Wang, "Retrieval-Augmented Generation for Large Language Models: A Survey," \textit{arXiv preprint arXiv:2312.10997}, 2023.
+  \bibitem{Retrieval-Augmented_Generation_for_Large_Language_Models:_A_Survey} Y. Gao, Y. Xiong, X. Gao, K. Jia, J. Pan, Y. Bi, Y. Dai, J. Sun, Q. Guo, M. Wang, and H. Wang, "Retrieval-Augmented Generation for Large Language Models: A Survey," \textit{arXiv preprint arXiv:2312.10997}, 2023. pp. 1-13
   
-  \bibitem{cite5} N. Reimers and I. Gurevych, "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks," \textit{arXiv preprint arXiv:1908.10084}, 2019.
+  \bibitem{sbert} N. Reimers and I. Gurevych, "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks," \textit{arXiv preprint arXiv:1908.10084}, 2019. pp. 1-11
+    
+  \bibitem{SpeculativeRAG_EnhancingRetrieval-AugmentedGenerationThroughDrafting} Z. Wang, Z. Wang, L. Le, H. S. Zheng, S. Mishra, V. Perot, Y. Zhang, A. Mattapalli, A. Taly, J. Shang, C.-Y. Lee, and T. Pfister, "Speculative RAG: Enhancing Retrieval-Augmented Generation through Drafting" \textit{arXiv preprint arXiv:2407.08223}, 2024.
+
   
-  \bibitem{cite6} P. Miesle, "Retrieval-Augmented Generation (RAG) Explained: Understanding Key Concepts," \textit{DataStax}. Retrieved from \href{https://www.datastax.com/guides/what-is-retrieval-augmented-generation}{DataStax Guide on RAG}.
+  \bibitem{website_deffinition_rag} P. Miesle, "Retrieval-Augmented Generation (RAG) Explained: Understanding Key Concepts," \textit{DataStax}. Retrieved from \href{https://www.datastax.com/guides/what-is-retrieval-augmented-generation}{DataStax Guide on RAG}.
+
+  % TODO MOZI DASE IZBRISI NEZNAM OD KAJ E OVAJ LINK. da se prasa profesorov dali da stojat referenci a da ne se referencirani
+  \bibitem{Website_NexocodeGuideonRAGLLMs} D. Owczarek, "The Comprehensive Guide to Retrieval-Augmented Generation LLMs: Transforming Data into Knowledge," \textit{Nexocode}, 2023. Retrieved from \href{https://nexocode.com/blog/posts/retrieval-augmented-generation-rag-llms}{Nexocode Guide on RAG LLMs}.
   
-  \bibitem{cite7} D. Owczarek, "The Comprehensive Guide to Retrieval-Augmented Generation LLMs: Transforming Data into Knowledge," \textit{Nexocode}, 2023. Retrieved from \href{https://nexocode.com/blog/posts/retrieval-augmented-generation-rag-llms}{Nexocode Guide on RAG LLMs}.
+  % TODO MOZI DASE IZBRISI NEZNAM OD KAJ E OVAJ LINK. da se prasa profesorov dali da stojat referenci a da ne se referencirani
+  \bibitem{website_ImplementGuideonRAGSystems} J. Alkestrup and N. S. Purup, "Building High-Quality RAG Systems," \textit{Implement Consulting Group}. Retrieved from \href{https://implementconsultinggroup.com/article/building-high-quality-rag-systems}{Implement Guide on RAG Systems}.
   
-  \bibitem{cite8} J. Alkestrup and N. S. Purup, "Building High-Quality RAG Systems," \textit{Implement Consulting Group}. Retrieved from \href{https://implementconsultinggroup.com/article/building-high-quality-rag-systems}{Implement Guide on RAG Systems}.
+  \bibitem{website_MediumGuideonRAGDatabases} M. Ali, "Optimizing RAG: A Guide to Choosing the Right Vector Database," \textit{Medium}, 2023. Retrieved from \href{https://medium.com/@mutahar789/optimizing-rag-a-guide-to-choosing-the-right-vector-database-480f71a33139}{Medium Guide on RAG Databases}.
   
-  \bibitem{cite9} M. Ali, "Optimizing RAG: A Guide to Choosing the Right Vector Database," \textit{Medium}, 2023. Retrieved from \href{https://medium.com/@mutahar789/optimizing-rag-a-guide-to-choosing-the-right-vector-database-480f71a33139}{Medium Guide on RAG Databases}.
+  \bibitem{Website_CloudflareGuideonVectorInsertion}Cloudflare Docs, "Best Practices: Insert Vectors," \textit{Cloudflare}. Retrieved from \href{https://developers.cloudflare.com/vectorize/best-practices/insert-vectors/}{Cloudflare Guide on Vector Insertion}.
   
-  \bibitem{cite10} Cloudflare Docs, "Best Practices: Insert Vectors," \textit{Cloudflare}. Retrieved from \href{https://developers.cloudflare.com/vectorize/best-practices/insert-vectors/}{Cloudflare Guide on Vector Insertion}.
+  \bibitem{website_AporiaGuideonVectorDatabasesforRAG} K. Kehrer, "Best Vector DBs for Retrieval Augmented Generation (RAG)," \textit{Aporia}, 2023. Retrieved from \href{https://www.aporia.com/learn/best-vector-dbs-for-retrieval-augmented-generation-rag/}{Aporia Guide on Vector Databases for RAG}.
   
-  \bibitem{cite11} K. Kehrer, "Best Vector DBs for Retrieval Augmented Generation (RAG)," \textit{Aporia}, 2023. Retrieved from \href{https://www.aporia.com/learn/best-vector-dbs-for-retrieval-augmented-generation-rag/}{Aporia Guide on Vector Databases for RAG}.
+  \bibitem{website_DatabricksGlossaryonRAG} Databricks, "Retrieval-Augmented Generation (RAG)," \textit{Databricks}. Retrieved from \href{https://www.databricks.com/glossary/retrieval-augmented-generation-rag}{Databricks Glossary on RAG}.
   
-  \bibitem{cite12} Databricks, "Retrieval-Augmented Generation (RAG)," \textit{Databricks}. Retrieved from \href{https://www.databricks.com/glossary/retrieval-augmented-generation-rag}{Databricks Glossary on RAG}.
+  \bibitem{website_MongoDBAtlasCLIDocumentation}MongoDB Docs, "Atlas CLI: Deploy Local," \textit{MongoDB}. Retrieved from \href{https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-deploy-local/}{MongoDB Atlas CLI Documentation}.
   
-  \bibitem{cite13} MongoDB Docs, "Atlas CLI: Deploy Local," \textit{MongoDB}. Retrieved from \href{https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-deploy-local/}{MongoDB Atlas CLI Documentation}.
+  \bibitem{website_MediumGuideonRAGwithAtlas} V. M. W. Benedict, "RAG with Atlas Vector Search and MongoDB," \textit{Medium}, 2023. Retrieved from \href{https://medium.com/@if-21062/rag-with-atlas-vector-search-mongodb-0d2420e00b64}{Medium Guide on RAG with Atlas}.
   
-  \bibitem{cite14} V. M. W. Benedict, "RAG with Atlas Vector Search and MongoDB," \textit{Medium}, 2023. Retrieved from \href{https://medium.com/@if-21062/rag-with-atlas-vector-search-mongodb-0d2420e00b64}{Medium Guide on RAG with Atlas}.
+  \bibitem{website_Neo4jBlogOnLangchainVectorIndex} T. Bratanič, "Neo4j Langchain Vector Index Implementation," \textit{Neo4j}, 2023. Retrieved from \href{https://neo4j.com/developer-blog/neo4j-langchain-vector-index-implementation/}{Neo4j Blog on Langchain Vector Index}.
   
-  \bibitem{cite15} T. Bratanič, "Neo4j Langchain Vector Index Implementation," \textit{Neo4j}, 2023. Retrieved from \href{https://neo4j.com/developer-blog/neo4j-langchain-vector-index-implementation/}{Neo4j Blog on Langchain Vector Index}.
+  \bibitem{website_PondhouseGuideOnAdvancedRAG} Pondhouse Data, "Advanced RAG: Recursive Retrieval with LlamaIndex," \textit{Pondhouse Data}, 2023. Retrieved from \href{https://www.pondhouse-data.com/blog/advanced-rag-recursive-retrieval-with-llamaindex}{Pondhouse Guide on Advanced RAG}.
   
-  \bibitem{cite16} Pondhouse Data, "Advanced RAG: Recursive Retrieval with LlamaIndex," \textit{Pondhouse Data}, 2023. Retrieved from \href{https://www.pondhouse-data.com/blog/advanced-rag-recursive-retrieval-with-llamaindex}{Pondhouse Guide on Advanced RAG}.
-  
-  \bibitem{cite17} V. Karpukhin, B. Oguz, S. Min, P. Lewis, L. Wu, S. Edunov, D. Chen, and W. Yih, "Dense Passage Retrieval for Open-Domain Question Answering," \textit{arXiv preprint arXiv:2004.04906}, 2020.
-  
-  \bibitem{cite18} Z. Wang, Z. Wang, L. Le, H. S. Zheng, S. Mishra, V. Perot, Y. Zhang, A. Mattapalli, A. Taly, J. Shang, C.-Y. Lee, and T. Pfister, "Speculative RAG: Enhancing Retrieval-Augmented Generation through Drafting," \textit{arXiv preprint arXiv:2407.08223}, 2024.
-  
+  % \bibitem{cite17} V. Karpukhin, B. Oguz, S. Min, P. Lewis, L. Wu, S. Edunov, D. Chen, and W. Yih, "Dense Passage Retrieval for Open-Domain Question Answering," \textit{arXiv preprint arXiv:2004.04906}, 2020.
+  \bibitem{cite_github_solution} Grabuloski, M. (2024). *RagSystems: Retrieval-Augmented Generation Systems*. GitHub repository. Retrieved from \url{https://github.com/mgrabul/RagSystems}
+
+
 \end{thebibliography}
 
 \flushleft \justifying{ \textbf {Contribution of Individual Authors to the \break Creation of a Scientific Article (Ghostwriting \break  Policy)}}

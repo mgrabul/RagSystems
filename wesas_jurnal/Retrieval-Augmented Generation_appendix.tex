@@ -434,8 +434,9 @@ to provide three embeddings \(SE(A)\), \(SE(P)\), \(SE(N)\),\\
 such that: if \(A\) and \(P\) are semantically more similar \(A\) and
 \(N\), then the distance, $D$: 
 
+% todo redo the equation, it is not clear
 \begin{equation}
-   D(SE(A), SE(P)) < D(SE(A), SE(N))
+  D(SE(A), SE(P)) < D(SE(A), SE(N))
 \end{equation}
 
 \textbf{The simple interpretation is that the sentence embedding model
@@ -667,7 +668,7 @@ sends the context and the question as an input to an LLM or the
 generator. The RAG-Token Model retrieves new documents on every
 generated token. Once a token is generated, the token is appended to all
 previously generated tokens and this are appended to the initial
-question. This results is a string in the following form "Question +
+question. This results in a string in the following form "Question +
 GenerateTockenList". This new string is then used again as an input in
 the RAG, or as an input for the RAG retrieved. The process retrieves new
 documents for every new generated token and uses this documents to
@@ -995,21 +996,21 @@ experiment parameters are as follows:
 \subsubsection{Causal Models}
 
 The results of the experiment are shown in the Table \ref{tab:experiment_R_1_sentence_Q_fact_M_casual_table}.
-\begin{table*}[htbp]
-  \centering
-  \caption{Fact-based question, single sentence retrieval, causal models}
-  \label{tab:experiment_R_1_sentence_Q_fact_M_casual_table}
-    \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-      \hline
-      \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
-      facebook blenderbot-90M & balkicker mutations mutations pment mutations mutations mutations kicker fiers eston eston eston eres bender eston \ldots{} & lease willis lease mative mative lease willis mative lease lease lease willis \ldots{} \\ \hline
-      gpt2 & The Pyramid of Giza is the tallest building in Egypt. The Pyramid of Giza is located in the Giza Plateau \ldots{} & The Great Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
-      EleutherAI gpt-neo-125M & The Pyramid of Giza is the tallest pyramid in the world. It was completed in the 13th century AD \ldots{} & The Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
-      gpt2-medium & The Pyramid of Giza is the tallest structure in Egypt. It is 1,068 feet tall, and is one of the largest pyramids \ldots{} & The Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
-      gpt2-large & The Pyramid of Giza is the tallest structure in the world. How tall is the Taj Mahal? \ldots{} & The Great Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
-      EleutherAI gpt-neo-1.3B & The Pyramid of Giza is one of the Seven Wonders of the Ancient World. It is one of the Seven Wonders of the Modern World \ldots{} & The pyramid of Giza, also known as the Pyramid of Khufu \ldots{} and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
-    \end{tabular}
-\end{table*}
+% \begin{table*}[htbp]
+%   \centering
+%   \caption{Fact-based question, single sentence retrieval, causal models}
+%   \label{tab:experiment_R_1_sentence_Q_fact_M_casual_table}
+%     \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+%       \hline
+%       \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
+%       facebook blenderbot-90M & balkicker mutations mutations pment mutations mutations mutations kicker fiers eston eston eston eres bender eston \ldots{} & lease willis lease mative mative lease willis mative lease lease lease willis \ldots{} \\ \hline
+%       gpt2 & The Pyramid of Giza is the tallest building in Egypt. The Pyramid of Giza is located in the Giza Plateau \ldots{} & The Great Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
+%       EleutherAI gpt-neo-125M & The Pyramid of Giza is the tallest pyramid in the world. It was completed in the 13th century AD \ldots{} & The Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
+%       gpt2-medium & The Pyramid of Giza is the tallest structure in Egypt. It is 1,068 feet tall, and is one of the largest pyramids \ldots{} & The Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
+%       gpt2-large & The Pyramid of Giza is the tallest structure in the world. How tall is the Taj Mahal? \ldots{} & The Great Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
+%       EleutherAI gpt-neo-1.3B & The Pyramid of Giza is one of the Seven Wonders of the Ancient World. It is one of the Seven Wonders of the Modern World \ldots{} & The pyramid of Giza, also known as the Pyramid of Khufu \ldots{} and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
+%     \end{tabular}
+% \end{table*}
 In this experiment setup, in all the cases the casual models generated a wrong LLM answer. Except
 the \texttt{facebook/blenderbot-90M} they all generated grammatically
 correct sentences. Concerning the RAG answers, all of them generated a
@@ -1024,18 +1025,18 @@ correct answer was GPT2 with 90M.
 
 \subsubsection{QA Models}
 
-\begin{table*}[htbp]
-  \centering
-  \caption{Fact-based question, single sentence retrieval, question answering models. "How tall is the Pyramid of Giza?"} % Optional caption
-  \label{tab:experiment_R_1_sentence_Q_fact_M_question_answering_table}  % Adding label for referencing  
-    \begin{tabular}{|p{0.2\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-      \hline
-      \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
-      distilbert-base-uncased-distilled-squad\_66M & how tall is the pyramid of giza? {[}SEP{]} & 146.6 meters \\ \hline
-      deepset roberta-base-squad2\_125M &  & 146.6 meters (481 feet) \\ \hline
-      bert-large-uncased-whole-word-masking-finetuned-squad\_340M & tall & 146.6 meters \\ \hline
-    \end{tabular}
-\end{table*}
+% \begin{table*}[htbp]
+%   \centering
+%   \caption{Fact-based question, single sentence retrieval, question answering models. "How tall is the Pyramid of Giza?"} % Optional caption
+%   \label{tab:experiment_R_1_sentence_Q_fact_M_question_answering_table}  % Adding label for referencing  
+%     \begin{tabular}{|p{0.2\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+%       \hline
+%       \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
+%       distilbert-base-uncased-distilled-squad\_66M & how tall is the pyramid of giza? {[}SEP{]} & 146.6 meters \\ \hline
+%       deepset roberta-base-squad2\_125M &  & 146.6 meters (481 feet) \\ \hline
+%       bert-large-uncased-whole-word-masking-finetuned-squad\_340M & tall & 146.6 meters \\ \hline
+%     \end{tabular}
+% \end{table*}
 The results of the question answering models for the experiment of the 
 current section are shown in Table \ref{tab:experiment_R_1_sentence_Q_fact_M_question_answering_table}.
 The QA models are also answered correctly. Compared to the casual LLMs
@@ -1045,17 +1046,17 @@ wrong for every model.
 
 \subsubsection{T5 Models}
 
-\begin{table}[htbp]
-  \centering
-  \caption{Fact-based question, single sentence retrieval, T5 conversational models. "How tall is the Pyramid of Giza?"} % Optional caption
-  \label{tab:experiment_R_1_sentence_Q_fact_M_T5_table}  % Adding label for referencing
-  \begin{tabular}{|p{0.22\linewidth}|p{0.29\linewidth}|p{0.35\linewidth}|}
-    \hline
-    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
-    t5-base\_220M & None & 146.6 meters (481 feet) \\ \hline
-    t5-large\_770M & False & 140 meters (481 feet) \\ \hline
-  \end{tabular}
-\end{table}
+% \begin{table}[htbp]
+%   \centering
+%   \caption{Fact-based question, single sentence retrieval, T5 conversational models. "How tall is the Pyramid of Giza?"} % Optional caption
+%   \label{tab:experiment_R_1_sentence_Q_fact_M_T5_table}  % Adding label for referencing
+%   \begin{tabular}{|p{0.22\linewidth}|p{0.29\linewidth}|p{0.35\linewidth}|}
+%     \hline
+%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
+%     t5-base\_220M & None & 146.6 meters (481 feet) \\ \hline
+%     t5-large\_770M & False & 140 meters (481 feet) \\ \hline
+%   \end{tabular}
+% \end{table}
 
 The results of the T5 conversational models this experiment can be seen in 
 Table \ref{tab:experiment_R_1_sentence_Q_fact_M_T5_table}.
@@ -1091,21 +1092,21 @@ Great Wall of China?'. The experiment parameters are as follows:
 \subsubsection{Causal Models}
 
 %  moved to the end of the document
-\begin{table*}[htbp]
-  \centering
-  \caption{List-based question, single sentence retrieval, causal models. "What materials were used in constructing the Great Wall of China?"}
-  \label{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_casualModel_table}  
-  \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-    \hline
-    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
-    facebook blenderbot-90M & pos sitter sitter drip ba ba ba le diving ba ba bee ba ba da ba ba cats ba ba table da ba da disc ba ba orba da da prba ba prda da \textbf{end} & scibal pubalfatty composition asses sciscifatty fatty bee pumubee bee mubee zarbalpuscibal mutbal bee bal composition fatty composition fatty bee bal strip scimutcomposition \textbf{end} \\ \hline
-    gpt2 & The Great Wall of China is the largest in the world, and is the largest city in the world. It is the largest city in the world. It is the largest city in & The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood. The Great Wall of China was built by the People's Republic of \ldots{} \\ \hline
-    EleutherAI gpt-neo-125M & The Great Wall of China was constructed by the Chinese government in the 17th century, and is known as the Great Wall of China \ldots{} & The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood. Answer What materials were used in constructing the Great Wall of China? \\ \hline
-    gpt2-medium & The Great Wall of China was built by the Ming Dynasty (1644-1911). The Great Wall was constructed of a combination of stone, wood, and metal \ldots{} & 'Answer The Great Wall of China was built of various materials, including stone, brick, tamped earth, and wood. The Great Wall of China was constructed of various materials, including stone \ldots{} \\ \hline
-    gpt2-large & The Great Wall of China was built by the Qin Dynasty (221-206 B.C.), which lasted from 221 to 206 B.C. \ldots{} & 'The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.'Answer What materials were used in constructing the Great Wall of China? \\ \hline
-    EleutherAI gpt-neo-1.3B & The Great Wall of China was constructed using many different types of materials, including wood, stone, brick, clay, and iron \ldots{} & The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood. \\ \hline
-  \end{tabular}
-\end{table*}
+% \begin{table*}[htbp]
+%   \centering
+%   \caption{List-based question, single sentence retrieval, causal models. "What materials were used in constructing the Great Wall of China?"}
+%   \label{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_casualModel_table}  
+%   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+%     \hline
+%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
+%     facebook blenderbot-90M & pos sitter sitter drip ba ba ba le diving ba ba bee ba ba da ba ba cats ba ba table da ba da disc ba ba orba da da prba ba prda da \textbf{end} & scibal pubalfatty composition asses sciscifatty fatty bee pumubee bee mubee zarbalpuscibal mutbal bee bal composition fatty composition fatty bee bal strip scimutcomposition \textbf{end} \\ \hline
+%     gpt2 & The Great Wall of China is the largest in the world, and is the largest city in the world. It is the largest city in the world. It is the largest city in & The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood. The Great Wall of China was built by the People's Republic of \ldots{} \\ \hline
+%     EleutherAI gpt-neo-125M & The Great Wall of China was constructed by the Chinese government in the 17th century, and is known as the Great Wall of China \ldots{} & The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood. Answer What materials were used in constructing the Great Wall of China? \\ \hline
+%     gpt2-medium & The Great Wall of China was built by the Ming Dynasty (1644-1911). The Great Wall was constructed of a combination of stone, wood, and metal \ldots{} & 'Answer The Great Wall of China was built of various materials, including stone, brick, tamped earth, and wood. The Great Wall of China was constructed of various materials, including stone \ldots{} \\ \hline
+%     gpt2-large & The Great Wall of China was built by the Qin Dynasty (221-206 B.C.), which lasted from 221 to 206 B.C. \ldots{} & 'The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.'Answer What materials were used in constructing the Great Wall of China? \\ \hline
+%     EleutherAI gpt-neo-1.3B & The Great Wall of China was constructed using many different types of materials, including wood, stone, brick, clay, and iron \ldots{} & The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood. \\ \hline
+%   \end{tabular}
+% \end{table*}
 
 The results of the causal models for the experiment of the current section 
 are documented in Table \ref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_casualModel_table}.
@@ -1119,18 +1120,18 @@ of the RAG approach, contains additional not needed info.
 
 
 % TODO REFERENCE TABLE IN TEXT
-\begin{table*}[htbp]
-  \centering
-  \caption{List-based question, single sentence retrieval, question answering models. "What materials were used in constructing the Great Wall of China?"} % Optional caption
-  \label{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_QaModels_table} 
-  \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-    \hline
-    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
-    distilbert-base-uncased-distilled-squad\_66M & what materials were used in constructing the great wall of china? {[}SEP{]} & stone, brick, tamped earth, and wood \\ \hline
-    deepset roberta-base-squad2\_125M & & stone, brick, tamped earth, and wood \\ \hline
-    bert-large-uncased-whole-word-masking-finetuned-squad\_340M & & stone, brick, tamped earth, and wood \\ \hline
-  \end{tabular}
-\end{table*}
+% \begin{table*}[htbp]
+%   \centering
+%   \caption{List-based question, single sentence retrieval, question answering models. "What materials were used in constructing the Great Wall of China?"} % Optional caption
+%   \label{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_QaModels_table} 
+%   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+%     \hline
+%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
+%     distilbert-base-uncased-distilled-squad\_66M & what materials were used in constructing the great wall of china? {[}SEP{]} & stone, brick, tamped earth, and wood \\ \hline
+%     deepset roberta-base-squad2\_125M & & stone, brick, tamped earth, and wood \\ \hline
+%     bert-large-uncased-whole-word-masking-finetuned-squad\_340M & & stone, brick, tamped earth, and wood \\ \hline
+%   \end{tabular}
+% \end{table*}
 
 
 The results of the QA models for the experiment of the current section 
@@ -1146,18 +1147,18 @@ accurate information.
 \subsubsection{T5 Models}
 
 %  TODO reference table in text
-\begin{table*}[htbp]
-  \centering
-  % TODO Table not referenced
-  \caption{List based question, single sentence retrieval, T5 conversational models. "What materials were used in constructing the Great Wall of China?"} % Optional caption
-  \label{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_T5Models_table} 
-  \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-    \hline
-    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
-    t5-base\_220M & None & stone, brick, tamped earth, and wood \\ \hline
-    t5-large\_770M & False & stone, brick, tamped earth, and wood \\ \hline
-  \end{tabular}
-\end{table*}
+% \begin{table*}[htbp]
+%   \centering
+%   % TODO Table not referenced
+%   \caption{List based question, single sentence retrieval, T5 conversational models. "What materials were used in constructing the Great Wall of China?"} % Optional caption
+%   \label{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_T5Models_table} 
+%   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+%     \hline
+%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
+%     t5-base\_220M & None & stone, brick, tamped earth, and wood \\ \hline
+%     t5-large\_770M & False & stone, brick, tamped earth, and wood \\ \hline
+%   \end{tabular}
+% \end{table*}
 
 The results of the T5 conversational models for the experiment of this
 can be seen in the Table \ref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_T5Models_table}.
@@ -1201,21 +1202,21 @@ The experiment parameters are as follows:
 
 \subsubsection{Causal Models}
 
-\begin{table*}[htbp]
-  \centering
-  \caption{Fact based question, single paragraph retrieval, causal models. "How tall is the Pyramid of Giza?"} % Optional caption
-  \label{tab:experiment_R_1_paragraph_Q_fact_M_casual_table}  % Adding label for referencing  
-  \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-    \hline
-    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
-    facebook blenderbot-90M & pickbalfiers fiers predators mutations bender mutations mutations eston mutations eston predators kicker mutations mutations predators mutations pment eston eston eston trout mutations fiers eston eston bender eston eston kicker eston eston fiers eston joreston \textbf{end} & design mutpuwillis willis design lease orpotbee willis potpotdistribution fatty fatty composition lease mutfatty fatty willis strip spy lease willis distribution willis strip distribution mutdraft mutpupumutspy \textbf{end} \\ \hline
-    gpt2 & The Pyramid of Giza is the tallest building in the world. It is located in the northern part of the country of Egypt. It is one of the tallest buildings in the world & The Great Pyramid of Giza is the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311. The Sphinx is \\ \hline
-    EleutherAI gpt-neo-125M & How tall is the Pyramid of Giza? How tall is the Pyramid of Giza? How tall is the Pyramid of Giza? How tall is & The Great Pyramid of Giza was the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311. The Great \\ \hline
-    gpt2-medium & The Pyramid of Giza, also known as the Great Pyramid of Giza or Pyramid of the Sun, is one of the world's largest pyramids. It was built in Egypt & The Pyramid of Giza is the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311. The Sphinx, \\ \hline
-    gpt2-large & The Pyramid of Giza is believed to be the tallest structure in the world. The Pyramid of Giza is located in Egypt. The Pyramid of Giza was built between & The height of the Great Pyramid of Giza is 146.6 meters (481 feet). This is the tallest man-made structure in the world for over 3,800 years. The \\ \hline
-    EleutherAI gpt-neo-1.3B & This is a question that has been asked many times, but the answer is not always so simple. Some of the tallest buildings in the world are located in the United States, and & The Pyramids of Giza are the only remaining structure of the Seven Wonders of the Ancient World. The Great Pyramid of Giza, also known as the Pyramid of Khuf \\ \hline
-  \end{tabular}
-\end{table*}
+% \begin{table*}[htbp]
+%   \centering
+%   \caption{Fact based question, single paragraph retrieval, causal models. "How tall is the Pyramid of Giza?"} % Optional caption
+%   \label{tab:experiment_R_1_paragraph_Q_fact_M_casual_table}  % Adding label for referencing  
+%   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+%     \hline
+%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
+%     facebook blenderbot-90M & pickbalfiers fiers predators mutations bender mutations mutations eston mutations eston predators kicker mutations mutations predators mutations pment eston eston eston trout mutations fiers eston eston bender eston eston kicker eston eston fiers eston joreston \textbf{end} & design mutpuwillis willis design lease orpotbee willis potpotdistribution fatty fatty composition lease mutfatty fatty willis strip spy lease willis distribution willis strip distribution mutdraft mutpupumutspy \textbf{end} \\ \hline
+%     gpt2 & The Pyramid of Giza is the tallest building in the world. It is located in the northern part of the country of Egypt. It is one of the tallest buildings in the world & The Great Pyramid of Giza is the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311. The Sphinx is \\ \hline
+%     EleutherAI gpt-neo-125M & How tall is the Pyramid of Giza? How tall is the Pyramid of Giza? How tall is the Pyramid of Giza? How tall is & The Great Pyramid of Giza was the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311. The Great \\ \hline
+%     gpt2-medium & The Pyramid of Giza, also known as the Great Pyramid of Giza or Pyramid of the Sun, is one of the world's largest pyramids. It was built in Egypt & The Pyramid of Giza is the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311. The Sphinx, \\ \hline
+%     gpt2-large & The Pyramid of Giza is believed to be the tallest structure in the world. The Pyramid of Giza is located in Egypt. The Pyramid of Giza was built between & The height of the Great Pyramid of Giza is 146.6 meters (481 feet). This is the tallest man-made structure in the world for over 3,800 years. The \\ \hline
+%     EleutherAI gpt-neo-1.3B & This is a question that has been asked many times, but the answer is not always so simple. Some of the tallest buildings in the world are located in the United States, and & The Pyramids of Giza are the only remaining structure of the Seven Wonders of the Ancient World. The Great Pyramid of Giza, also known as the Pyramid of Khuf \\ \hline
+%   \end{tabular}
+% \end{table*}
 
 This experiment's results for the casual models can be observed in 
 Table \ref{tab:experiment_R_1_paragraph_Q_fact_M_casual_table}.
@@ -1227,18 +1228,18 @@ and presenting the relevant information from the paragraph.
 
 \subsubsection{QA Models}
 % TODO REFERENCE TABLE IN TEXT
-\begin{table*}[htbp]
-  \centering
-  \caption{Fact based question, single paragraph retrieval, question answering models. "How tall is the Pyramid of Giza?"} % Optional caption
-  \label{tab:experiment_R_1_paragraph_Q_fact_M_QaModels_table}
-  \begin{tabular}{|p{0.2\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-    \hline
-    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
-    distilbert-base-uncased-distilled-squad\_66M & how tall is the pyramid of giza? {[}SEP{]} & 146.6 meters \\ \hline
-    deepset roberta-base-squad2\_125M &  & 146.6 meters (481 feet) \\ \hline
-    bert-large-uncased-whole-word-masking-finetuned-squad\_340M & tall & 146.6 meters \\ \hline
-  \end{tabular}
-\end{table*}
+% \begin{table*}[htbp]
+%   \centering
+%   \caption{Fact based question, single paragraph retrieval, question answering models. "How tall is the Pyramid of Giza?"} % Optional caption
+%   \label{tab:experiment_R_1_paragraph_Q_fact_M_QaModels_table}
+%   \begin{tabular}{|p{0.2\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+%     \hline
+%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
+%     distilbert-base-uncased-distilled-squad\_66M & how tall is the pyramid of giza? {[}SEP{]} & 146.6 meters \\ \hline
+%     deepset roberta-base-squad2\_125M &  & 146.6 meters (481 feet) \\ \hline
+%     bert-large-uncased-whole-word-masking-finetuned-squad\_340M & tall & 146.6 meters \\ \hline
+%   \end{tabular}
+% \end{table*}
 
 The experiment results for the QA models are shown Table \ref{tab:experiment_R_1_paragraph_Q_fact_M_QaModels_table}.
 
@@ -1250,17 +1251,17 @@ presented.
 \subsubsection{T5 Models}
 
 
-\begin{table*}[htbp]
-  \centering
-  \caption{Fact based question, single paragraph retrieval, T5 conversational models. "How tall is the Pyramid of Giza?"} % Optional caption
-  \label{tab:experiment_R_1_paragraph_Q_fact_M_T5Models_table}
-  \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-    \hline
-    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
-    t5-base\_220M & None & 146.6 meters (481 feet) \\ \hline
-    t5-large\_770M & False & 146.6 meters \\ \hline
-  \end{tabular}
-\end{table*}
+% \begin{table*}[htbp]
+%   \centering
+%   \caption{Fact based question, single paragraph retrieval, T5 conversational models. "How tall is the Pyramid of Giza?"} % Optional caption
+%   \label{tab:experiment_R_1_paragraph_Q_fact_M_T5Models_table}
+%   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+%     \hline
+%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
+%     t5-base\_220M & None & 146.6 meters (481 feet) \\ \hline
+%     t5-large\_770M & False & 146.6 meters \\ \hline
+%   \end{tabular}
+% \end{table*}
 
 The results of the T5 conversational models for the experiment of the current section 
 are shown in Table \ref{tab:experiment_R_1_paragraph_Q_fact_M_T5Models_table}.
@@ -1303,28 +1304,28 @@ document. The experiment parameters are as follows:
 \subsubsection{Causal Models}
 % TODO REFERENCE TABLE IN TEXT
 
-\begin{table*}[htbp]
-  \centering
-  \caption{List based question, single paragraph retrieval, causal models. "What materials were used in constructing the Great Wall of China?"}
-  \label{tab:experiment_R_1_paragraph_Q_listBased_M_casual_table}
-  \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-    \hline
-    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
-    \hline
-    facebook blenderbot-90M & horn ba ba squba ba ba da ba ba bal ba ba phba ba eling ba ba sheet ba ba itba da phth ba ba muba da da audprba da \textbf{end} & potpotscistrip scipotorscizarpotdistribution scipotstrip strip cupotstrip sciscistrip potsciscibee qpotstrip cuqstrip potqsciqstrip sci\_\_end\_\_ \\
-    \hline
-    gpt2 & There are many materials that were used in the construction of the Great Wall of China, but only a few were used for the construction of the Great Wall of China \ldots{} & The Great Wall of China was built to protect against invasions from northern tribes. The Great Wall of China is made of various materials, including stone, brick, tamped earth \ldots{} \\
-    \hline
-    EleutherAI gpt-neo-125M & The Great Wall of China was built by the Chinese government during the reign of the Qing dynasty \ldots{} & The Great Wall of China is over 13,000 miles long. Construction of the Great Wall of China began in the 7th century BC. The Great Wall of China was \ldots{} \\
-    \hline
-    gpt2-medium & The Great Wall of China was constructed by a team of Chinese engineers, engineers, and architects \ldots{} & The Great Wall of China was constructed of various materials, including stone, brick, tamped earth, and wood. The height of the Great Wall of China varies, with the tallest \ldots{} \\
-    \hline
-    gpt2-large & The Great Wall of China was constructed by the Han Dynasty (206 BC -- 220 AD) \ldots{} & The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood. The height of the Great Wall of China varies, with the tallest sections \ldots{} \\
-    \hline
-    EleutherAI gpt-neo-1.3B & The Great Wall of China is one of the most famous examples of ancient Chinese architecture \ldots{} & The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood. The height of the Great Wall of China varies, with the tallest \ldots{} \\
-    \hline
-  \end{tabular}
-\end{table*}
+% \begin{table*}[htbp]
+%   \centering
+%   \caption{List based question, single paragraph retrieval, causal models. "What materials were used in constructing the Great Wall of China?"}
+%   \label{tab:experiment_R_1_paragraph_Q_listBased_M_casual_table}
+%   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+%     \hline
+%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
+%     \hline
+%     facebook blenderbot-90M & horn ba ba squba ba ba da ba ba bal ba ba phba ba eling ba ba sheet ba ba itba da phth ba ba muba da da audprba da \textbf{end} & potpotscistrip scipotorscizarpotdistribution scipotstrip strip cupotstrip sciscistrip potsciscibee qpotstrip cuqstrip potqsciqstrip sci\_\_end\_\_ \\
+%     \hline
+%     gpt2 & There are many materials that were used in the construction of the Great Wall of China, but only a few were used for the construction of the Great Wall of China \ldots{} & The Great Wall of China was built to protect against invasions from northern tribes. The Great Wall of China is made of various materials, including stone, brick, tamped earth \ldots{} \\
+%     \hline
+%     EleutherAI gpt-neo-125M & The Great Wall of China was built by the Chinese government during the reign of the Qing dynasty \ldots{} & The Great Wall of China is over 13,000 miles long. Construction of the Great Wall of China began in the 7th century BC. The Great Wall of China was \ldots{} \\
+%     \hline
+%     gpt2-medium & The Great Wall of China was constructed by a team of Chinese engineers, engineers, and architects \ldots{} & The Great Wall of China was constructed of various materials, including stone, brick, tamped earth, and wood. The height of the Great Wall of China varies, with the tallest \ldots{} \\
+%     \hline
+%     gpt2-large & The Great Wall of China was constructed by the Han Dynasty (206 BC -- 220 AD) \ldots{} & The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood. The height of the Great Wall of China varies, with the tallest sections \ldots{} \\
+%     \hline
+%     EleutherAI gpt-neo-1.3B & The Great Wall of China is one of the most famous examples of ancient Chinese architecture \ldots{} & The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood. The height of the Great Wall of China varies, with the tallest \ldots{} \\
+%     \hline
+%   \end{tabular}
+% \end{table*}
 
 The results of the causal models for the experiment of the current section can be seen 
 in Table \ref{tab:experiment_R_1_paragraph_Q_listBased_M_casual_table}.
@@ -1337,22 +1338,22 @@ used in the construction of the Great Wall of China.
 
 \subsubsection{QA Models}
 
-\begin{table*}[htbp]
-  \centering
-  \caption{List based question, single paragraph retrieval, question answering models. "What materials were used in constructing the Great Wall of China?"} % Optional caption
-  \label{tab:experiment_R_1_paragraph_Q_listBased_M_QaModels_table}  % Adding label for referencing
-  \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-    \hline
-    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
-    \hline
-    distilbert-base-uncased-distilled-squad\_66M & what materials were used in constructing the great wall of china? {[}SEP{]} & stone, brick, tamped earth, and wood \\
-    \hline
-    deepset roberta-base-squad2\_125M & & stone, brick, tamped earth, and wood \\
-    \hline
-    bert-large-uncased-whole-word-masking-finetuned-squad\_340M & & stone, brick, tamped earth, and wood \\
-    \hline
-  \end{tabular}
-\end{table*}
+% \begin{table*}[htbp]
+%   \centering
+%   \caption{List based question, single paragraph retrieval, question answering models. "What materials were used in constructing the Great Wall of China?"} % Optional caption
+%   \label{tab:experiment_R_1_paragraph_Q_listBased_M_QaModels_table}  % Adding label for referencing
+%   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+%     \hline
+%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
+%     \hline
+%     distilbert-base-uncased-distilled-squad\_66M & what materials were used in constructing the great wall of china? {[}SEP{]} & stone, brick, tamped earth, and wood \\
+%     \hline
+%     deepset roberta-base-squad2\_125M & & stone, brick, tamped earth, and wood \\
+%     \hline
+%     bert-large-uncased-whole-word-masking-finetuned-squad\_340M & & stone, brick, tamped earth, and wood \\
+%     \hline
+%   \end{tabular}
+% \end{table*}
 
 The results of the QA models for the experiment of the current section
 can be seen in Table \ref{tab:experiment_R_1_paragraph_Q_listBased_M_QaModels_table}.
@@ -1365,22 +1366,22 @@ information.
 
 \subsubsection{T5 Models}
 
-\begin{table*}[htbp]
-  \centering
-  \caption{List based question, single paragraph retrieval, T5 conversational models. "What materials were used in constructing the Great Wall of China?"}
-  \label{tab:experiment_R_1_paragraph_Q_listBased_M_T5Models_table}  % Adding label for referencing
-  \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-    \hline
-    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
-    \hline
-    distilbert-base-uncased-distilled-squad\_66M & what materials were used in constructing the great wall of china? {[}SEP{]} & stone, brick, tamped earth, and wood \\
-    \hline
-    deepset roberta-base-squad2\_125M & & stone, brick, tamped earth, and wood \\
-    \hline
-    bert-large-uncased-whole-word-masking-finetuned-squad\_340M & & stone, brick, tamped earth, and wood \\
-    \hline
-  \end{tabular}
-\end{table*}
+% \begin{table*}[htbp]
+%   \centering
+%   \caption{List based question, single paragraph retrieval, T5 conversational models. "What materials were used in constructing the Great Wall of China?"}
+%   \label{tab:experiment_R_1_paragraph_Q_listBased_M_T5Models_table}  % Adding label for referencing
+%   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+%     \hline
+%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
+%     \hline
+%     distilbert-base-uncased-distilled-squad\_66M & what materials were used in constructing the great wall of china? {[}SEP{]} & stone, brick, tamped earth, and wood \\
+%     \hline
+%     deepset roberta-base-squad2\_125M & & stone, brick, tamped earth, and wood \\
+%     \hline
+%     bert-large-uncased-whole-word-masking-finetuned-squad\_340M & & stone, brick, tamped earth, and wood \\
+%     \hline
+%   \end{tabular}
+% \end{table*}
 
 The results of the T5 conversational models for the experiment of the
 current section can be seen in Table \ref{tab:experiment_R_1_paragraph_Q_listBased_M_T5Models_table}.
@@ -1437,28 +1438,28 @@ the LLM needs to combine the facts in to a conclusion and generate the answer.
 
 % TODO REFERENCE TABLE IN TEXT
 
-\begin{table*}[htbp]
-  \centering
-  \caption{Synthesis based question, three paragraph retrieval, causal models. "Which famous structures, both designed or structurally influenced by Gustave Eiffel?"} % Optional caption
-  \label{tab:experiment_R_3_paragraph_Q_synthesis_M_casual_table}  % Adding label for referencing
-  \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-    \hline
-    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
-    \hline
-    facebook blenderbot-90M & etically ication ix belle ication belle ication judgment ication belle le tacication belle conception ication le le belle ication planted le tacdden ication tacication judge ix ication le ication judge belle ication ication le \textbf{end} & Error generating text for facebook blenderbot-90M \\
-    \hline
-    gpt2 & They're not, but it's hard not to feel a twinge of nostalgia for them \ldots{} & The Eiffel Tower is located in Paris, France. The Eiffel Tower was completed in 1889. The Eiffel Tower was painted every seven years to prevent it \ldots{} \\
-    \hline
-    EleutherAI gpt-neo-125M & This article is part of a series of articles that explore Gustave Eiffel's influence on architecture and design \ldots{} & The Colosseum was completed in AD 80. The Colosseum was designed by Gustave Eiffel, who also designed the Eiffel Tower. \\
-    \hline
-    gpt2-medium & There are many, many, many. Some of the most famous of them are: The Eiffel Tower, Paris \ldots{} & The Eiffel Tower is located in Paris, France. The Eiffel Tower was completed in 1889. The Eiffel Tower is 324 meters tall. The Eiffel Tower was designed by Gustave Eiffel. \\
-    \hline
-    gpt2-large & The Louvre, Paris, France The Eiffel Tower, Paris, France The Eiffel Tower, Paris, France \ldots{} & The Eiffel Tower is located in Paris, France. The Eiffel Tower is 324 meters tall. The Eiffel Tower was designed by Gustave Eiffel. \\
-    \hline
-    EleutherAI gpt-neo-1.3B & The Eiffel Tower in Paris. The Eiffel Tower in Paris. The Eiffel Tower in Paris \ldots{} & The Eiffel Tower is located in Paris, France. The Eiffel Tower was completed in 1889. The Eiffel Tower is 324 meters tall. \\
-    \hline
-  \end{tabular}
-\end{table*}
+% \begin{table*}[htbp]
+%   \centering
+%   \caption{Synthesis based question, three paragraph retrieval, causal models. "Which famous structures, both designed or structurally influenced by Gustave Eiffel?"} % Optional caption
+%   \label{tab:experiment_R_3_paragraph_Q_synthesis_M_casual_table}  % Adding label for referencing
+%   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+%     \hline
+%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
+%     \hline
+%     facebook blenderbot-90M & etically ication ix belle ication belle ication judgment ication belle le tacication belle conception ication le le belle ication planted le tacdden ication tacication judge ix ication le ication judge belle ication ication le \textbf{end} & Error generating text for facebook blenderbot-90M \\
+%     \hline
+%     gpt2 & They're not, but it's hard not to feel a twinge of nostalgia for them \ldots{} & The Eiffel Tower is located in Paris, France. The Eiffel Tower was completed in 1889. The Eiffel Tower was painted every seven years to prevent it \ldots{} \\
+%     \hline
+%     EleutherAI gpt-neo-125M & This article is part of a series of articles that explore Gustave Eiffel's influence on architecture and design \ldots{} & The Colosseum was completed in AD 80. The Colosseum was designed by Gustave Eiffel, who also designed the Eiffel Tower. \\
+%     \hline
+%     gpt2-medium & There are many, many, many. Some of the most famous of them are: The Eiffel Tower, Paris \ldots{} & The Eiffel Tower is located in Paris, France. The Eiffel Tower was completed in 1889. The Eiffel Tower is 324 meters tall. The Eiffel Tower was designed by Gustave Eiffel. \\
+%     \hline
+%     gpt2-large & The Louvre, Paris, France The Eiffel Tower, Paris, France The Eiffel Tower, Paris, France \ldots{} & The Eiffel Tower is located in Paris, France. The Eiffel Tower is 324 meters tall. The Eiffel Tower was designed by Gustave Eiffel. \\
+%     \hline
+%     EleutherAI gpt-neo-1.3B & The Eiffel Tower in Paris. The Eiffel Tower in Paris. The Eiffel Tower in Paris \ldots{} & The Eiffel Tower is located in Paris, France. The Eiffel Tower was completed in 1889. The Eiffel Tower is 324 meters tall. \\
+%     \hline
+%   \end{tabular}
+% \end{table*}
 
 The results of the causal models for the experiment of the current section
 are stored in Table \ref{tab:experiment_R_3_paragraph_Q_synthesis_M_casual_table}.
@@ -1473,22 +1474,22 @@ best choice for complex synthesis-based questions.
 
 \subsubsection{QA Models}
 
-\begin{table*}[htbp]
-  \centering
-  \caption{Synthesis based question, three paragraph retrieval, question answering models. "Which famous structures, both designed or structurally influenced by Gustave Eiffel?"} % Optional caption
-  \label{tab:experiment_R_3_paragraph_Q_synthesis_M_QaModels_table}  % Adding label for referencing
-  \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-    \hline
-    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
-    \hline
-    distilbert-base-uncased-distilled-squad\_66M & which famous structures, both designed or structurally influenced by Gustave Eiffel? {[}SEP{]} & statue of liberty \\
-    \hline
-    deepset roberta-base-squad2\_125M & & \\
-    \hline
-    bert-large-uncased-whole-word-masking-finetuned-squad\_340M & & statue of liberty \\
-    \hline
-  \end{tabular}
-\end{table*}
+% \begin{table*}[htbp]
+%   \centering
+%   \caption{Synthesis based question, three paragraph retrieval, question answering models. "Which famous structures, both designed or structurally influenced by Gustave Eiffel?"} % Optional caption
+%   \label{tab:experiment_R_3_paragraph_Q_synthesis_M_QaModels_table}  % Adding label for referencing
+%   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+%     \hline
+%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
+%     \hline
+%     distilbert-base-uncased-distilled-squad\_66M & which famous structures, both designed or structurally influenced by Gustave Eiffel? {[}SEP{]} & statue of liberty \\
+%     \hline
+%     deepset roberta-base-squad2\_125M & & \\
+%     \hline
+%     bert-large-uncased-whole-word-masking-finetuned-squad\_340M & & statue of liberty \\
+%     \hline
+%   \end{tabular}
+% \end{table*}
 
 The results of the QA models for the experiment of the current section
 are documented in Table \ref{tab:experiment_R_3_paragraph_Q_synthesis_M_QaModels_table}.
@@ -1501,21 +1502,21 @@ challenging for these models.
 
 \subsubsection{T5 Models}
 
-% Referece table in text
-\begin{table*}[htbp]
-  \centering
-  \caption{Synthesis based question, three paragraph retrieval, T5 Models} % Optional caption
-  \label{tab:experiment_R_3_paragraph_Q_synthesis_M_T5Models_table}  % Adding label for referencing
-  \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-    \hline
-    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
-    \hline
-    t5-base\_220M & None & The Eiffel Tower \\
-    \hline
-    t5-large\_770M & False & Eiffel Tower and The Statue of Liberty \\
-    \hline
-  \end{tabular}
-\end{table*}
+% % Referece table in text
+% \begin{table*}[htbp]
+%   \centering
+%   \caption{Synthesis based question, three paragraph retrieval, T5 Models} % Optional caption
+%   \label{tab:experiment_R_3_paragraph_Q_synthesis_M_T5Models_table}  % Adding label for referencing
+%   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+%     \hline
+%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
+%     \hline
+%     t5-base\_220M & None & The Eiffel Tower \\
+%     \hline
+%     t5-large\_770M & False & Eiffel Tower and The Statue of Liberty \\
+%     \hline
+%   \end{tabular}
+% \end{table*}
 
 The results of the T5 conversational models for the experiment of the current section
 are documented in Table \ref{tab:experiment_R_3_paragraph_Q_synthesis_M_T5Models_table}.
@@ -1617,6 +1618,596 @@ This data indicates that as stated before the time to response in a RAG system d
   \end{tabular}
 \end{table}
 
+
+% \begin{table*}[htbp]
+%   \centering
+%   \caption{Experiment 1, Model Performance with Sizes in Parameters} % Optional caption
+%   \label{tab:experiment1_model_performance_full_with_size}  % Adding label for referencing
+%   \resizebox{\textwidth}{!}{  % Resizes the table to fit the page width
+%   \begin{tabular}{|p{0.18\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.12\linewidth}|}
+%     \hline
+%     \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
+%     \hline
+%     facebook/blenderbot-90M & casual\_model & Incorrect & 1.39 & 1.63 & 90M \\
+%     \hline
+%     gpt2 & casual\_model & Over Information & 3.59 & 2.75 & 124M \\
+%     \hline
+%     EleutherAI/gpt-neo-125M & casual\_model & Partial & 3.54 & 2.79 & 125M \\
+%     \hline
+%     gpt2-medium & casual\_model & Partial & 9.36 & 6.03 & 355M \\
+%     \hline
+%     gpt2-large & casual\_model & Correct & 17.03 & 10.47 & 762M \\
+%     \hline
+%     EleutherAI/gpt-neo-1.3B & casual\_model & Partial & 20.68 & 19.14 & 1.3B \\
+%     \hline
+%     distilbert-base-uncased-distilled-squad & qa\_model & Correct & 0.22 & 0.09 & 66M \\
+%     \hline
+%     deepset/roberta-base-squad2 & qa\_model & Correct & 0.49 & 0.17 & 125M \\
+%     \hline
+%     bert-large-uncased-whole-word-masking-finetuned-squad & qa\_model & Correct & 1.26 & 0.45 & 340M \\
+%     \hline
+%     t5-base & t5\_model & Correct & 1.17 & 0.90 & 220M \\
+%     \hline
+%     t5-large & t5\_model & Partial & 3.40 & 1.83 & 770M \\
+%     \hline
+%   \end{tabular}
+%   }
+% \end{table*}
+
+% \begin{table*}[htbp]
+%   \centering
+%   \caption{Experiment 2, Model Performance with Sizes in Parameters} % Optional caption
+%   \label{tab:experiment2_model_performance_full_with_size}  % Adding label for referencing
+%   \resizebox{\textwidth}{!}{  % Resizes the table to fit the page width
+%   \begin{tabular}{|p{0.18\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.12\linewidth}|}
+%     \hline
+%     \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
+%     \hline
+%     facebook/blenderbot-90M & casual\_model & Incorrect & 1.39 & 1.63 & 90M \\
+%     \hline
+%     gpt2 & casual\_model & Partial & 3.59 & 2.75 & 124M \\
+%     \hline
+%     EleutherAI/gpt-neo-125M & casual\_model & Incorrect & 3.54 & 2.79 & 125M \\
+%     \hline
+%     gpt2-medium & casual\_model & Partial & 9.36 & 6.03 & 355M \\
+%     \hline
+%     gpt2-large & casual\_model & Partial & 17.03 & 10.47 & 762M \\
+%     \hline
+%     EleutherAI/gpt-neo-1.3B & casual\_model & Partial & 20.68 & 19.14 & 1.3B \\
+%     \hline
+%     distilbert-base-uncased-distilled-squad & qa\_model & Partial & 0.22 & 0.09 & 66M \\
+%     \hline
+%     deepset/roberta-base-squad2 & qa\_model & Correct & 0.49 & 0.17 & 125M \\
+%     \hline
+%     bert-large-uncased-whole-word-masking-finetuned-squad & qa\_model & Correct & 1.26 & 0.45 & 340M \\
+%     \hline
+%     t5-base & t5\_model & Correct & 1.17 & 0.90 & 220M \\
+%     \hline
+%     t5-large & t5\_model & Correct & 3.40 & 1.83 & 770M \\
+%     \hline
+%   \end{tabular}
+%   }
+% \end{table*}
+
+% \begin{table*}[htbp]
+%   \centering
+%   \caption{Experiment 3, Model Performance with Sizes in Parameters} % Optional caption
+%   \label{tab:experiment3_model_performance_full_with_size}  % Adding label for referencing
+%   \resizebox{\textwidth}{!}{  % Resizes the table to fit the page width
+%   \begin{tabular}{|p{0.16\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|}
+%     \hline
+%     \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
+%     \hline
+%     facebook/blenderbot-90M & casual\_model & Incorrect & 1.69 & 2.20 & 90M \\
+%     \hline
+%     gpt2 & casual\_model & Incorrect & 3.70 & 3.67 & 124M \\
+%     \hline
+%     EleutherAI/gpt-neo-125M & casual\_model & Incorrect & 3.68 & 4.19 & 125M \\
+%     \hline
+%     gpt2-medium & casual\_model & Over Information & 8.95 & 8.65 & 355M \\
+%     \hline
+%     gpt2-large & casual\_model & Over Information & 16.52 & 15.63 & 762M \\
+%     \hline
+%     EleutherAI/gpt-neo-1.3B & casual\_model & Incorrect & 21.88 & 27.92 & 1.3B \\
+%     \hline
+%     distilbert-base-uncased-distilled-squad & qa\_model & Correct & 0.16 & 0.18 & 66M \\
+%     \hline
+%     deepset/roberta-base-squad2 & qa\_model & Correct & 0.32 & 0.35 & 125M \\
+%     \hline
+%     bert-large-uncased-whole-word-masking-finetuned-squad & qa\_model & Correct & 1.29 & 1.12 & 340M \\
+%     \hline
+%     t5-base & t5\_model & Correct & 1.33 & 1.54 & 220M \\
+%     \hline
+%     t5-large & t5\_model & Correct & 3.66 & 3.38 & 770M \\
+%     \hline
+%   \end{tabular}
+%   }
+% \end{table*}
+
+% \begin{table*}[htbp]
+%   \centering
+%   \caption{Experiment 4, Model Performance with Sizes in Parameters} % Optional caption
+%   \label{tab:experiment4_model_performance_full_with_size}  % Adding label for referencing
+%   \resizebox{\textwidth}{!}{  % Resizes the table to fit the page width
+%   \begin{tabular}{|p{0.18\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.13\linewidth}|p{0.13\linewidth}|}
+%     \hline
+%     \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
+%     \hline
+%     facebook/blenderbot-90M & casual\_model & Incorrect & 2.09 & 2.78 & 90M \\
+%     \hline
+%     gpt2 & casual\_model & Over Information & 4.11 & 4.32 & 124M \\
+%     \hline
+%     EleutherAI/gpt-neo-125M & casual\_model & Incorrect & 4.66 & 4.51 & 125M \\
+%     \hline
+%     gpt2-medium & casual\_model & Over Information & 10.92 & 10.45 & 355M \\
+%     \hline
+%     gpt2-large & casual\_model & Over Information & 17.46 & 14.16 & 762M \\
+%     \hline
+%     EleutherAI/gpt-neo-1.3B & casual\_model & Over Information & 19.06 & 22.33 & 1.3B \\
+%     \hline
+%     distilbert-base-uncased-distilled-squad & qa\_model & Correct & 0.19 & 0.17 & 66M \\
+%     \hline
+%     deepset/roberta-base-squad2 & qa\_model & Correct & 0.55 & 0.30 & 125M \\
+%     \hline
+%     bert-large-uncased-whole-word-masking-finetuned-squad & qa\_model & Correct & 1.40 & 0.86 & 340M \\
+%     \hline
+%     t5-base & t5\_model & Correct & 1.16 & 1.41 & 220M \\
+%     \hline
+%     t5-large & t5\_model & Correct & 3.59 & 4.72 & 770M \\
+%     \hline
+%   \end{tabular}
+%   }
+% \end{table*}
+
+% \begin{table*}[htbp]
+%   \centering
+%   \caption{Experiment 5, Model Performance with Sizes in Parameters} % Optional caption
+%   \label{tab:experiment5_model_performance_full_with_size}  % Adding label for referencing
+%   \resizebox{\textwidth}{!}{  % Resizes the table to fit the page width
+%   \begin{tabular}{|p{0.16\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|}
+%     \hline
+%     \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
+%     \hline
+%     facebook/blenderbot-90M & casual\_model & Incorrect & 2.19 & 3.09 & 90M \\
+%     \hline
+%     gpt2 & casual\_model & Incorrect & 4.96 & 5.57 & 124M \\
+%     \hline
+%     EleutherAI/gpt-neo-125M & casual\_model & Incorrect & 4.14 & 5.92 & 125M \\
+%     \hline
+%     gpt2-medium & casual\_model & Incorrect & 9.49 & 13.54 & 355M \\
+%     \hline
+%     gpt2-large & casual\_model & Incorrect & 18.67 & 24.57 & 762M \\
+%     \hline
+%     EleutherAI/gpt-neo-1.3B & casual\_model & Incorrect & 18.41 & 37.47 & 1.3B \\
+%     \hline
+%     distilbert-base-uncased-distilled-squad & qa\_model & Partial & 0.14 & 0.31 & 66M \\
+%     \hline
+%     deepset/roberta-base-squad2 & qa\_model & Incorrect & 0.38 & 0.71 & 125M \\
+%     \hline
+%     bert-large-uncased-whole-word-masking-finetuned-squad & qa\_model & Partial & 0.92 & 1.70 & 340M \\
+%     \hline
+%     t5-base & t5\_model & Partial & 0.99 & 1.53 & 220M \\
+%     \hline
+%     t5-large & t5\_model & Correct & 3.56 & 5.78 & 770M \\
+%     \hline
+%   \end{tabular}
+%   }
+% \end{table*}
+
+
+\section{Conclusion}
+
+This text demonstrates through experimentation that Retrieval-Augmented
+Generation (RAG) systems effectively address some of the most
+significant challenges faced by Large Language Models (LLMs) and other
+models with parametric memory. Compared to models solely relying on
+parametric memory, RAG systems offer several advantages:
+
+\begin{itemize}
+
+\item
+  \textbf{Horizontally Scalable}: RAG systems can efficiently scale by
+  distributing the retrieval process across multiple nodes, allowing for
+  handling larger datasets and more complex queries.
+\item
+  \textbf{Distributive}: The modular nature of RAG systems enables
+  distribution of tasks across different components, enhancing
+  robustness and flexibility.
+\item
+  \textbf{Mitigates High Bias}: By integrating external knowledge
+  retrieval, RAG systems reduce the need for extremely large models with
+  numerous parameters, thus avoiding issues related to under-fitting and
+  high bias in therms of the real world data set, or the cross
+  validation set The model is just not curved enough to handle real
+  world data.
+\item
+  \textbf{Performance Enhancement}: RAG systems can surpass the
+  performance of their base generative models by leveraging external
+  knowledge, resulting in more accurate and contextually relevant
+  responses.
+\end{itemize}
+
+As an example, a decent quality question answering system can be created
+using only a 66M parameter pertained question answering model like
+DistilBERT when using an index like FAISS. However, it is crucial that
+the paragraphs and sentences provided to the model contain the answer
+explicitly written, with no pronouns or ambiguous references. In case of
+the T5 models they will perform better than QA in a more complex text
+scenarios, these models are capable of understanding and synthesizing
+information. The t5-large\_770M given the size and performance would be
+a good candidate more general RAG solution. 
+
+When considering a self-hosted production RAG system the T-5 models 
+are solid candidate. Using designing a horizontal scalable system with
+multiple T-5 model nodes and distributed parametric memory index would be
+a feasible solution.
+
+In most industries and businesses, data privacy is a concern. However,
+if the data is not sensitive, or privacy is not a concern, cloud-based,
+already provided LLMs as a service, like OpenAI's GPT-4o model can be used.
+
+In conclusion, the main challenge in designing a RAG (Retrieval-Augmented Generation) 
+system is not the LLM (Large Language Model) itself, but the process of creating the context. 
+If the context does not contain all the information required to answer the question, 
+the model will be unable to provide an accurate response. On the other hand, as shown in this paper, 
+if the context is too large, the model's response time will be slower. Research and advancements 
+in information retrieval aimed at creating the minimum required context for a question are crucial 
+for the development of RAG systems and the broader field of AI.
+
+In summary, RAG systems provide a scalable, distributive, and
+cost-efficient solution to enhance the capabilities of LLMs, addressing
+key limitations and improving overall performance without the necessity
+for excessively large and complex models.
+
+\flushleft \par{\textit {Acknowledgment:}}\\
+It is an optional section where the authors may write a short text on what should be acknowledged regarding their manuscript.
+
+\begin{thebibliography}{9}
+
+  \bibitem{attention_is_all_you_need} A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, Ł. Kaiser, and I. Polosukhin, "Attention Is All You Need," \textit{arXiv preprint arXiv:1706.03762}, 2017, pp. 8-10.
+  
+  \bibitem{the_faiss_library} M. Douze, A. Guzhva, C. Deng, J. Johnson, G. Szilvasy, P.-E. Mazaré, M. Lomeli, L. Hosseini, and H. Jégou, "The Faiss Library," \textit{arXiv preprint arXiv:2401.08281}, 2024. pp. 1-13.
+  
+  \bibitem{Retrieval_Augmented_Generation_(RAG)_Explained_Understanding_Key_Concepts} P. Lewis, W. Yih, T. Rocktäschel, and S. Riedel, "Retrieval-Augmented Generation (RAG) Explained: Understanding Key Concepts," \textit{arXiv preprint arXiv:2005.11401v4}, 2020. pp. 3
+  
+  \bibitem{Retrieval-Augmented_Generation_for_Large_Language_Models:_A_Survey} Y. Gao, Y. Xiong, X. Gao, K. Jia, J. Pan, Y. Bi, Y. Dai, J. Sun, Q. Guo, M. Wang, and H. Wang, "Retrieval-Augmented Generation for Large Language Models: A Survey," \textit{arXiv preprint arXiv:2312.10997}, 2023. pp. 1-13
+  
+  \bibitem{sbert} N. Reimers and I. Gurevych, "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks," \textit{arXiv preprint arXiv:1908.10084}, 2019. pp. 1-11
+    
+  \bibitem{SpeculativeRAG_EnhancingRetrieval-AugmentedGenerationThroughDrafting} Z. Wang, Z. Wang, L. Le, H. S. Zheng, S. Mishra, V. Perot, Y. Zhang, A. Mattapalli, A. Taly, J. Shang, C.-Y. Lee, and T. Pfister, "Speculative RAG: Enhancing Retrieval-Augmented Generation through Drafting" \textit{arXiv preprint arXiv:2407.08223}, 2024.
+  
+  \bibitem{website_deffinition_rag} P. Miesle, "Retrieval-Augmented Generation (RAG) Explained: Understanding Key Concepts," \textit{DataStax}. Retrieved from \href{https://www.datastax.com/guides/what-is-retrieval-augmented-generation}{DataStax Guide on RAG}.
+
+  \bibitem{website_MediumGuideonRAGDatabases} M. Ali, "Optimizing RAG: A Guide to Choosing the Right Vector Database," \textit{Medium}, 2023. Retrieved from \href{https://medium.com/@mutahar789/optimizing-rag-a-guide-to-choosing-the-right-vector-database-480f71a33139}{Medium Guide on RAG Databases}.
+  
+  \bibitem{Website_CloudflareGuideonVectorInsertion}Cloudflare Docs, "Best Practices: Insert Vectors," \textit{Cloudflare}. Retrieved from \href{https://developers.cloudflare.com/vectorize/best-practices/insert-vectors/}{Cloudflare Guide on Vector Insertion}.
+  
+  \bibitem{website_AporiaGuideonVectorDatabasesforRAG} K. Kehrer, "Best Vector DBs for Retrieval Augmented Generation (RAG)," \textit{Aporia}, 2023. Retrieved from \href{https://www.aporia.com/learn/best-vector-dbs-for-retrieval-augmented-generation-rag/}{Aporia Guide on Vector Databases for RAG}.
+  
+  \bibitem{website_DatabricksGlossaryonRAG} Databricks, "Retrieval-Augmented Generation (RAG)," \textit{Databricks}. Retrieved from \href{https://www.databricks.com/glossary/retrieval-augmented-generation-rag}{Databricks Glossary on RAG}.
+  
+  \bibitem{website_MongoDBAtlasCLIDocumentation}MongoDB Docs, "Atlas CLI: Deploy Local," \textit{MongoDB}. Retrieved from \href{https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-deploy-local/}{MongoDB Atlas CLI Documentation}.
+  
+  \bibitem{website_MediumGuideonRAGwithAtlas} V. M. W. Benedict, "RAG with Atlas Vector Search and MongoDB," \textit{Medium}, 2023. Retrieved from \href{https://medium.com/@if-21062/rag-with-atlas-vector-search-mongodb-0d2420e00b64}{Medium Guide on RAG with Atlas}.
+  
+  \bibitem{website_Neo4jBlogOnLangchainVectorIndex} T. Bratanič, "Neo4j Langchain Vector Index Implementation," \textit{Neo4j}, 2023. Retrieved from \href{https://neo4j.com/developer-blog/neo4j-langchain-vector-index-implementation/}{Neo4j Blog on Langchain Vector Index}.
+  
+  \bibitem{website_PondhouseGuideOnAdvancedRAG} Pondhouse Data, "Advanced RAG: Recursive Retrieval with LlamaIndex," \textit{Pondhouse Data}, 2023. Retrieved from \href{https://www.pondhouse-data.com/blog/advanced-rag-recursive-retrieval-with-llamaindex}{Pondhouse Guide on Advanced RAG}.
+  
+  \bibitem{cite_github_solution} Grabuloski, M. (2024). *RagSystems: Retrieval-Augmented Generation Systems*. GitHub repository. Retrieved from \url{https://github.com/mgrabul/RagSystems}
+
+
+\end{thebibliography}
+
+\flushleft \justifying{ \textbf {Contribution of Individual Authors to the \break Creation of a Scientific Article (Ghostwriting \break  Policy)}}
+% \par{{\color{red}
+% \noindent \textbf{Please, indicate the role and the contribution of each author:}\\ 
+% \\
+% For Example:}}
+\par{
+  \noindent 
+  {John Smith, Donald Smith carried out the simulation and the optimization.  }\break
+  George Smith has implemented the Algorithm 1.1 and 1.2 in C++.  \break
+  Maria Ivanova has organized and executed the experiments of Section 4.  \break
+  George Nikolov was responsible for the Statistics.  \break
+
+  \noindent Please visit Contributor Roles Taxonomy (CRediT) that contains several roles:
+  \href{www.wseas.org/multimedia/contributor-roleinstruction.pdf}{\color{blue}{www.wseas.org/multimedia/contributor-roleinstruction.pdf}}
+
+  \flushleft \justifying{ \textbf {Sources of Funding for Research Presented in a Scientific Article or Scientific Article Itself}}
+  % \par{{\color{red}
+  % \noindent \textbf{Report potential sources of funding if there is any}}}
+
+
+  % \flushleft \justifying{ \textbf {\hl {Alternatively, in case of no funding the following text will be published:}}}
+  \par { \noindent No funding was received for conducting this study.}
+  \break
+
+  \flushleft \justifying{ \textbf {Conflicts of Interest}}
+  % \par { \noindent {\color{red}{\textbf{Please declare anything related to this study.}}}}
+
+  % \flushleft \justifying{ \textbf{\hl {Alternatively, in case of no conflicts of interest the following text will be published:}}}
+}
+\par  \justifying{ { \noindent The authors have no conflicts of interest to \break declare that are relevant to the content of this \break  article.}}
+
+
+\flushleft \justifying{ \textbf{Creative Commons Attribution License 4.0 \break (Attribution 4.0 International , CC BY 4.0)}}
+
+\par { \noindent This article is published under the terms of the Creative Commons Attribution License 4.0\\
+\href{https://creativecommons.org/licenses/by/4.0/deed.en\_US}{\color{blue}{https://creativecommons.org/licenses/by/4.0/deed.en\break\_US}} }
+
+% \twocolumn[
+%   \begin{@twocolumnfalse}
+
+% \section{Appendix}
+
+% \begin{table*}[htbp]
+%   \centering
+%   \caption{Experiment 5, Model Performance with Sizes in Parameters} % Optional caption
+%   % \label{tab:experiment5_model_performance_full_with_size}  % Adding label for referencing
+%   \resizebox{\textwidth}{!}{  % Resizes the table to fit the page width
+%   \begin{tabular}{|p{0.16\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|}
+%     \hline
+%     \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
+%     \hline
+%     facebook/blenderbot-90M & casual\_model & Incorrect & 2.19 & 3.09 & 90M \\
+%     \hline
+%     gpt2 & casual\_model & Incorrect & 4.96 & 5.57 & 124M \\
+%     \hline
+%     EleutherAI/gpt-neo-125M & casual\_model & Incorrect & 4.14 & 5.92 & 125M \\
+%     \hline
+%     gpt2-medium & casual\_model & Incorrect & 9.49 & 13.54 & 355M \\
+%     \hline
+%     gpt2-large & casual\_model & Incorrect & 18.67 & 24.57 & 762M \\
+%     \hline
+%     EleutherAI/gpt-neo-1.3B & casual\_model & Incorrect & 18.41 & 37.47 & 1.3B \\
+%     \hline
+%     distilbert-base-uncased-distilled-squad & qa\_model & Partial & 0.14 & 0.31 & 66M \\
+%     \hline
+%     deepset/roberta-base-squad2 & qa\_model & Incorrect & 0.38 & 0.71 & 125M \\
+%     \hline
+%     bert-large-uncased-whole-word-masking-finetuned-squad & qa\_model & Partial & 0.92 & 1.70 & 340M \\
+%     \hline
+%     t5-base & t5\_model & Partial & 0.99 & 1.53 & 220M \\
+%     \hline
+%     t5-large & t5\_model & Correct & 3.56 & 5.78 & 770M \\
+%     \hline
+%   \end{tabular}
+%   }
+% \end{table*}
+% ]
+
+% \twocolumn[
+%   \begin{@twocolumnfalse}
+%     \maketitle
+%     \begin{appendix}
+    
+\onecolumn
+\section*{Appendix}
+
+
+\begin{table*}[htbp]
+  \centering
+  \caption{Fact-based question, single sentence retrieval, causal models}
+  \label{tab:experiment_R_1_sentence_Q_fact_M_casual_table}
+    \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+      \hline
+      \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
+      facebook blenderbot-90M & balkicker mutations mutations pment mutations mutations mutations kicker fiers eston eston eston eres bender eston \ldots{} & lease willis lease mative mative lease willis mative lease lease lease willis \ldots{} \\ \hline
+      gpt2 & The Pyramid of Giza is the tallest building in Egypt. The Pyramid of Giza is located in the Giza Plateau \ldots{} & The Great Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
+      EleutherAI gpt-neo-125M & The Pyramid of Giza is the tallest pyramid in the world. It was completed in the 13th century AD \ldots{} & The Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
+      gpt2-medium & The Pyramid of Giza is the tallest structure in Egypt. It is 1,068 feet tall, and is one of the largest pyramids \ldots{} & The Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
+      gpt2-large & The Pyramid of Giza is the tallest structure in the world. How tall is the Taj Mahal? \ldots{} & The Great Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
+      EleutherAI gpt-neo-1.3B & The Pyramid of Giza is one of the Seven Wonders of the Ancient World. It is one of the Seven Wonders of the Modern World \ldots{} & The pyramid of Giza, also known as the Pyramid of Khufu \ldots{} and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
+    \end{tabular}
+\end{table*}
+\begin{table*}[htbp]
+  \centering
+  \caption{Fact-based question, single sentence retrieval, question answering models. "How tall is the Pyramid of Giza?"} % Optional caption
+  \label{tab:experiment_R_1_sentence_Q_fact_M_question_answering_table}  % Adding label for referencing  
+    \begin{tabular}{|p{0.2\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+      \hline
+      \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
+      distilbert-base-uncased-distilled-squad\_66M & how tall is the pyramid of giza? {[}SEP{]} & 146.6 meters \\ \hline
+      deepset roberta-base-squad2\_125M &  & 146.6 meters (481 feet) \\ \hline
+      bert-large-uncased-whole-word-masking-finetuned-squad\_340M & tall & 146.6 meters \\ \hline
+    \end{tabular}
+\end{table*}
+\begin{table}[htbp]
+  \centering
+  \caption{Fact-based question, single sentence retrieval, T5 conversational models. "How tall is the Pyramid of Giza?"} % Optional caption
+  \label{tab:experiment_R_1_sentence_Q_fact_M_T5_table}  % Adding label for referencing
+  \begin{tabular}{|p{0.22\linewidth}|p{0.29\linewidth}|p{0.35\linewidth}|}
+    \hline
+    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
+    t5-base\_220M & None & 146.6 meters (481 feet) \\ \hline
+    t5-large\_770M & False & 140 meters (481 feet) \\ \hline
+  \end{tabular}
+\end{table}
+\begin{table*}[htbp]
+  \centering
+  \caption{List-based question, single sentence retrieval, causal models. "What materials were used in constructing the Great Wall of China?"}
+  \label{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_casualModel_table}  
+  \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+    \hline
+    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
+    facebook blenderbot-90M & pos sitter sitter drip ba ba ba le diving ba ba bee ba ba da ba ba cats ba ba table da ba da disc ba ba orba da da prba ba prda da \textbf{end} & scibal pubalfatty composition asses sciscifatty fatty bee pumubee bee mubee zarbalpuscibal mutbal bee bal composition fatty composition fatty bee bal strip scimutcomposition \textbf{end} \\ \hline
+    gpt2 & The Great Wall of China is the largest in the world, and is the largest city in the world. It is the largest city in the world. It is the largest city in & The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood. The Great Wall of China was built by the People's Republic of \ldots{} \\ \hline
+    EleutherAI gpt-neo-125M & The Great Wall of China was constructed by the Chinese government in the 17th century, and is known as the Great Wall of China \ldots{} & The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood. Answer What materials were used in constructing the Great Wall of China? \\ \hline
+    gpt2-medium & The Great Wall of China was built by the Ming Dynasty (1644-1911). The Great Wall was constructed of a combination of stone, wood, and metal \ldots{} & 'Answer The Great Wall of China was built of various materials, including stone, brick, tamped earth, and wood. The Great Wall of China was constructed of various materials, including stone \ldots{} \\ \hline
+    gpt2-large & The Great Wall of China was built by the Qin Dynasty (221-206 B.C.), which lasted from 221 to 206 B.C. \ldots{} & 'The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.'Answer What materials were used in constructing the Great Wall of China? \\ \hline
+    EleutherAI gpt-neo-1.3B & The Great Wall of China was constructed using many different types of materials, including wood, stone, brick, clay, and iron \ldots{} & The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood. \\ \hline
+  \end{tabular}
+\end{table*}
+\begin{table*}[htbp]
+  \centering
+  \caption{List-based question, single sentence retrieval, question answering models. "What materials were used in constructing the Great Wall of China?"} % Optional caption
+  \label{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_QaModels_table} 
+  \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+    \hline
+    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
+    distilbert-base-uncased-distilled-squad\_66M & what materials were used in constructing the great wall of china? {[}SEP{]} & stone, brick, tamped earth, and wood \\ \hline
+    deepset roberta-base-squad2\_125M & & stone, brick, tamped earth, and wood \\ \hline
+    bert-large-uncased-whole-word-masking-finetuned-squad\_340M & & stone, brick, tamped earth, and wood \\ \hline
+  \end{tabular}
+\end{table*}
+\begin{table*}[htbp]
+  \centering
+  % TODO Table not referenced
+  \caption{List based question, single sentence retrieval, T5 conversational models. "What materials were used in constructing the Great Wall of China?"} % Optional caption
+  \label{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_T5Models_table} 
+  \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+    \hline
+    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
+    t5-base\_220M & None & stone, brick, tamped earth, and wood \\ \hline
+    t5-large\_770M & False & stone, brick, tamped earth, and wood \\ \hline
+  \end{tabular}
+\end{table*}
+\begin{table*}[htbp]
+  \centering
+  \caption{Fact based question, single paragraph retrieval, causal models. "How tall is the Pyramid of Giza?"} % Optional caption
+  \label{tab:experiment_R_1_paragraph_Q_fact_M_casual_table}  % Adding label for referencing  
+  \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+    \hline
+    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
+    facebook blenderbot-90M & pickbalfiers fiers predators mutations bender mutations mutations eston mutations eston predators kicker mutations mutations predators mutations pment eston eston eston trout mutations fiers eston eston bender eston eston kicker eston eston fiers eston joreston \textbf{end} & design mutpuwillis willis design lease orpotbee willis potpotdistribution fatty fatty composition lease mutfatty fatty willis strip spy lease willis distribution willis strip distribution mutdraft mutpupumutspy \textbf{end} \\ \hline
+    gpt2 & The Pyramid of Giza is the tallest building in the world. It is located in the northern part of the country of Egypt. It is one of the tallest buildings in the world & The Great Pyramid of Giza is the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311. The Sphinx is \\ \hline
+    EleutherAI gpt-neo-125M & How tall is the Pyramid of Giza? How tall is the Pyramid of Giza? How tall is the Pyramid of Giza? How tall is & The Great Pyramid of Giza was the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311. The Great \\ \hline
+    gpt2-medium & The Pyramid of Giza, also known as the Great Pyramid of Giza or Pyramid of the Sun, is one of the world's largest pyramids. It was built in Egypt & The Pyramid of Giza is the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311. The Sphinx, \\ \hline
+    gpt2-large & The Pyramid of Giza is believed to be the tallest structure in the world. The Pyramid of Giza is located in Egypt. The Pyramid of Giza was built between & The height of the Great Pyramid of Giza is 146.6 meters (481 feet). This is the tallest man-made structure in the world for over 3,800 years. The \\ \hline
+    EleutherAI gpt-neo-1.3B & This is a question that has been asked many times, but the answer is not always so simple. Some of the tallest buildings in the world are located in the United States, and & The Pyramids of Giza are the only remaining structure of the Seven Wonders of the Ancient World. The Great Pyramid of Giza, also known as the Pyramid of Khuf \\ \hline
+  \end{tabular}
+\end{table*}
+\begin{table*}[htbp]
+  \centering
+  \caption{Fact based question, single paragraph retrieval, question answering models. "How tall is the Pyramid of Giza?"} % Optional caption
+  \label{tab:experiment_R_1_paragraph_Q_fact_M_QaModels_table}
+  \begin{tabular}{|p{0.2\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+    \hline
+    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
+    distilbert-base-uncased-distilled-squad\_66M & how tall is the pyramid of giza? {[}SEP{]} & 146.6 meters \\ \hline
+    deepset roberta-base-squad2\_125M &  & 146.6 meters (481 feet) \\ \hline
+    bert-large-uncased-whole-word-masking-finetuned-squad\_340M & tall & 146.6 meters \\ \hline
+  \end{tabular}
+\end{table*}
+\begin{table*}[htbp]
+  \centering
+  \caption{Fact based question, single paragraph retrieval, T5 conversational models. "How tall is the Pyramid of Giza?"} % Optional caption
+  \label{tab:experiment_R_1_paragraph_Q_fact_M_T5Models_table}
+  \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+    \hline
+    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
+    t5-base\_220M & None & 146.6 meters (481 feet) \\ \hline
+    t5-large\_770M & False & 146.6 meters \\ \hline
+  \end{tabular}
+\end{table*}
+\begin{table*}[htbp]
+  \centering
+  \caption{List based question, single paragraph retrieval, causal models. "What materials were used in constructing the Great Wall of China?"}
+  \label{tab:experiment_R_1_paragraph_Q_listBased_M_casual_table}
+  \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+    \hline
+    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
+    \hline
+    facebook blenderbot-90M & horn ba ba squba ba ba da ba ba bal ba ba phba ba eling ba ba sheet ba ba itba da phth ba ba muba da da audprba da \textbf{end} & potpotscistrip scipotorscizarpotdistribution scipotstrip strip cupotstrip sciscistrip potsciscibee qpotstrip cuqstrip potqsciqstrip sci\_\_end\_\_ \\
+    \hline
+    gpt2 & There are many materials that were used in the construction of the Great Wall of China, but only a few were used for the construction of the Great Wall of China \ldots{} & The Great Wall of China was built to protect against invasions from northern tribes. The Great Wall of China is made of various materials, including stone, brick, tamped earth \ldots{} \\
+    \hline
+    EleutherAI gpt-neo-125M & The Great Wall of China was built by the Chinese government during the reign of the Qing dynasty \ldots{} & The Great Wall of China is over 13,000 miles long. Construction of the Great Wall of China began in the 7th century BC. The Great Wall of China was \ldots{} \\
+    \hline
+    gpt2-medium & The Great Wall of China was constructed by a team of Chinese engineers, engineers, and architects \ldots{} & The Great Wall of China was constructed of various materials, including stone, brick, tamped earth, and wood. The height of the Great Wall of China varies, with the tallest \ldots{} \\
+    \hline
+    gpt2-large & The Great Wall of China was constructed by the Han Dynasty (206 BC -- 220 AD) \ldots{} & The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood. The height of the Great Wall of China varies, with the tallest sections \ldots{} \\
+    \hline
+    EleutherAI gpt-neo-1.3B & The Great Wall of China is one of the most famous examples of ancient Chinese architecture \ldots{} & The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood. The height of the Great Wall of China varies, with the tallest \ldots{} \\
+    \hline
+  \end{tabular}
+\end{table*}
+\begin{table*}[htbp]
+  \centering
+  \caption{List based question, single paragraph retrieval, question answering models. "What materials were used in constructing the Great Wall of China?"} % Optional caption
+  \label{tab:experiment_R_1_paragraph_Q_listBased_M_QaModels_table}  % Adding label for referencing
+  \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+    \hline
+    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
+    \hline
+    distilbert-base-uncased-distilled-squad\_66M & what materials were used in constructing the great wall of china? {[}SEP{]} & stone, brick, tamped earth, and wood \\
+    \hline
+    deepset roberta-base-squad2\_125M & & stone, brick, tamped earth, and wood \\
+    \hline
+    bert-large-uncased-whole-word-masking-finetuned-squad\_340M & & stone, brick, tamped earth, and wood \\
+    \hline
+  \end{tabular}
+\end{table*}
+\begin{table*}[htbp]
+  \centering
+  \caption{List based question, single paragraph retrieval, T5 conversational models. "What materials were used in constructing the Great Wall of China?"}
+  \label{tab:experiment_R_1_paragraph_Q_listBased_M_T5Models_table}  % Adding label for referencing
+  \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+    \hline
+    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
+    \hline
+    distilbert-base-uncased-distilled-squad\_66M & what materials were used in constructing the great wall of china? {[}SEP{]} & stone, brick, tamped earth, and wood \\
+    \hline
+    deepset roberta-base-squad2\_125M & & stone, brick, tamped earth, and wood \\
+    \hline
+    bert-large-uncased-whole-word-masking-finetuned-squad\_340M & & stone, brick, tamped earth, and wood \\
+    \hline
+  \end{tabular}
+\end{table*}
+\begin{table*}[htbp]
+  \centering
+  \caption{Synthesis based question, three paragraph retrieval, causal models. "Which famous structures, both designed or structurally influenced by Gustave Eiffel?"} % Optional caption
+  \label{tab:experiment_R_3_paragraph_Q_synthesis_M_casual_table}  % Adding label for referencing
+  \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+    \hline
+    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
+    \hline
+    facebook blenderbot-90M & etically ication ix belle ication belle ication judgment ication belle le tacication belle conception ication le le belle ication planted le tacdden ication tacication judge ix ication le ication judge belle ication ication le \textbf{end} & Error generating text for facebook blenderbot-90M \\
+    \hline
+    gpt2 & They're not, but it's hard not to feel a twinge of nostalgia for them \ldots{} & The Eiffel Tower is located in Paris, France. The Eiffel Tower was completed in 1889. The Eiffel Tower was painted every seven years to prevent it \ldots{} \\
+    \hline
+    EleutherAI gpt-neo-125M & This article is part of a series of articles that explore Gustave Eiffel's influence on architecture and design \ldots{} & The Colosseum was completed in AD 80. The Colosseum was designed by Gustave Eiffel, who also designed the Eiffel Tower. \\
+    \hline
+    gpt2-medium & There are many, many, many. Some of the most famous of them are: The Eiffel Tower, Paris \ldots{} & The Eiffel Tower is located in Paris, France. The Eiffel Tower was completed in 1889. The Eiffel Tower is 324 meters tall. The Eiffel Tower was designed by Gustave Eiffel. \\
+    \hline
+    gpt2-large & The Louvre, Paris, France The Eiffel Tower, Paris, France The Eiffel Tower, Paris, France \ldots{} & The Eiffel Tower is located in Paris, France. The Eiffel Tower is 324 meters tall. The Eiffel Tower was designed by Gustave Eiffel. \\
+    \hline
+    EleutherAI gpt-neo-1.3B & The Eiffel Tower in Paris. The Eiffel Tower in Paris. The Eiffel Tower in Paris \ldots{} & The Eiffel Tower is located in Paris, France. The Eiffel Tower was completed in 1889. The Eiffel Tower is 324 meters tall. \\
+    \hline
+  \end{tabular}
+\end{table*}
+\begin{table*}[htbp]
+  \centering
+  \caption{Synthesis based question, three paragraph retrieval, question answering models. "Which famous structures, both designed or structurally influenced by Gustave Eiffel?"} % Optional caption
+  \label{tab:experiment_R_3_paragraph_Q_synthesis_M_QaModels_table}  % Adding label for referencing
+  \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+    \hline
+    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
+    \hline
+    distilbert-base-uncased-distilled-squad\_66M & which famous structures, both designed or structurally influenced by Gustave Eiffel? {[}SEP{]} & statue of liberty \\
+    \hline
+    deepset roberta-base-squad2\_125M & & \\
+    \hline
+    bert-large-uncased-whole-word-masking-finetuned-squad\_340M & & statue of liberty \\
+    \hline
+  \end{tabular}
+\end{table*}
+% Referece table in text
+\begin{table*}[htbp]
+  \centering
+  \caption{Synthesis based question, three paragraph retrieval, T5 Models} % Optional caption
+  \label{tab:experiment_R_3_paragraph_Q_synthesis_M_T5Models_table}  % Adding label for referencing
+  \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+    \hline
+    \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
+    \hline
+    t5-base\_220M & None & The Eiffel Tower \\
+    \hline
+    t5-large\_770M & False & Eiffel Tower and The Statue of Liberty \\
+    \hline
+  \end{tabular}
+\end{table*}
 
 \begin{table*}[htbp]
   \centering
@@ -1793,147 +2384,47 @@ This data indicates that as stated before the time to response in a RAG system d
   }
 \end{table*}
 
+      % \begin{table*}[htbp]
+      %   \centering
+      %   \caption{Experiment 5, Model Performance with Sizes in Parameters} % Optional caption
+      %   % \label{tab:experiment5_model_performance_full_with_size}  % Adding label for referencing
+      %   \resizebox{\textwidth}{!}{  % Resizes the table to fit the page width
+      %   \begin{tabular}{|p{0.16\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|}
+      %     \hline
+      %     \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
+      %     \hline
+      %     facebook/blenderbot-90M & casual\_model & Incorrect & 2.19 & 3.09 & 90M \\
+      %     \hline
+      %     gpt2 & casual\_model & Incorrect & 4.96 & 5.57 & 124M \\
+      %     \hline
+      %     EleutherAI/gpt-neo-125M & casual\_model & Incorrect & 4.14 & 5.92 & 125M \\
+      %     \hline
+      %     gpt2-medium & casual\_model & Incorrect & 9.49 & 13.54 & 355M \\
+      %     \hline
+      %     gpt2-large & casual\_model & Incorrect & 18.67 & 24.57 & 762M \\
+      %     \hline
+      %     EleutherAI/gpt-neo-1.3B & casual\_model & Incorrect & 18.41 & 37.47 & 1.3B \\
+      %     \hline
+      %     distilbert-base-uncased-distilled-squad & qa\_model & Partial & 0.14 & 0.31 & 66M \\
+      %     \hline
+      %     deepset/roberta-base-squad2 & qa\_model & Incorrect & 0.38 & 0.71 & 125M \\
+      %     \hline
+      %     bert-large-uncased-whole-word-masking-finetuned-squad & qa\_model & Partial & 0.92 & 1.70 & 340M \\
+      %     \hline
+      %     t5-base & t5\_model & Partial & 0.99 & 1.53 & 220M \\
+      %     \hline
+      %     t5-large & t5\_model & Correct & 3.56 & 5.78 & 770M \\
+      %     \hline
+      %   \end{tabular}
+      %   }
+      % \end{table*}
+% \end{apeendix}
 
-\section{Conclusion}
-
-This text demonstrates through experimentation that Retrieval-Augmented
-Generation (RAG) systems effectively address some of the most
-significant challenges faced by Large Language Models (LLMs) and other
-models with parametric memory. Compared to models solely relying on
-parametric memory, RAG systems offer several advantages:
-
-\begin{itemize}
-
-\item
-  \textbf{Horizontally Scalable}: RAG systems can efficiently scale by
-  distributing the retrieval process across multiple nodes, allowing for
-  handling larger datasets and more complex queries.
-\item
-  \textbf{Distributive}: The modular nature of RAG systems enables
-  distribution of tasks across different components, enhancing
-  robustness and flexibility.
-\item
-  \textbf{Mitigates High Bias}: By integrating external knowledge
-  retrieval, RAG systems reduce the need for extremely large models with
-  numerous parameters, thus avoiding issues related to under-fitting and
-  high bias in therms of the real world data set, or the cross
-  validation set The model is just not curved enough to handle real
-  world data.
-\item
-  \textbf{Performance Enhancement}: RAG systems can surpass the
-  performance of their base generative models by leveraging external
-  knowledge, resulting in more accurate and contextually relevant
-  responses.
-\end{itemize}
-
-As an example, a decent quality question answering system can be created
-using only a 66M parameter pertained question answering model like
-DistilBERT when using an index like FAISS. However, it is crucial that
-the paragraphs and sentences provided to the model contain the answer
-explicitly written, with no pronouns or ambiguous references. In case of
-the T5 models they will perform better than QA in a more complex text
-scenarios, these models are capable of understanding and synthesizing
-information. The t5-large\_770M given the size and performance would be
-a good candidate more general RAG solution. 
-
-When considering a self-hosted production RAG system the T-5 models 
-are solid candidate. Using designing a horizontal scalable system with
-multiple T-5 model nodes and distributed parametric memory index would be
-a feasible solution.
-
-In most industries and businesses, data privacy is a concern. However,
-if the data is not sensitive, or privacy is not a concern, cloud-based,
-already provided LLMs as a service, like OpenAI's GPT-4o model can be used.
-
-In conclusion, the main challenge in designing a RAG (Retrieval-Augmented Generation) 
-system is not the LLM (Large Language Model) itself, but the process of creating the context. 
-If the context does not contain all the information required to answer the question, 
-the model will be unable to provide an accurate response. On the other hand, as shown in this paper, 
-if the context is too large, the model's response time will be slower. Research and advancements 
-in information retrieval aimed at creating the minimum required context for a question are crucial 
-for the development of RAG systems and the broader field of AI.
-
-In summary, RAG systems provide a scalable, distributive, and
-cost-efficient solution to enhance the capabilities of LLMs, addressing
-key limitations and improving overall performance without the necessity
-for excessively large and complex models.
-
-\flushleft \par{\textit {Acknowledgment:}}\\
-It is an optional section where the authors may write a short text on what should be acknowledged regarding their manuscript.
-
-\begin{thebibliography}{9}
-
-  \bibitem{attention_is_all_you_need} A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, Ł. Kaiser, and I. Polosukhin, "Attention Is All You Need," \textit{arXiv preprint arXiv:1706.03762}, 2017, pp. 8-10.
+%     \end{appendix}  
   
-  \bibitem{the_faiss_library} M. Douze, A. Guzhva, C. Deng, J. Johnson, G. Szilvasy, P.-E. Mazaré, M. Lomeli, L. Hosseini, and H. Jégou, "The Faiss Library," \textit{arXiv preprint arXiv:2401.08281}, 2024. pp. 1-13.
-  
-  \bibitem{Retrieval_Augmented_Generation_(RAG)_Explained_Understanding_Key_Concepts} P. Lewis, W. Yih, T. Rocktäschel, and S. Riedel, "Retrieval-Augmented Generation (RAG) Explained: Understanding Key Concepts," \textit{arXiv preprint arXiv:2005.11401v4}, 2020. pp. 3
-  
-  \bibitem{Retrieval-Augmented_Generation_for_Large_Language_Models:_A_Survey} Y. Gao, Y. Xiong, X. Gao, K. Jia, J. Pan, Y. Bi, Y. Dai, J. Sun, Q. Guo, M. Wang, and H. Wang, "Retrieval-Augmented Generation for Large Language Models: A Survey," \textit{arXiv preprint arXiv:2312.10997}, 2023. pp. 1-13
-  
-  \bibitem{sbert} N. Reimers and I. Gurevych, "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks," \textit{arXiv preprint arXiv:1908.10084}, 2019. pp. 1-11
-    
-  \bibitem{SpeculativeRAG_EnhancingRetrieval-AugmentedGenerationThroughDrafting} Z. Wang, Z. Wang, L. Le, H. S. Zheng, S. Mishra, V. Perot, Y. Zhang, A. Mattapalli, A. Taly, J. Shang, C.-Y. Lee, and T. Pfister, "Speculative RAG: Enhancing Retrieval-Augmented Generation through Drafting" \textit{arXiv preprint arXiv:2407.08223}, 2024.
-  
-  \bibitem{website_deffinition_rag} P. Miesle, "Retrieval-Augmented Generation (RAG) Explained: Understanding Key Concepts," \textit{DataStax}. Retrieved from \href{https://www.datastax.com/guides/what-is-retrieval-augmented-generation}{DataStax Guide on RAG}.
-
-  \bibitem{website_MediumGuideonRAGDatabases} M. Ali, "Optimizing RAG: A Guide to Choosing the Right Vector Database," \textit{Medium}, 2023. Retrieved from \href{https://medium.com/@mutahar789/optimizing-rag-a-guide-to-choosing-the-right-vector-database-480f71a33139}{Medium Guide on RAG Databases}.
-  
-  \bibitem{Website_CloudflareGuideonVectorInsertion}Cloudflare Docs, "Best Practices: Insert Vectors," \textit{Cloudflare}. Retrieved from \href{https://developers.cloudflare.com/vectorize/best-practices/insert-vectors/}{Cloudflare Guide on Vector Insertion}.
-  
-  \bibitem{website_AporiaGuideonVectorDatabasesforRAG} K. Kehrer, "Best Vector DBs for Retrieval Augmented Generation (RAG)," \textit{Aporia}, 2023. Retrieved from \href{https://www.aporia.com/learn/best-vector-dbs-for-retrieval-augmented-generation-rag/}{Aporia Guide on Vector Databases for RAG}.
-  
-  \bibitem{website_DatabricksGlossaryonRAG} Databricks, "Retrieval-Augmented Generation (RAG)," \textit{Databricks}. Retrieved from \href{https://www.databricks.com/glossary/retrieval-augmented-generation-rag}{Databricks Glossary on RAG}.
-  
-  \bibitem{website_MongoDBAtlasCLIDocumentation}MongoDB Docs, "Atlas CLI: Deploy Local," \textit{MongoDB}. Retrieved from \href{https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-deploy-local/}{MongoDB Atlas CLI Documentation}.
-  
-  \bibitem{website_MediumGuideonRAGwithAtlas} V. M. W. Benedict, "RAG with Atlas Vector Search and MongoDB," \textit{Medium}, 2023. Retrieved from \href{https://medium.com/@if-21062/rag-with-atlas-vector-search-mongodb-0d2420e00b64}{Medium Guide on RAG with Atlas}.
-  
-  \bibitem{website_Neo4jBlogOnLangchainVectorIndex} T. Bratanič, "Neo4j Langchain Vector Index Implementation," \textit{Neo4j}, 2023. Retrieved from \href{https://neo4j.com/developer-blog/neo4j-langchain-vector-index-implementation/}{Neo4j Blog on Langchain Vector Index}.
-  
-  \bibitem{website_PondhouseGuideOnAdvancedRAG} Pondhouse Data, "Advanced RAG: Recursive Retrieval with LlamaIndex," \textit{Pondhouse Data}, 2023. Retrieved from \href{https://www.pondhouse-data.com/blog/advanced-rag-recursive-retrieval-with-llamaindex}{Pondhouse Guide on Advanced RAG}.
-  
-  \bibitem{cite_github_solution} Grabuloski, M. (2024). *RagSystems: Retrieval-Augmented Generation Systems*. GitHub repository. Retrieved from \url{https://github.com/mgrabul/RagSystems}
+%   \end{@twocolumnfalse}
+% \vspace{2ex} 
+% ]
 
 
-\end{thebibliography}
-
-\flushleft \justifying{ \textbf {Contribution of Individual Authors to the \break Creation of a Scientific Article (Ghostwriting \break  Policy)}}
-% \par{{\color{red}
-% \noindent \textbf{Please, indicate the role and the contribution of each author:}\\ 
-% \\
-% For Example:}}
-\par{
-  \noindent 
-  {John Smith, Donald Smith carried out the simulation and the optimization.  }\break
-  George Smith has implemented the Algorithm 1.1 and 1.2 in C++.  \break
-  Maria Ivanova has organized and executed the experiments of Section 4.  \break
-  George Nikolov was responsible for the Statistics.  \break
-
-  \noindent Please visit Contributor Roles Taxonomy (CRediT) that contains several roles:
-  \href{www.wseas.org/multimedia/contributor-roleinstruction.pdf}{\color{blue}{www.wseas.org/multimedia/contributor-roleinstruction.pdf}}
-
-  \flushleft \justifying{ \textbf {Sources of Funding for Research Presented in a Scientific Article or Scientific Article Itself}}
-  % \par{{\color{red}
-  % \noindent \textbf{Report potential sources of funding if there is any}}}
-
-
-  % \flushleft \justifying{ \textbf {\hl {Alternatively, in case of no funding the following text will be published:}}}
-  \par { \noindent No funding was received for conducting this study.}
-  \break
-
-  \flushleft \justifying{ \textbf {Conflicts of Interest}}
-  % \par { \noindent {\color{red}{\textbf{Please declare anything related to this study.}}}}
-
-  % \flushleft \justifying{ \textbf{\hl {Alternatively, in case of no conflicts of interest the following text will be published:}}}
-}
-\par  \justifying{ { \noindent The authors have no conflicts of interest to \break declare that are relevant to the content of this \break  article.}}
-
-
-\flushleft \justifying{ \textbf{Creative Commons Attribution License 4.0 \break (Attribution 4.0 International , CC BY 4.0)}}
-
-\par { \noindent This article is published under the terms of the Creative Commons Attribution License 4.0\\
-\href{https://creativecommons.org/licenses/by/4.0/deed.en\_US}{\color{blue}{https://creativecommons.org/licenses/by/4.0/deed.en\break\_US}} }
-
-  
 \end{document}    

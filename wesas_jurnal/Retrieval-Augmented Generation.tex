@@ -667,7 +667,7 @@ sends the context and the question as an input to an LLM or the
 generator. The RAG-Token Model retrieves new documents on every
 generated token. Once a token is generated, the token is appended to all
 previously generated tokens and this are appended to the initial
-question. This results is a string in the following form "Question +
+question. This results in a string in the following form "Question +
 GenerateTockenList". This new string is then used again as an input in
 the RAG, or as an input for the RAG retrieved. The process retrieves new
 documents for every new generated token and uses this documents to

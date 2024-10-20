@@ -28,4 +28,5 @@
 *.out
 *.dvi
 *.toc
+*.DS_Store
 /ML-Retrieval-Augmented Generation.pdf

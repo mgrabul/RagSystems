@@ -168,7 +168,7 @@ done in three phases:
 \end{itemize}
 
 Usually phase one and two are part of retrieval and augmentation component. The 
-simplified RAG process can be seen in the figure \ref{fig:rag_system_figure}.
+simplified RAG process can be seen in the \autoref{fig:rag_system_figure}.
 
 \begin{figure}[htbp]
   \centering
@@ -243,6 +243,7 @@ This part of the system is composed of two components or modules:
 
 The idea of the storing phase is for a given text block to create
 embedding and store this embedding in the non-parametric memory.
+The process is shown in \autoref{fig:retrieval_system_storing_phase_figure}.
 
 The process is as follows:
 \begin{enumerate}
@@ -468,8 +469,8 @@ functions are contrastive loss and the triplet loss function.
 
 \paragraph{Contrastive loss function}
 
-Contrastive loss function uses the Siamese network. The training set
-elements consist of two text blocks \(A\), \(C\) where:
+Contrastive loss function uses the Siamese network, shown in \autoref{fig:contrastive_loss_function_figure}. 
+The training set elements consist of two text blocks \(A\), \(C\) where:
 
 \begin{itemize}
 
@@ -489,9 +490,11 @@ elements consist of two text blocks \(A\), \(C\) where:
 
 The networks end's with a contrastive loss function that is given with
 the following formula:
+
 \begin{equation} 
-  Loss =  \frac{1}{2} (y*D(A,C)^2 + (1-y)*max(0,m-D(A,C))^2)
+  \textstyle  Loss =  \frac{y * D(A,C)^2 + (1-y)*max(0,m-D(A,C))^2}{2} 
 \end{equation}
+
 In the previous function \(y\) can be 1 or 0. This is because the
 network can be trained on cases with similar and dissimilar embeddings.
 
@@ -515,12 +518,12 @@ network can be trained on cases with similar and dissimilar embeddings.
 Similarly to the Contrastive loss function training method, the triplet
 loss function uses a variation of the Siamese network where instead of
 two networks, three networks are used. One single test case consists of
-three text blocks: \(A\), \(P\), and \(N\). * The text block \(A\) is
-used for comparison and is called an anchor. * The text block \(P\) is
-semantically similar to \(A\) and is called the positive case. * The
-text block \(N\) is semantically different from \(A\) and \(P\) and is
-called the negative case.
-
+three text blocks: \(A\), \(P\), and \(N\). 
+\begin{itemize}
+  \item The text block \(A\) is used for comparison and is called an anchor.
+  \item The text block \(P\) is semantically similar to \(A\) and is called the positive case.
+  \item The text block \(N\) is semantically different from \(A\) and \(P\) and is called the negative case.
+\end{itemize}
 
 \begin{figure}[htbp]
   \centering
@@ -531,13 +534,18 @@ called the negative case.
 
 This Siamese network ends with a triplet distance activation function.
 The function calculates the distance \(D(A,P)\) \(D(A,N)\) and is
-activated if \(D(A,P)\) \textgreater{} \(D(A,N) + margin\). The
-triplet function from the perspective of the Sentence embedder model is
-a Loss function and its output is used for training. 
+activated when:
+\begin{equation}
+  D(A,P) \textgreater{} D(A,N) + margin
+\end{equation}
+
+The activation function from the perspective of the Sentence embedder model is
+a Loss function, triplet loss function (\autoref{eq:efficiency_score}), and its output is used for training \cite{sbert}. 
 
 \begin{equation}
   Loss = max(0, D(A,P) - D(A,N) + margin) 
-\end{equation}\cite{sbert}
+  \label{eq:triplet_loss_function}
+\end{equation}
 
 Generally the function does the following:
 \begin{itemize}
@@ -628,8 +636,8 @@ from the retrieved data. The data now is re-ranked and compressed, cleaned up.
 This type of architecture tries to split the system in to more modules
 that can be independently scaled and optimized. Example: Query
 Processing Module, Retriever, Re-ranking, Context Management, Generation
-Module.
-\cite{Retrieval-Augmented_Generation_for_Large_Language_Models:_A_Survey}
+Module \cite{Retrieval-Augmented_Generation_for_Large_Language_Models:_A_Survey}.
+
 \subsection{Different RAG methods and
 models}
 
@@ -639,8 +647,8 @@ This type of RAG retrieves \(k\) embeddings, but unlike the standard RAG
 implementation it does not use all the embeddings at the same time to
 generate the answer. Before returning a token, the next token is
 generated \(k\) times, meaning for every embedding one token is
-generated. Then the token with the highest probability is returned. This
-is done for every token.
+generated. Then the token with the highest probability is returned. This 
+process is repeated for every token.
 
 \emph{The RAG-Sequence model uses the same retrieved document to
 generate the complete sequence. Technically, it treats the retrieved
@@ -648,37 +656,37 @@ document as a single latent variable that is marginalized to get the
 seq2seq probability p(y\textbar x) via a top-K approximation.
 Concretely, the top K documents are retrieved using the retriever, and
 the generator produces the output sequence probability for each
-document, which are then marginalized} \cite{Retrieval_Augmented_Generation_(RAG)_Explained_Understanding_Key_Concepts}
+document, which are then marginalized} \cite{Retrieval_Augmented_Generation_(RAG)_Explained_Understanding_Key_Concepts}.
 
 \subsubsection{RAG-Token Model}
 
 Interesting research has been done using the so-called \emph{RAG-Token
 Model} \cite{Retrieval_Augmented_Generation_(RAG)_Explained_Understanding_Key_Concepts}. The RAG technique described, initially retrieves \(k\) documents
-related to the question then augments the context of the question and
+related to the question then augments, creates context for the question and
 sends the context and the question as an input to an LLM or the
 generator. The RAG-Token Model retrieves new documents on every
 generated token. Once a token is generated, the token is appended to all
 previously generated tokens and this are appended to the initial
-question. This results in a string of the following form "Question +
+question. This results is a string in the following form "Question +
 GenerateTockenList". This new string is then used again as an input in
 the RAG, or as an input for the RAG retrieved. The process retrieves new
 documents for every new generated token and uses this documents to
 generate the next token. This makes sure that every new generated token
 is equally dependent on the question and the non-parametric memory.
 
-\emph{RAG-Token Model, In the RAG-Token model we can draw a different
+\emph{RAG-Token Model, in the RAG-Token model we can draw a different
 latent document for each target token and marginalize accordingly. This
 allows the generator to choose content from several documents when
 producing an answer. Concretely, the top $K$ documents are retrieved using
 the retriever, and then the generator produces a distribution for the
 next output token for each document, before marginalizing, and repeating
 the process with the following output token}
-\cite{Retrieval_Augmented_Generation_(RAG)_Explained_Understanding_Key_Concepts}
+\cite{Retrieval_Augmented_Generation_(RAG)_Explained_Understanding_Key_Concepts}.
 
 \subsection{Iterative RAG}
 
-One example is the "Speculative RAG" described in the paper \cite{SpeculativeRAG_EnhancingRetrieval-AugmentedGenerationThroughDrafting}
-by (Wang 2024). Based on the question it retrieves \(N\) embeddings. The
+One example is the "Speculative RAG" described in the paper \cite{SpeculativeRAG_EnhancingRetrieval-AugmentedGenerationThroughDrafting}. 
+Based on the question it retrieves \(N\) embeddings. The
 embeddings are then clustered in \(k\) classes using $K-means$. From the
 \(k\) clusters one embedding is selected per cluster, resulting in $k$
 embeddings. Then the algorithm uses two LLMs so called a drafter and a
@@ -699,6 +707,7 @@ formula:
 
 \begin{equation}
   P_{sc} = P(A,B \mid Q) = P(A \mid Q) \cdot P(B \mid Q, A)
+  \label{eq:self_consistency_score}
 \end{equation}
   
 Where:
@@ -708,17 +717,17 @@ Where:
   \item \( Q \) is the question
 \end{itemize}
 
-The value can be retreated from the LLM. It simply says what is the
+The simple interpretation of \autoref{eq:self_consistency_score} is the
 probability that the answer been generated based on the question and the
 probability that the rational is generated based on the question and the
-answer.
+answer. The probability are calculated by the LLM. 
 
 \subsubsection{Self-reflection score}
 
-It tries to determine if the rational sports the answer. For this a new
-question R can be formed: Does the rational $A$ sports the answer
+It tries to determine if the rational supports the answer (\autoref{eq:self_reflection_score}). For this a new
+question $R$ can be formed: Does the rational $A$ sports the answer
 $B$ for the question $Q$? The new question is called a
-self-reflected statement and denoted with $R$. Then the probability of Yes
+self-reflected statement and denoted with $R$. Then the probability of $Yes$
 been generated from the LLM is measured. In general, the self-reflection
 score is the conditional probability of $Yes$ been generated by the
 LLM given the input of a question $Q$, answer $A$, rational $B$ and self
@@ -727,7 +736,8 @@ reflected statement $R$.
 Self-reflection score: 
 
 \begin{equation}
-  P_{sr} = P("Yes"|Q, A, B, R)  
+  P_{sr} = P("Yes"|Q, A, B, R)
+  \label{eq:self_reflection_score}  
 \end{equation}
 
 The process is repeated for all the clusters, and a \(p_{sr}*p_{sc}\) is
@@ -746,9 +756,9 @@ starts examine the semantically similar documents not only of the
 question but also of the embeddings that are initially retrieved. With
 this it tries to capture all the relevant information. The previous is
 described in the paper from (Karpukhin et al.~2020; Pondhouse Data, no
-date) \cite{website_PondhouseGuideOnAdvancedRAG} 
+date) \cite{website_PondhouseGuideOnAdvancedRAG} .
 % \section{Dense Passage Retrieval (DPR)}
- not inculded
+%  not included
   % \bibitem{cite17} V. Karpukhin, B. Oguz, S. Min, P. Lewis, L. Wu, S. Edunov, D. Chen, and W. Yih, "Dense Passage Retrieval for Open-Domain Question Answering," \textit{arXiv preprint arXiv:2004.04906}, 2020.
 
 
@@ -756,7 +766,7 @@ date) \cite{website_PondhouseGuideOnAdvancedRAG}
 
 In this research, a simple RAG system will be coded. The system will be
 flexible and modular enough so can use different LLMS as generators. The
-system will have a Retriever that will be able to create embeddings
+system will have a retriever that will be able to create embeddings
 based on sentences and also on paragraphs. The retriever will also
 retrieve embeddings based on a question/query. All the chosen LLMs and
 their corresponding RAGs will be asked three different type of Open-domain
@@ -886,16 +896,12 @@ retrieval:
 \subsection{RAG solution}
 
 The RAG system will be a manual solution, not an existing RAG system.
-The idea is to show that even a simple RAG system can extend the
+The idea is to explore how even a simple RAG system can extend the
 capabilities of the LLM.
 
 \subsubsection{Sentence Embedder}
 
-For sentence embedder a SBART based embedder will be used:
-
-\begin{verbatim}
-sentence_transformers import SentenceTransformer
-\end{verbatim}
+For sentence embedder a SBART based embedder will be used.
 
 \subsubsection{Non-Parametric library}
 
@@ -922,7 +928,7 @@ run locally on the pc. The chosen hardware is a m3 processor with 36GB
 of RAM.
 
 \subsection{System architecture}
-The architecture of the RAG developed solution for testing the LLMs can be seen in the Figure \ref{fig:rag_system_diagram_figure}. 
+The architecture of the RAG developed solution for testing the LLMs can be seen in the \autoref{fig:rag_system_diagram_figure}. 
 Where the important processes are numerated and described in the following list: 
 
 \begin{enumerate}
@@ -1009,7 +1015,9 @@ the \texttt{facebook/blenderbot-90M} they all generated grammatically
 correct sentences. Concerning the RAG answers, all of them generated a
 correct RAG answer except the \texttt{facebook/blenderbot-90M}. This is
 an amazing result since without any additional training or tuning, the
-models when using a RAG approach were able to generate a correct answer.
+models when using a RAG approach were able to generate an answer that 
+contained the correct information. The answer lacks structure and provides 
+additional information the is not required. This is because of the nature of the causal models.
 Taking in to consideration the parameters the smallest model that give a
 correct answer was GPT2 with 90M.
 
@@ -1017,8 +1025,8 @@ correct answer was GPT2 with 90M.
 \subsubsection{QA Models}
 
 \begin{table*}[htbp]
-  \caption{Fact-based question, single sentence retrieval, question answering models. "How tall is the Pyramid of Giza?"} % Optional caption
   \centering
+  \caption{Fact-based question, single sentence retrieval, question answering models. "How tall is the Pyramid of Giza?"} % Optional caption
   \label{tab:experiment_R_1_sentence_Q_fact_M_question_answering_table}  % Adding label for referencing  
     \begin{tabular}{|p{0.2\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
       \hline
@@ -1048,16 +1056,15 @@ wrong for every model.
     t5-large\_770M & False & 140 meters (481 feet) \\ \hline
   \end{tabular}
 \end{table}
-The results of the T5 conversational models for the experiment of the 
-current section are shown in Table \ref{tab:experiment_R_1_sentence_Q_fact_M_T5_table}.
-The T5 models RAG generated answer is also correct for all the models.
-At this point they perform the quality of the answer is on the same
-level of the QA models and Casual models. But the models a bigger than
-the QA models.
 
-% TODO perhaps add experiment conclusion
-\textbf{Conclusion:}
-Given the size of the models the QA models are most
+The results of the T5 conversational models this experiment can be seen in 
+Table \ref{tab:experiment_R_1_sentence_Q_fact_M_T5_table}.
+The T5 models RAG generated answer is correct for the T5-base model and partially correct
+for the T5-large model. The T5-large model answered correctly in feet but not in meters.
+
+
+\textbf{Summary:}
+Given the size of the models and the accuracy of the answers the QA models are most
 appropriate for answering Fact-based Question.
 
 
@@ -1072,9 +1079,9 @@ Great Wall of China?'. The experiment parameters are as follows:
 
 \begin{itemize}
 \item
-  \textbf{Question Type}: List-based Question
+  \textbf{Question Type}: List-based Questions
 \item
-  \textbf{Question}: "What materials were used in constructing the Great Wall of China?"''"
+  \textbf{Question}: "What materials were used in constructing the Great Wall of China?"
 \item
   \textbf{Retrieval Type}: Sentence retrieval
 \item
@@ -1082,8 +1089,6 @@ Great Wall of China?'. The experiment parameters are as follows:
 \end{itemize}
 
 \subsubsection{Causal Models}
-
-% TODO REFERENCE TABLE IN TEXT
 
 %  moved to the end of the document
 \begin{table*}[htbp]
@@ -1107,9 +1112,8 @@ are documented in Table \ref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_
 In all cases, the causal models generated incorrect or irrelevant LLM
 answers. The RAG approach, however, performed significantly better, with
 all models providing correct information about the materials used in
-constructing the Great Wall of China. This demonstrates the
-effectiveness of RAG in generating accurate answers even when the base
-model's output is flawed.
+constructing the Great Wall of China. Because of the casual LLM model's nature the given answer
+of the RAG approach, contains additional not needed info.
 
 \subsubsection{QA Models}
 
@@ -1145,8 +1149,8 @@ accurate information.
 \begin{table*}[htbp]
   \centering
   % TODO Table not referenced
-  \label{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_T5Models_table} 
   \caption{List based question, single sentence retrieval, T5 conversational models. "What materials were used in constructing the Great Wall of China?"} % Optional caption
+  \label{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_T5Models_table} 
   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
     \hline
     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
@@ -1165,7 +1169,7 @@ inaccurate or non-informative, further highlighting the importance of
 RAG in ensuring accurate output.
 
 % perhaps a subsection 
-\textbf{Conclusion:}
+\textbf{Summary:}
 
 Given the size of the models the QA models are most appropriate for
 answering List-based Question.
@@ -1247,8 +1251,8 @@ presented.
 
 
 \begin{table*}[htbp]
-  \caption{Fact based question, single paragraph retrieval, T5 conversational models. "How tall is the Pyramid of Giza?"} % Optional caption
   \centering
+  \caption{Fact based question, single paragraph retrieval, T5 conversational models. "How tall is the Pyramid of Giza?"} % Optional caption
   \label{tab:experiment_R_1_paragraph_Q_fact_M_T5Models_table}
   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
     \hline
@@ -1266,7 +1270,7 @@ consistently providing the correct height of the Pyramid of Giza. As
 seen in previous experiments, the direct LLM answers were inaccurate,
 underscoring the importance of using RAG for accurate outputs.
 
-\textbf{Conclusion:}
+\textbf{Summary:}
 
 The QA models and T5 models were particularly efficient, consistently
 providing the correct height of the Pyramid of Giza. Given the size of
@@ -1335,8 +1339,8 @@ used in the construction of the Great Wall of China.
 
 \begin{table*}[htbp]
   \centering
-  \label{tab:experiment_R_1_paragraph_Q_listBased_M_QaModels_table}  % Adding label for referencing
   \caption{List based question, single paragraph retrieval, question answering models. "What materials were used in constructing the Great Wall of China?"} % Optional caption
+  \label{tab:experiment_R_1_paragraph_Q_listBased_M_QaModels_table}  % Adding label for referencing
   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
     \hline
     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
@@ -1363,8 +1367,8 @@ information.
 
 \begin{table*}[htbp]
   \centering
-  \label{tab:experiment_R_1_paragraph_Q_listBased_M_T5Models_table}  % Adding label for referencing
   \caption{List based question, single paragraph retrieval, T5 conversational models. "What materials were used in constructing the Great Wall of China?"}
+  \label{tab:experiment_R_1_paragraph_Q_listBased_M_T5Models_table}  % Adding label for referencing
   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
     \hline
     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
@@ -1387,7 +1391,8 @@ Wall of China. Similar to other models, the direct LLM answers were
 inaccurate or non-informative, but the RAG system ensured accurate
 output.
 
-\textbf{Conclusion:}
+\textbf{Summary:}
+
 
 The QA models proved to be the most efficient for answering list-based
 questions with paragraph retrievals. Their performance in generating
@@ -1468,11 +1473,10 @@ best choice for complex synthesis-based questions.
 
 \subsubsection{QA Models}
 
-% REFERENCE TABLE IN TEXT
 \begin{table*}[htbp]
   \centering
-  \label{tab:experiment_R_3_paragraph_Q_synthesis_M_QaModels_table}  % Adding label for referencing
   \caption{Synthesis based question, three paragraph retrieval, question answering models. "Which famous structures, both designed or structurally influenced by Gustave Eiffel?"} % Optional caption
+  \label{tab:experiment_R_3_paragraph_Q_synthesis_M_QaModels_table}  % Adding label for referencing
   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
     \hline
     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
@@ -1500,8 +1504,8 @@ challenging for these models.
 % Referece table in text
 \begin{table*}[htbp]
   \centering
-  \label{tab:experiment_R_3_paragraph_Q_synthesis_M_T5Models_table}  % Adding label for referencing
   \caption{Synthesis based question, three paragraph retrieval, T5 Models} % Optional caption
+  \label{tab:experiment_R_3_paragraph_Q_synthesis_M_T5Models_table}  % Adding label for referencing
   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
     \hline
     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
@@ -1522,7 +1526,7 @@ Tower and the Statue of Liberty as structures associated with Gustave
 Eiffel. This highlights the potential of T5 models in synthesis-based
 tasks, especially when more complex reasoning is required.
 
-\textbf{Conclusion:}
+\textbf{Summary:}
 
 For synthesis-based questions, the T5 models, particularly the larger
 variant, demonstrated the most potential in the RAG approach,
@@ -1532,6 +1536,262 @@ struggled with the complexity of synthesizing information from multiple
 documents. The causal models, even with RAG, were not able to handle
 this task effectively. Therefore, T5 models are the best choice for
 RAG-based solutions when dealing with synthesis-based questions.
+
+\subsection{Summary on performance}
+% todo contue here
+In terms of answer quality, the answers can be categorized in four groups, incorrect, partial, over information correct.
+Partial answer, would be an answer that does not provide some but not all necessarily information to answer the question
+also answers that are truncated or sentences not fully articulated will fall in this category. Over-information
+is a correct answer that contains additional or repeatable information that is not required for the question. 
+The answer quality alongside the model's speed and size in parameters can be observed in the tables 
+\autoref{tab:experiment1_model_performance_full_with_size}, \autoref{tab:experiment2_model_performance_full_with_size}, 
+\autoref{tab:experiment3_model_performance_full_with_size}, \autoref{tab:experiment4_model_performance_full_with_size},
+\autoref{tab:experiment5_model_performance_full_with_size} for each experiment. In terms of answer quality overall in all categoris
+the T5-models performed the best. In terms of measurable performance several interesting conclusions can be derived from the data. 
+For the purpose of comparing performance, simple efficiency score can be defined as:
+\begin{equation}
+  Efficiency Score = \frac{Normalized Speed}{Normalized Parameters}
+  \label{eq:efficiency_score}
+\end{equation}
+
+The normalized speed and normalized parameters are calculated based on the maximum speed and the maximum number of parameters across all experiments.
+Bigger numbers in \autoref{eq:efficiency_score} indicate better performance. Base on this formula average efficiency scores can be calculated for each model across all experiments. 
+The results can be seen in \autoref{tab:model_efficiency_scores}. The `EleutherAI/gpt-neo-1.3B` model has the highest average efficiency score. 
+This model performed well only in the first experiment, where the augmentation context was one sentence with fact based question.
+The GPT model family performed quite well in terms of efficiency. They struggled mostly in the synthesis based question, and have the issue of providing
+over-information in some cases. Given the efficiency the GPT models can become a candidate for a RAG system after additional training and fine-tuning.
+The T5-models performed the best in terms of answer quality, but they were not the most efficient they are somewhere in the middle in the table. 
+When considering the absolute average speed of answer, 1.2 and 3.5 seconds for the two T5-models, they are still quite fast. Without additional fine-tuning
+they can be used in a RAG system. \textbf{For comparison the expected response time of OpenAI's GPT-4o model is 1-3 seconds for a medium to short answers}.
+The QA models in terms of efficiency performed the worse, but had a good answer quality and the overall absolute time of response was quite fast with an 
+average from 0.1 to 0.9 seconds. Main issue with the tested QA models is that their answers on the synthesis based question
+have tendency to be partial or incorrect. They only focus and return the most probable sequence of characters in the context that satisfies an answer to the question. 
+
+When comparing the LLM answer time to the RAG answer time, two tasks need to be measured. The time to retrieve of the context and the time to generate the answer.
+The time to retrieve the context depends on the parametric memory index, parametric memory size and number of retrievals. 
+The time to generate the answer depends on the model, bigger models need more time to generate the answer and the size of the question and context, 
+where bigger context and question need more time to generate the answer. The average response time of the LLM models was 5.6 seconds over all experiments.
+The average response time of the RAG for the experiments is:
+\begin{itemize}
+  \item Experiment 1: 4.2 seconds
+  \item Experiment 2: 4.2 seconds
+  \item Experiment 3: 6.2 seconds
+  \item Experiment 4: 6.0 seconds
+  \item Experiment 5: 9.1 seconds
+\end{itemize}
+
+The context in experiments starting from experiment 1 to experiment 5 was increased. Experiment 1 and 2 have a context of one sentence, experiment 3 and 4 have a context of one paragraph and experiment 5 has a context of three paragraphs.
+This data indicates that as stated before the time to response in a RAG system depends on the context size.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Model Size and Efficiency Score} % Optional caption
+  \label{tab:model_efficiency_scores}  % Adding label for referencing
+  \begin{tabular}
+    {|p{0.4\linewidth}|p{0.25\linewidth}|p{0.2\linewidth}|}
+    \hline
+    \textbf{Model Name} & \textbf{Model Size (in parameters)} & \textbf{Efficiency Score} \\
+    \hline
+    EleutherAI/gpt-neo-125M & 12.5 & 1.135 \\
+    \hline
+    gpt2 & 12.4 & 1.079 \\
+    \hline
+    facebook/blenderbot-90M & 9 & 0.886 \\
+    \hline
+    gpt2-medium & 35.5 & 0.885 \\
+    \hline
+    gpt2-large & 76.2 & 0.694 \\
+    \hline
+    EleutherAI/gpt-neo-1.3B & 130 & 0.681 \\
+    \hline
+    t5-base & 22 & 0.200 \\
+    \hline
+    t5-large & 77 & 0.160 \\
+    \hline
+    deepset/roberta-base-squad2 & 12.5 & 0.095 \\
+    \hline
+    bert-large-uncased-whole-word-masking-finetuned-squad & 34 & 0.094 \\
+    \hline
+    distilbert-base-uncased-distilled-squad & 6.6 & 0.089 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+
+\begin{table*}[htbp]
+  \centering
+  \caption{Experiment 1, Model Performance with Sizes in Parameters} % Optional caption
+  \label{tab:experiment1_model_performance_full_with_size}  % Adding label for referencing
+  \resizebox{\textwidth}{!}{  % Resizes the table to fit the page width
+  \begin{tabular}{|p{0.18\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.12\linewidth}|}
+    \hline
+    \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
+    \hline
+    facebook/blenderbot-90M & casual\_model & Incorrect & 1.39 & 1.63 & 90M \\
+    \hline
+    gpt2 & casual\_model & Over Information & 3.59 & 2.75 & 124M \\
+    \hline
+    EleutherAI/gpt-neo-125M & casual\_model & Partial & 3.54 & 2.79 & 125M \\
+    \hline
+    gpt2-medium & casual\_model & Partial & 9.36 & 6.03 & 355M \\
+    \hline
+    gpt2-large & casual\_model & Correct & 17.03 & 10.47 & 762M \\
+    \hline
+    EleutherAI/gpt-neo-1.3B & casual\_model & Partial & 20.68 & 19.14 & 1.3B \\
+    \hline
+    distilbert-base-uncased-distilled-squad & qa\_model & Correct & 0.22 & 0.09 & 66M \\
+    \hline
+    deepset/roberta-base-squad2 & qa\_model & Correct & 0.49 & 0.17 & 125M \\
+    \hline
+    bert-large-uncased-whole-word-masking-finetuned-squad & qa\_model & Correct & 1.26 & 0.45 & 340M \\
+    \hline
+    t5-base & t5\_model & Correct & 1.17 & 0.90 & 220M \\
+    \hline
+    t5-large & t5\_model & Partial & 3.40 & 1.83 & 770M \\
+    \hline
+  \end{tabular}
+  }
+\end{table*}
+
+\begin{table*}[htbp]
+  \centering
+  \caption{Experiment 2, Model Performance with Sizes in Parameters} % Optional caption
+  \label{tab:experiment2_model_performance_full_with_size}  % Adding label for referencing
+  \resizebox{\textwidth}{!}{  % Resizes the table to fit the page width
+  \begin{tabular}{|p{0.18\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.12\linewidth}|}
+    \hline
+    \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
+    \hline
+    facebook/blenderbot-90M & casual\_model & Incorrect & 1.39 & 1.63 & 90M \\
+    \hline
+    gpt2 & casual\_model & Partial & 3.59 & 2.75 & 124M \\
+    \hline
+    EleutherAI/gpt-neo-125M & casual\_model & Incorrect & 3.54 & 2.79 & 125M \\
+    \hline
+    gpt2-medium & casual\_model & Partial & 9.36 & 6.03 & 355M \\
+    \hline
+    gpt2-large & casual\_model & Partial & 17.03 & 10.47 & 762M \\
+    \hline
+    EleutherAI/gpt-neo-1.3B & casual\_model & Partial & 20.68 & 19.14 & 1.3B \\
+    \hline
+    distilbert-base-uncased-distilled-squad & qa\_model & Partial & 0.22 & 0.09 & 66M \\
+    \hline
+    deepset/roberta-base-squad2 & qa\_model & Correct & 0.49 & 0.17 & 125M \\
+    \hline
+    bert-large-uncased-whole-word-masking-finetuned-squad & qa\_model & Correct & 1.26 & 0.45 & 340M \\
+    \hline
+    t5-base & t5\_model & Correct & 1.17 & 0.90 & 220M \\
+    \hline
+    t5-large & t5\_model & Correct & 3.40 & 1.83 & 770M \\
+    \hline
+  \end{tabular}
+  }
+\end{table*}
+
+\begin{table*}[htbp]
+  \centering
+  \caption{Experiment 3, Model Performance with Sizes in Parameters} % Optional caption
+  \label{tab:experiment3_model_performance_full_with_size}  % Adding label for referencing
+  \resizebox{\textwidth}{!}{  % Resizes the table to fit the page width
+  \begin{tabular}{|p{0.16\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|}
+    \hline
+    \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
+    \hline
+    facebook/blenderbot-90M & casual\_model & Incorrect & 1.69 & 2.20 & 90M \\
+    \hline
+    gpt2 & casual\_model & Incorrect & 3.70 & 3.67 & 124M \\
+    \hline
+    EleutherAI/gpt-neo-125M & casual\_model & Incorrect & 3.68 & 4.19 & 125M \\
+    \hline
+    gpt2-medium & casual\_model & Over Information & 8.95 & 8.65 & 355M \\
+    \hline
+    gpt2-large & casual\_model & Over Information & 16.52 & 15.63 & 762M \\
+    \hline
+    EleutherAI/gpt-neo-1.3B & casual\_model & Incorrect & 21.88 & 27.92 & 1.3B \\
+    \hline
+    distilbert-base-uncased-distilled-squad & qa\_model & Correct & 0.16 & 0.18 & 66M \\
+    \hline
+    deepset/roberta-base-squad2 & qa\_model & Correct & 0.32 & 0.35 & 125M \\
+    \hline
+    bert-large-uncased-whole-word-masking-finetuned-squad & qa\_model & Correct & 1.29 & 1.12 & 340M \\
+    \hline
+    t5-base & t5\_model & Correct & 1.33 & 1.54 & 220M \\
+    \hline
+    t5-large & t5\_model & Correct & 3.66 & 3.38 & 770M \\
+    \hline
+  \end{tabular}
+  }
+\end{table*}
+
+\begin{table*}[htbp]
+  \centering
+  \caption{Experiment 4, Model Performance with Sizes in Parameters} % Optional caption
+  \label{tab:experiment4_model_performance_full_with_size}  % Adding label for referencing
+  \resizebox{\textwidth}{!}{  % Resizes the table to fit the page width
+  \begin{tabular}{|p{0.18\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.13\linewidth}|p{0.13\linewidth}|}
+    \hline
+    \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
+    \hline
+    facebook/blenderbot-90M & casual\_model & Incorrect & 2.09 & 2.78 & 90M \\
+    \hline
+    gpt2 & casual\_model & Over Information & 4.11 & 4.32 & 124M \\
+    \hline
+    EleutherAI/gpt-neo-125M & casual\_model & Incorrect & 4.66 & 4.51 & 125M \\
+    \hline
+    gpt2-medium & casual\_model & Over Information & 10.92 & 10.45 & 355M \\
+    \hline
+    gpt2-large & casual\_model & Over Information & 17.46 & 14.16 & 762M \\
+    \hline
+    EleutherAI/gpt-neo-1.3B & casual\_model & Over Information & 19.06 & 22.33 & 1.3B \\
+    \hline
+    distilbert-base-uncased-distilled-squad & qa\_model & Correct & 0.19 & 0.17 & 66M \\
+    \hline
+    deepset/roberta-base-squad2 & qa\_model & Correct & 0.55 & 0.30 & 125M \\
+    \hline
+    bert-large-uncased-whole-word-masking-finetuned-squad & qa\_model & Correct & 1.40 & 0.86 & 340M \\
+    \hline
+    t5-base & t5\_model & Correct & 1.16 & 1.41 & 220M \\
+    \hline
+    t5-large & t5\_model & Correct & 3.59 & 4.72 & 770M \\
+    \hline
+  \end{tabular}
+  }
+\end{table*}
+
+\begin{table*}[htbp]
+  \centering
+  \caption{Experiment 5, Model Performance with Sizes in Parameters} % Optional caption
+  \label{tab:experiment5_model_performance_full_with_size}  % Adding label for referencing
+  \resizebox{\textwidth}{!}{  % Resizes the table to fit the page width
+  \begin{tabular}{|p{0.16\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|}
+    \hline
+    \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
+    \hline
+    facebook/blenderbot-90M & casual\_model & Incorrect & 2.19 & 3.09 & 90M \\
+    \hline
+    gpt2 & casual\_model & Incorrect & 4.96 & 5.57 & 124M \\
+    \hline
+    EleutherAI/gpt-neo-125M & casual\_model & Incorrect & 4.14 & 5.92 & 125M \\
+    \hline
+    gpt2-medium & casual\_model & Incorrect & 9.49 & 13.54 & 355M \\
+    \hline
+    gpt2-large & casual\_model & Incorrect & 18.67 & 24.57 & 762M \\
+    \hline
+    EleutherAI/gpt-neo-1.3B & casual\_model & Incorrect & 18.41 & 37.47 & 1.3B \\
+    \hline
+    distilbert-base-uncased-distilled-squad & qa\_model & Partial & 0.14 & 0.31 & 66M \\
+    \hline
+    deepset/roberta-base-squad2 & qa\_model & Incorrect & 0.38 & 0.71 & 125M \\
+    \hline
+    bert-large-uncased-whole-word-masking-finetuned-squad & qa\_model & Partial & 0.92 & 1.70 & 340M \\
+    \hline
+    t5-base & t5\_model & Partial & 0.99 & 1.53 & 220M \\
+    \hline
+    t5-large & t5\_model & Correct & 3.56 & 5.78 & 770M \\
+    \hline
+  \end{tabular}
+  }
+\end{table*}
 
 
 \section{Conclusion}
@@ -1574,7 +1834,24 @@ explicitly written, with no pronouns or ambiguous references. In case of
 the T5 models they will perform better than QA in a more complex text
 scenarios, these models are capable of understanding and synthesizing
 information. The t5-large\_770M given the size and performance would be
-a good candidate more general RAG solution.
+a good candidate more general RAG solution. 
+
+When considering a self-hosted production RAG system the T-5 models 
+are solid candidate. Using designing a horizontal scalable system with
+multiple T-5 model nodes and distributed parametric memory index would be
+a feasible solution.
+
+In most industries and businesses, data privacy is a concern. However,
+if the data is not sensitive, or privacy is not a concern, cloud-based,
+already provided LLMs as a service, like OpenAI's GPT-4o model can be used.
+
+In conclusion, the main challenge in designing a RAG (Retrieval-Augmented Generation) 
+system is not the LLM (Large Language Model) itself, but the process of creating the context. 
+If the context does not contain all the information required to answer the question, 
+the model will be unable to provide an accurate response. On the other hand, as shown in this paper, 
+if the context is too large, the model's response time will be slower. Research and advancements 
+in information retrieval aimed at creating the minimum required context for a question are crucial 
+for the development of RAG systems and the broader field of AI.
 
 In summary, RAG systems provide a scalable, distributive, and
 cost-efficient solution to enhance the capabilities of LLMs, addressing
@@ -1583,128 +1860,6 @@ for excessively large and complex models.
 
 \flushleft \par{\textit {Acknowledgment:}}\\
 It is an optional section where the authors may write a short text on what should be acknowledged regarding their manuscript.
-
-
-% \begin{enumerate}
-% \def\labelenumi{\arabic{enumi}.}
-% \begin{thebibliography}{9}
-% \bibitem{cite1} Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., \& Polosukhin, I. (2017). Attention Is All You Need. Retrieved from \url{https://arxiv.org/pdf/1706.03762}
-% \bibitem{cite2} 
-%   Douze, M., Guzhva, A., Deng, C., Johnson, J., Szilvasy, G., Mazaré,
-%   P-E., Lomeli, M., Hosseini, L., \& Jégou, H. (2024). The Faiss
-%   Library. Retrieved from \url{https://arxiv.org/pdf/2401.08281}
-% \bibitem{cite3} 
-%   Lewis, P., Yih, W., Rocktäschel, T., \& Riedel, S. (2020).
-%   Retrieval-Augmented Generation (RAG) Explained: Understanding Key
-%   Concepts. Retrieved from \url{https://arxiv.org/pdf/2005.11401v4}
-% \bibitem{cite4} 
-%   Gao, Y., Xiong, Y., Gao, X., Jia, K., Pan, J., Bi, Y., Dai, Y., Sun,
-%   J., Guo, Q., Wang, M., \& Wang, H. (2023). Retrieval-Augmented
-%   Generation for Large Language Models: A Survey. Retrieved from
-%   \url{https://arxiv.org/pdf/2312.10997}
-% \bibitem{sbert} 
-%   Reimers, N., \& Gurevych, I. (2019). Sentence-BERT: Sentence
-%   Embeddings using Siamese BERT-Networks. Retrieved from
-%   \url{https://arxiv.org/pdf/1908.10084}
-% \bibitem{website_deffinition_rag} 
-%   Miesle, P. (no date). Retrieval-augmented Generation (RAG) Explained:
-%   Understanding Key Concepts. DataStax. Retrieved from
-%   \url{https://www.datastax.com/guides/what-is-retrieval-augmented-generation}
-% \bibitem{Website_NexocodeGuideonRAGLLMs} 
-%   Owczarek, D. (2023). The Comprehensive Guide to Retrieval Augmented
-%   Generation LLMs: Transforming Data into Knowledge. Nexocode. Retrieved
-%   from
-%   \url{https://nexocode.com/blog/posts/retrieval-augmented-generation-rag-llms}
-% \bibitem{website_ImplementGuideonRAGSystems} 
-%   Alkestrup, J., \& Purup, N. S. (n.d.). Building high-quality RAG
-%   systems. Implement Consulting Group. Retrieved from
-%   \url{https://implementconsultinggroup.com/article/building-high-quality-rag-systems}
-% \bibitem{website_MediumGuideonRAGDatabases} 
-%   Ali, M. (2023). Optimizing RAG: A Guide to Choosing the Right Vector
-%   Database. Medium. Retrieved from
-%   \href{https://medium.com/@mutahar789/optimizing-rag-a-guide-to-choosing-the-right-vector-database-480f71a33139}{https://medium.com/@mutahar789/optimizing-rag-a-guide-to-choosing-the-right-vector-database-480f71a33139}
-% \bibitem{Website_CloudflareGuideonVectorInsertion}
-%   Cloudflare Docs. no date. Best Practices: Insert Vectors. Retrieved
-%   from
-%   \url{https://developers.cloudflare.com/vectorize/best-practices/insert-vectors/}
-% \bibitem{website_AporiaGuideonVectorDatabasesforRAG} 
-%   Kehrer, K. (2023). Best Vector DBs for Retrieval Augmented Generation
-%   (RAG). Aporia. Retrieved from
-%   \url{https://www.aporia.com/learn/best-vector-dbs-for-retrieval-augmented-generation-rag/}
-% \bibitem{website_DatabricksGlossaryonRAG} 
-%   Databricks. (n.d.). Retrieval-Augmented Generation (RAG). Retrieved
-%   from
-%   \url{https://www.databricks.com/glossary/retrieval-augmented-generation-rag}
-% \bibitem{cite13}
-%   MongoDB Docs. (n.d.). Atlas CLI: Deploy Local. Retrieved from
-%   \url{https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-deploy-local/}
-% \bibitem{website_MediumGuideonRAGwithAtlas}
-%   Benedict, V. M. W. (2023). RAG with Atlas Vector Search and MongoDB.
-%   Medium. Retrieved from
-%   \href{https://medium.com/@if-21062/rag-with-atlas-vector-search-mongodb-0d2420e00b64}{https://medium.com/@if-21062/rag-with-atlas-vector-search-mongodb-0d2420e00b64}
-% \bibitem{website_Neo4jBlogOnLangchainVectorIndex}
-%   Bratanič, T. (2023). Neo4j Langchain Vector Index Implementation.
-%   Neo4j. Retrieved from
-%   \url{https://neo4j.com/developer-blog/neo4j-langchain-vector-index-implementation/}
-% \bibitem{website_PondhouseGuideOnAdvancedRAG}
-%   Pondhouse Data. (2023). Advanced RAG: Recursive Retrieval with
-%   llamaindex. Retrieved from
-%   \url{https://www.pondhouse-data.com/blog/advanced-rag-recursive-retrieval-with-llamaindex}
-% \bibitem{cite17}
-%   Karpukhin, V., Oguz, B., Min, S., Lewis, P., Wu, L., Edunov, S., Chen,
-%   D., \& Yih, W. (2020). Dense Passage Retrieval for Open-Domain
-%   Question Answering. Retrieved from
-%   \url{https://arxiv.org/pdf/2004.04906}
-% \bibitem{SpeculativeRAG_EnhancingRetrieval-AugmentedGenerationThroughDrafting}
-%   Wang, Z., Wang, Z., Le, L., Zheng, H. S., Mishra, S., Perot, V.,
-%   Zhang, Y., Mattapalli, A., Taly, A., Shang, J., Lee, C-Y., \& Pfister,
-%   T. (2024). Speculative RAG: Enhancing Retrieval Augmented Generation
-%   through Drafting. Retrieved from
-%   \url{https://arxiv.org/pdf/2407.08223}
-
-% \end{thebibliography}
-
-% \end{document}    
-
-% \begin{thebibliography}{9}
-
-%   \bibitem{cite1} A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, Ł. Kaiser, and I. Polosukhin, "Attention Is All You Need," \textit{arXiv preprint arXiv:1706.03762}, 2017.
-  
-%   \bibitem{cite2} M. Douze, A. Guzhva, C. Deng, J. Johnson, G. Szilvasy, P.-E. Mazaré, M. Lomeli, L. Hosseini, and H. Jégou, "The Faiss Library," \textit{arXiv preprint arXiv:2401.08281}, 2024.
-  
-%   \bibitem{cite3} P. Lewis, W. Yih, T. Rocktäschel, and S. Riedel, "Retrieval-Augmented Generation (RAG) Explained: Understanding Key Concepts," \textit{arXiv preprint arXiv:2005.11401v4}, 2020.
-  
-%   \bibitem{cite4} Y. Gao, Y. Xiong, X. Gao, K. Jia, J. Pan, Y. Bi, Y. Dai, J. Sun, Q. Guo, M. Wang, and H. Wang, "Retrieval-Augmented Generation for Large Language Models: A Survey," \textit{arXiv preprint arXiv:2312.10997}, 2023.
-  
-%   \bibitem{sbert} N. Reimers and I. Gurevych, "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks," \textit{arXiv preprint arXiv:1908.10084}, 2019.
-  
-%   \bibitem{website_deffinition_rag} P. Miesle, "Retrieval-Augmented Generation (RAG) Explained: Understanding Key Concepts," \textit{DataStax}. Retrieved from \url{https://www.datastax.com/guides/what-is-retrieval-augmented-generation}.
-  
-%   \bibitem{Website_NexocodeGuideonRAGLLMs} D. Owczarek, "The Comprehensive Guide to Retrieval-Augmented Generation LLMs: Transforming Data into Knowledge," \textit{Nexocode}, 2023. Retrieved from \url{https://nexocode.com/blog/posts/retrieval-augmented-generation-rag-llms}.
-  
-%   \bibitem{website_ImplementGuideonRAGSystems} J. Alkestrup and N. S. Purup, "Building High-Quality RAG Systems," \textit{Implement Consulting Group}. Retrieved from \url{https://implementconsultinggroup.com/article/building-high-quality-rag-systems}.
-  
-%   \bibitem{website_MediumGuideonRAGDatabases} M. Ali, "Optimizing RAG: A Guide to Choosing the Right Vector Database," \textit{Medium}, 2023. Retrieved from \url{https://medium.com/@mutahar789/optimizing-rag-a-guide-to-choosing-the-right-vector-database-480f71a33139}.
-  
-%   \bibitem{Website_CloudflareGuideonVectorInsertion}Cloudflare Docs, "Best Practices: Insert Vectors," \textit{Cloudflare}. Retrieved from \url{https://developers.cloudflare.com/vectorize/best-practices/insert-vectors/}.
-  
-%   \bibitem{website_AporiaGuideonVectorDatabasesforRAG} K. Kehrer, "Best Vector DBs for Retrieval Augmented Generation (RAG)," \textit{Aporia}, 2023. Retrieved from \url{https://www.aporia.com/learn/best-vector-dbs-for-retrieval-augmented-generation-rag/}.
-  
-%   \bibitem{website_DatabricksGlossaryonRAG} Databricks, "Retrieval-Augmented Generation (RAG)," \textit{Databricks}. Retrieved from \url{https://www.databricks.com/glossary/retrieval-augmented-generation-rag}.
-  
-%   \bibitem{website_MongoDBAtlasCLIDocumentation}MongoDB Docs, "Atlas CLI: Deploy Local," \textit{MongoDB}. Retrieved from \url{https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-deploy-local/}.
-  
-%   \bibitem{website_MediumGuideonRAGwithAtlas} V. M. W. Benedict, "RAG with Atlas Vector Search and MongoDB," \textit{Medium}, 2023. Retrieved from \url{https://medium.com/@if-21062/rag-with-atlas-vector-search-mongodb-0d2420e00b64}.
-  
-%   \bibitem{website_Neo4jBlogOnLangchainVectorIndex} T. Bratanič, "Neo4j Langchain Vector Index Implementation," \textit{Neo4j}, 2023. Retrieved from \url{https://neo4j.com/developer-blog/neo4j-langchain-vector-index-implementation/}.
-  
-%   \bibitem{website_PondhouseGuideOnAdvancedRAG} Pondhouse Data, "Advanced RAG: Recursive Retrieval with LlamaIndex," \textit{Pondhouse Data}, 2023. Retrieved from \url{https://www.pondhouse-data.com/blog/advanced-rag-recursive-retrieval-with-llamaindex}.
-  
-%   \bibitem{cite17} V. Karpukhin, B. Oguz, S. Min, P. Lewis, L. Wu, S. Edunov, D. Chen, and W. Yih, "Dense Passage Retrieval for Open-Domain Question Answering," \textit{arXiv preprint arXiv:2004.04906}, 2020.
-  
-%   \bibitem{SpeculativeRAG_EnhancingRetrieval-AugmentedGenerationThroughDrafting} Z. Wang, Z. Wang, L. Le, H. S. Zheng, S. Mishra, V. Perot, Y. Zhang, A. Mattapalli, A. Taly, J. Shang, C.-Y. Lee, and T. Pfister, "Speculative RAG: Enhancing Retrieval-Augmented Generation through Drafting," \textit{arXiv preprint arXiv:2407.08223}, 2024.
-  
-%   \end{thebibliography}
 
 \begin{thebibliography}{9}
 
@@ -1719,16 +1874,9 @@ It is an optional section where the authors may write a short text on what shoul
   \bibitem{sbert} N. Reimers and I. Gurevych, "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks," \textit{arXiv preprint arXiv:1908.10084}, 2019. pp. 1-11
     
   \bibitem{SpeculativeRAG_EnhancingRetrieval-AugmentedGenerationThroughDrafting} Z. Wang, Z. Wang, L. Le, H. S. Zheng, S. Mishra, V. Perot, Y. Zhang, A. Mattapalli, A. Taly, J. Shang, C.-Y. Lee, and T. Pfister, "Speculative RAG: Enhancing Retrieval-Augmented Generation through Drafting" \textit{arXiv preprint arXiv:2407.08223}, 2024.
-
   
   \bibitem{website_deffinition_rag} P. Miesle, "Retrieval-Augmented Generation (RAG) Explained: Understanding Key Concepts," \textit{DataStax}. Retrieved from \href{https://www.datastax.com/guides/what-is-retrieval-augmented-generation}{DataStax Guide on RAG}.
 
-  % TODO MOZI DASE IZBRISI NEZNAM OD KAJ E OVAJ LINK. da se prasa profesorov dali da stojat referenci a da ne se referencirani
-  \bibitem{Website_NexocodeGuideonRAGLLMs} D. Owczarek, "The Comprehensive Guide to Retrieval-Augmented Generation LLMs: Transforming Data into Knowledge," \textit{Nexocode}, 2023. Retrieved from \href{https://nexocode.com/blog/posts/retrieval-augmented-generation-rag-llms}{Nexocode Guide on RAG LLMs}.
-  
-  % TODO MOZI DASE IZBRISI NEZNAM OD KAJ E OVAJ LINK. da se prasa profesorov dali da stojat referenci a da ne se referencirani
-  \bibitem{website_ImplementGuideonRAGSystems} J. Alkestrup and N. S. Purup, "Building High-Quality RAG Systems," \textit{Implement Consulting Group}. Retrieved from \href{https://implementconsultinggroup.com/article/building-high-quality-rag-systems}{Implement Guide on RAG Systems}.
-  
   \bibitem{website_MediumGuideonRAGDatabases} M. Ali, "Optimizing RAG: A Guide to Choosing the Right Vector Database," \textit{Medium}, 2023. Retrieved from \href{https://medium.com/@mutahar789/optimizing-rag-a-guide-to-choosing-the-right-vector-database-480f71a33139}{Medium Guide on RAG Databases}.
   
   \bibitem{Website_CloudflareGuideonVectorInsertion}Cloudflare Docs, "Best Practices: Insert Vectors," \textit{Cloudflare}. Retrieved from \href{https://developers.cloudflare.com/vectorize/best-practices/insert-vectors/}{Cloudflare Guide on Vector Insertion}.
@@ -1745,7 +1893,6 @@ It is an optional section where the authors may write a short text on what shoul
   
   \bibitem{website_PondhouseGuideOnAdvancedRAG} Pondhouse Data, "Advanced RAG: Recursive Retrieval with LlamaIndex," \textit{Pondhouse Data}, 2023. Retrieved from \href{https://www.pondhouse-data.com/blog/advanced-rag-recursive-retrieval-with-llamaindex}{Pondhouse Guide on Advanced RAG}.
   
-  % \bibitem{cite17} V. Karpukhin, B. Oguz, S. Min, P. Lewis, L. Wu, S. Edunov, D. Chen, and W. Yih, "Dense Passage Retrieval for Open-Domain Question Answering," \textit{arXiv preprint arXiv:2004.04906}, 2020.
   \bibitem{cite_github_solution} Grabuloski, M. (2024). *RagSystems: Retrieval-Augmented Generation Systems*. GitHub repository. Retrieved from \url{https://github.com/mgrabul/RagSystems}
 
 

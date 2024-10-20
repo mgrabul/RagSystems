@@ -1,0 +1,12 @@
+Model Name,Model Type,RAG Answer Quality,LLM Answer Time,RAG Answer Time
+facebook/blenderbot-90M,casual_model,Incorrect,2.190959930419922,3.0939981937408447
+gpt2,casual_model,Incorrect,4.964699983596802,5.565961837768555
+EleutherAI/gpt-neo-125M,casual_model,Incorrect,4.140110969543457,5.9186930656433105
+gpt2-medium,casual_model,Incorrect,9.49160122871399,13.543174028396606
+gpt2-large,casual_model,Incorrect,18.671204090118408,24.568648099899292
+EleutherAI/gpt-neo-1.3B,casual_model,Incorrect,18.4095721244812,37.47492599487305
+distilbert-base-uncased-distilled-squad,qa_model,Partial,0.13754987716674805,0.3137500286102295
+deepset/roberta-base-squad2,qa_model,Incorrect,0.37583494186401367,0.7083730697631836
+bert-large-uncased-whole-word-masking-finetuned-squad,qa_model,Partial,0.9208388328552246,1.703279972076416
+t5-base,t5_model,Partial,0.9946699142456055,1.5254778861999512
+t5-large,t5_model,Correct,3.5560178756713867,5.779507160186768

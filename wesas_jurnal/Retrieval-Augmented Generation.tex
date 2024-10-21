@@ -1550,9 +1550,11 @@ The answer quality alongside the model's speed and size in parameters can be obs
 the T5-models performed the best. In terms of measurable performance several interesting conclusions can be derived from the data. 
 For the purpose of comparing performance, simple efficiency score can be defined as:
 \begin{equation}
-  Efficiency Score = \frac{1}{Normalized Speed * Normalized Parameters}
+  \textstyle  
+EfficiencyScore = \frac{1}{Speed_n * Parameters_n}
   \label{eq:efficiency_score}
 \end{equation}
+Where $Speed_n$ is the normalized speed of the model and $Parameters_n$ is the normalized number of parameters of the model.
 
 The normalized speed and normalized parameters are calculated based on the maximum speed and the maximum number of parameters across all experiments.
 Bigger numbers in \autoref{eq:efficiency_score} indicate better performance. Base on this formula average efficiency scores 

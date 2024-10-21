@@ -1550,22 +1550,31 @@ The answer quality alongside the model's speed and size in parameters can be obs
 the T5-models performed the best. In terms of measurable performance several interesting conclusions can be derived from the data. 
 For the purpose of comparing performance, simple efficiency score can be defined as:
 \begin{equation}
-  Efficiency Score = \frac{Normalized Speed}{Normalized Parameters}
+  Efficiency Score = \frac{1}{Normalized Speed * Normalized Parameters}
   \label{eq:efficiency_score}
 \end{equation}
 
 The normalized speed and normalized parameters are calculated based on the maximum speed and the maximum number of parameters across all experiments.
-Bigger numbers in \autoref{eq:efficiency_score} indicate better performance. Base on this formula average efficiency scores can be calculated for each model across all experiments. 
-The results can be seen in \autoref{tab:model_efficiency_scores}. The `EleutherAI/gpt-neo-1.3B` model has the highest average efficiency score. 
-This model performed well only in the first experiment, where the augmentation context was one sentence with fact based question.
-The GPT model family performed quite well in terms of efficiency. They struggled mostly in the synthesis based question, and have the issue of providing
-over-information in some cases. Given the efficiency the GPT models can become a candidate for a RAG system after additional training and fine-tuning.
-The T5-models performed the best in terms of answer quality, but they were not the most efficient they are somewhere in the middle in the table. 
-When considering the absolute average speed of answer, 1.2 and 3.5 seconds for the two T5-models, they are still quite fast. Without additional fine-tuning
-they can be used in a RAG system. \textbf{For comparison the expected response time of OpenAI's GPT-4o model is 1-3 seconds for a medium to short answers}.
-The QA models in terms of efficiency performed the worse, but had a good answer quality and the overall absolute time of response was quite fast with an 
-average from 0.1 to 0.9 seconds. Main issue with the tested QA models is that their answers on the synthesis based question
-have tendency to be partial or incorrect. They only focus and return the most probable sequence of characters in the context that satisfies an answer to the question. 
+Bigger numbers in \autoref{eq:efficiency_score} indicate better performance. Base on this formula average efficiency scores 
+can be calculated for each model across all experiments. The results can be seen in \autoref{tab:model_efficiency_scores}.
+
+Based on this assessment The QA models are in the top segment of the \autoref{tab:model_efficiency_scores},
+their efficiency score ranges from 200,85 to 5550,67, where the 'distilbert-base-uncased-distilled-squad' been the model with the highest efficiency score.
+Their average answer time is quite fast, with and the average per model ranges from 0,17 to 0,92 seconds.
+
+The GPT model family are positioned at the lower end of the table. The model with the lowest average efficiency score
+of 1,56 is `EleutherAI/gpt-neo-1.3B`. The average answer is slower than the others model families, with an average range per model from 3.8 up to 25 seconds.
+The `EleutherAI/gpt-neo-1.3B` is the slowest model in terms of absolute answer speed, it's average answer time is 25,20 seconds.
+
+The T-model family are positioned in middle of the efficiency score \autoref{tab:model_efficiency_scores}. They are slower than the QA modes. 
+`T5-base` model have an average efficiency score of 22,13 for the T5-large and 185,50 for the T5-base model. When considering the 
+answer quality, T5-large model performed better than the T5-base model. This is visible in the last experiment where the T5-base model
+failed to answer correctly on the synthesis based question. This might indicate that model can't handle complex context. 
+Given the size of the model, 22M parameter this is probably an underfitting problem and using same model type with more parameters might solve this issue.
+In terms of the absolute time of response, the T5 models are quite fast with an average from 1,2 to 3,5 seconds, this is an acceptable time.
+Without additional fine-tuning this model family can be used in a RAG system.
+
+\textbf{For comparison the expected response time of OpenAI's GPT-4o model is 1-3 seconds for a medium to short answers}.
 
 When comparing the LLM answer time to the RAG answer time, two tasks need to be measured. The time to retrieve of the context and the time to generate the answer.
 The time to retrieve the context depends on the parametric memory index, parametric memory size and number of retrievals. 
@@ -1583,39 +1592,38 @@ The average response time of the RAG for the experiments is:
 The context in experiments starting from experiment 1 to experiment 5 was increased. Experiment 1 and 2 have a context of one sentence, experiment 3 and 4 have a context of one paragraph and experiment 5 has a context of three paragraphs.
 This data indicates that as stated before the time to response in a RAG system depends on the context size.
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
   \centering
-  \caption{Model Size and Efficiency Score} % Optional caption
+  \caption{Model's Average Response Time and Efficiency Score} % Optional caption
   \label{tab:model_efficiency_scores}  % Adding label for referencing
-  \begin{tabular}
-    {|p{0.4\linewidth}|p{0.25\linewidth}|p{0.2\linewidth}|}
+  \begin{tabular}{|p{0.4\linewidth}|p{0.25\linewidth}|p{0.2\linewidth}|}
     \hline
-    \textbf{Model Name} & \textbf{Model Size (in parameters)} & \textbf{Efficiency Score} \\
+    \textbf{Model Name} & \textbf{Avg. Response Time} & \textbf{Avg. Efficiency Score} \\
     \hline
-    EleutherAI/gpt-neo-125M & 12.5 & 1.135 \\
+    distilbert-base-uncased-distilled-squad & 0.1672 & 5550.6793 \\
     \hline
-    gpt2 & 12.4 & 1.079 \\
+    deepset/roberta-base-squad2 & 0.3384 & 1511.1777 \\
     \hline
-    facebook/blenderbot-90M & 9 & 0.886 \\
+    facebook/blenderbot-90M & 2.2683 & 252.6381 \\
     \hline
-    gpt2-medium & 35.5 & 0.885 \\
+    bert-large-uncased-whole-word-masking-finetuned-squad & 0.9152 & 200.8508 \\
     \hline
-    gpt2-large & 76.2 & 0.694 \\
+    t5-base & 1.2539 & 185.5049 \\
     \hline
-    EleutherAI/gpt-neo-1.3B & 130 & 0.681 \\
+    gpt2 & 3.8098 & 109.4958 \\
     \hline
-    t5-base & 22 & 0.200 \\
+    EleutherAI/gpt-neo-125M & 4.0386 & 103.6577 \\
     \hline
-    t5-large & 77 & 0.160 \\
+    t5-large & 3.5096 & 22.1266 \\
     \hline
-    deepset/roberta-base-squad2 & 12.5 & 0.095 \\
+    gpt2-medium & 8.9408 & 16.7129 \\
     \hline
-    bert-large-uncased-whole-word-masking-finetuned-squad & 34 & 0.094 \\
+    gpt2-large & 15.0616 & 4.6237 \\
     \hline
-    distilbert-base-uncased-distilled-squad & 6.6 & 0.089 \\
+    EleutherAI/gpt-neo-1.3B & 25.2002 & 1.5673 \\
     \hline
   \end{tabular}
-\end{table}
+\end{table*}
 
 
 \begin{table*}[htbp]
@@ -1793,9 +1801,7 @@ This data indicates that as stated before the time to response in a RAG system d
   }
 \end{table*}
 
-
 \section{Conclusion}
-
 This text demonstrates through experimentation that Retrieval-Augmented
 Generation (RAG) systems effectively address some of the most
 significant challenges faced by Large Language Models (LLMs) and other
@@ -1803,7 +1809,6 @@ models with parametric memory. Compared to models solely relying on
 parametric memory, RAG systems offer several advantages:
 
 \begin{itemize}
-
 \item
   \textbf{Horizontally Scalable}: RAG systems can efficiently scale by
   distributing the retrieval process across multiple nodes, allowing for
@@ -1828,15 +1833,23 @@ parametric memory, RAG systems offer several advantages:
 
 As an example, a decent quality question answering system can be created
 using only a 66M parameter pertained question answering model like
-DistilBERT when using an index like FAISS. However, it is crucial that
+'DistilBERT' when using an index like 'FAISS'. However, it is crucial that
 the paragraphs and sentences provided to the model contain the answer
 explicitly written, with no pronouns or ambiguous references. In case of
 the T5 models they will perform better than QA in a more complex text
 scenarios, these models are capable of understanding and synthesizing
-information. The t5-large\_770M given the size and performance would be
-a good candidate more general RAG solution. 
+information. The 't5-large\_770M' given the size and performance would be
+a good candidate more general RAG solution. The T5 models are a good candidate for a RAG system,
 
-When considering a self-hosted production RAG system the T-5 models 
+When choosing a LLM, it's important to pick a large enough model. 
+This is to ensure will be able to handle complex and will not suffer from underfitting. 
+Good strategy when choosing between models from
+the same model family is to pick the model with the most parameters 
+that has an acceptable average response time. Models with more parameters will 
+usually perform better in terms of answer quality. Having an efficiency score for 
+comparison could also be usefully in the decision-making process.
+
+For self-hosted production RAG system the T-5 models 
 are solid candidate. Using designing a horizontal scalable system with
 multiple T-5 model nodes and distributed parametric memory index would be
 a feasible solution.

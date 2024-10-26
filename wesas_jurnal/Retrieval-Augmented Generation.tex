@@ -15,7 +15,14 @@
 % custom setup of how tables are rendered
 % \usepackage{multirow}
 
-\author{MARKO GRABULOSKI}
+\author{
+  MARKO GRABULOSKI, ALEKSANDAR KARADIMCE, ANIS SEFIDANOSKI\\
+  Information Sciences and Technologies\\
+  University of Information Science and Technology "St. Paul the Apostle"\\
+  Partizanska bb, 6000 Ohrid\\
+  NORTH MACEDONIA
+}
+
 \title{Enhancing Language models with RAG}  
 \begin{document}
 \twocolumn[
@@ -83,7 +90,7 @@ using retrieval augmentation generation techniques (RAG).
 Further on it will explore different RAG techniques and how they can be used  
 to enhance the LLMs. For the purpose of testing the properties and performance 
 of different LLMs in a RAG system in different scenarios, a RAG system is implemented. 
-The entire code, experiment definitions and results can be found on the 
+The entire code, experiment definitions and results can be found in a github repository
 \cite{cite_github_solution}.
 
 \section{What is Retrieval augmented generation}
@@ -92,7 +99,7 @@ The entire code, experiment definitions and results can be found on the
  artificial intelligence (AI) technique that combines information 
  retrieval with text generation, allowing AI models to retrieve 
  relevant information from a knowledge source and incorporate it 
- into generated text.}\cite{website_deffinition_rag}
+ into generated text}\cite{website_deffinition_rag}.
 
 
 The basic idea around a RAG system is extending the capabilities of an
@@ -136,8 +143,7 @@ The system has two types of memory:
 The RAG technique integrates a retrieval model and generative model. RAG
 systems usually work around extending the capabilities of NLP(Natural
 Language processing models) giving them additional memory or information
-on various topics. Therefor a production RAG system in the context of
-LLMs is build from 2 sub-systems:
+on various topics. Therefor a RAG system's main two component or sub-systems are:
 
 \begin{itemize}
 
@@ -167,7 +173,7 @@ done in three phases:
   that will generate an answer.
 \end{itemize}
 
-Usually phase one and two are part of retrieval and augmentation component. The 
+Usually phase one and two are part of the retrieval and augmentation component. The 
 simplified RAG process can be seen in the \autoref{fig:rag_system_figure}.
 
 \begin{figure}[htbp]
@@ -248,7 +254,7 @@ The process is shown in \autoref{fig:retrieval_system_storing_phase_figure}.
 The process is as follows:
 \begin{enumerate}
 \item
-    Take a text block, sentence, or paragraph.
+    Takes block of text, sentence, or paragraph.
 \item
     Passes this text to the Sentence Embedding model to get an
     embedding(dense vector).
@@ -274,7 +280,7 @@ The process is as follows:
   Takes input text, referred to as a query.
 \item
   Passes the query text to the Sentence Embedding model to get a query
-  embedding or a query dense vector.
+  embedding, query dense vector.
 \item
   Using the query embedding, fetches a list of related knowledge from
   the non-parametric memory.
@@ -297,23 +303,21 @@ vector. Like in any other traditional database, fast storage and querying
 are important. Ideally, these databases should be able to store data on 
 disk to enable horizontal scaling and data distribution, which are essential 
 for a RAG system to achieve scalability compared to a traditional LLM model.
-% italic text is not needed here
-\textit{
+
 The experiment in this research will use the Faiss library, as it satisfies the conditions for
 vector storage and querying the $k$ closest vectors, it lacks automatic
 distributive scaling, but a full DB solution is not required for the project as the paper
-focuses on comparison on LLMs and not on non-parametric memory storage.}
+focuses on comparison on LLMs and not on non-parametric memory storage.
 
 \emph{The Faiss library is dedicated to vector similarity search, a core
 functionality of vector databases. Faiss is a toolkit of indexing
 methods and related primitives used to search, cluster, compress, and
 transform vectors} \cite{the_faiss_library}.
 
-According to the referenced research \cite{the_faiss_library}, the Faiss database 
-was tested with 768-dimensional ContrieverDb (name of the database from where vectors
-are imported) dense vector embeddings with up to 1M vectors with 64
-bytes per dimension and also with 100M vectors from DeepDb that have a
-dimension of 96 and 8 bytes per dimension.
+The Faiss database was tested with 768-dimensional ContrieverDb 
+(name of the database from where vectors are imported) dense vector embeddings
+with up to 1M vectors with 64 bytes per dimension and also with 100M vectors 
+from DeepDb that have a dimension of 96 and 8 bytes per dimension \cite{the_faiss_library}.
 
 \paragraph{Popular vector databases}
 
@@ -359,7 +363,7 @@ contextual embedding.
 From particular interest for the Sentence embedding models and the RAG
 system is the encoder layer of the LLMs transformer.
 
-Here is a description on how sentences are converted to embedding by an
+In \autoref{fig:encoder_layer_figure} is a description on how sentences are converted to embedding by an
 encoder.
 
 \textbf{LLM Transformer's encoder}
@@ -381,8 +385,6 @@ the token embedding.
 
 Visual description on the process of creating sentence embedding by a 
 Sentence embedding model is shown in \autoref{fig:sentence_embedding_model_figure}.
-
-\textbf{Sentence embedding model}
 
 \begin{figure}[htbp]
   \centering
@@ -416,14 +418,13 @@ embedding using the mean:
   meanpool(e_1, e_2, \ldots, e_n) = \frac{1}{n} \sum_{i=1}^{n} e_i
 \end{equation}
 
-According to research paper \cite{sbert}, mean
-pooling, max pooling, and CLS Token are commonly used techniques.
+\textit{Mean pooling, max pooling, and CLS Token are commonly used techniques} \cite{sbert}.
 
 The goal of sentence embedding models is to produce an embedding or
 vector from text. As mentioned before, they are built by adding a layer
-to the LLM's transformer encoder component. The LLMs encoder produce token
-embeddings, where the sentence embedding models produce embeddings for
-entire sentences.
+to the LLM's transformer encoder component. The LLMs encoder produces token
+embeddings, where the sentence embedding models produces embeddings for
+entire sentences or text blocks.
 
 The requirement of the sentence embedding model is as follows:
 
@@ -444,7 +445,7 @@ describing it as a vector.}
 
 \textbf{This is an extremely useful feature because it allows for the 
 quantitative representation of text or sentence semantics. In contrast, 
-traditional information theory typically represents information as the 
+traditional information theory represents information as the 
 average number of bits transferred, focusing on the quantity of information 
 without considering semantic meaning. LLM embeddings, however, numerically 
 represent the quality of information.}
@@ -456,7 +457,7 @@ including its input and output. Even though the input and output are in
 the required format, sentence embedding models are additionally trained
 to meet the semantic requirements defined above.
 
-The main issue during training is that it's that the exact output for a 
+The main issue during training is that that the exact output for a 
 block of text is not really know, it can be any embedding. It is the relative
 distance between the embeddings that is important. Semantically close
 embeddings should be closer than embeddings that have different
@@ -514,7 +515,6 @@ network can be trained on cases with similar and dissimilar embeddings.
 \end{itemize}
 
 \paragraph{Triplet Loss function}
-%  up to here
 Similarly to the Contrastive loss function training method, the triplet
 loss function uses a variation of the Siamese network where instead of
 two networks, three networks are used. One single test case consists of
@@ -547,7 +547,7 @@ a Loss function, triplet loss function (\autoref{eq:efficiency_score}), and its 
   \label{eq:triplet_loss_function}
 \end{equation}
 
-Generally the function does the following:
+Generally the \autoref{eq:triplet_loss_function} does the following:
 \begin{itemize}
   \item If \(D(A,P) < D(A,N)\), the function returns 0 then no adjustments should be 
   made for the current test case. 
@@ -621,7 +621,7 @@ use complicated server architecture or complex multiphase retrieval or augmentat
 Focuses on improving the retrieval of embeddings or data. It adds
 additional \textbf{pre-retrieval} and \textbf{post-retrieval} phase. 
 
-In the pre-retrieve several optimization methods are employed like: 
+In the pre-retrieve phase several optimization methods are employed, like: 
 \begin{itemize}
   \item Query optimization 
   \item Storage optimization and retrieval 
@@ -634,9 +634,16 @@ from the retrieved data. The data now is re-ranked and compressed, cleaned up.
 \subsubsection{Modular RAG}
 
 This type of architecture tries to split the system in to more modules
-that can be independently scaled and optimized. Example: Query
-Processing Module, Retriever, Re-ranking, Context Management, Generation
-Module \cite{Retrieval-Augmented_Generation_for_Large_Language_Models:_A_Survey}.
+that can be independently scaled and optimized  \cite{Retrieval-Augmented_Generation_for_Large_Language_Models:_A_Survey}. 
+Example:
+\begin{itemize}
+  \item Query Processing Module
+  \item Retriever
+  \item Re-ranking
+  \item Context Management
+  \item Generation Module
+\end{itemize}
+
 
 \subsection{Different RAG methods and
 models}
@@ -667,12 +674,11 @@ sends the context and the question as an input to an LLM or the
 generator. The RAG-Token Model retrieves new documents on every
 generated token. Once a token is generated, the token is appended to all
 previously generated tokens and this are appended to the initial
-question. This results in a string in the following form "Question +
+question. This results in a string of the following form "Question +
 GenerateTockenList". This new string is then used again as an input in
 the RAG, or as an input for the RAG retrieved. The process retrieves new
 documents for every new generated token and uses this documents to
-generate the next token. This makes sure that every new generated token
-is equally dependent on the question and the non-parametric memory.
+generate the next token. 
 
 \emph{RAG-Token Model, in the RAG-Token model we can draw a different
 latent document for each target token and marginalize accordingly. This
@@ -685,9 +691,9 @@ the process with the following output token}
 
 \subsection{Iterative RAG}
 
-One example is the "Speculative RAG" described in the paper \cite{SpeculativeRAG_EnhancingRetrieval-AugmentedGenerationThroughDrafting}. 
-Based on the question it retrieves \(N\) embeddings. The
-embeddings are then clustered in \(k\) classes using $K-means$. From the
+One example is the "Speculative RAG" \cite{SpeculativeRAG_EnhancingRetrieval-AugmentedGenerationThroughDrafting}. 
+Based on the question it retrieves \(N\) embeddings.
+The embeddings are then clustered in \(k\) classes using $K-means$. From the
 \(k\) clusters one embedding is selected per cluster, resulting in $k$
 embeddings. Then the algorithm uses two LLMs so called a drafter and a
 verifier. The drafter is used to generate the answer, called a draft and
@@ -717,9 +723,9 @@ Where:
   \item \( Q \) is the question
 \end{itemize}
 
-The simple interpretation of \autoref{eq:self_consistency_score} is the
-probability that the answer been generated based on the question and the
-probability that the rational is generated based on the question and the
+The simple interpretation of \autoref{eq:self_consistency_score} is that
+calculates the conditional joint probability of the answer been generated based on the question 
+and the probability that the rational is generated based on the question and the
 answer. The probability are calculated by the LLM. 
 
 \subsubsection{Self-reflection score}
@@ -744,7 +750,6 @@ The process is repeated for all the clusters, and a \(p_{sr}*p_{sc}\) is
 calculated. The answer with the highest \(p_{sr}*p_{sc}\) score is
 picked as the most relevant, and it is the answer that is returned.
 
-
 \subsection{Recursive RAG}
 
 As any recursive algorithm it repeats its self until the results
@@ -757,10 +762,6 @@ question but also of the embeddings that are initially retrieved. With
 this it tries to capture all the relevant information. The previous is
 described in the paper from (Karpukhin et al.~2020; Pondhouse Data, no
 date) \cite{website_PondhouseGuideOnAdvancedRAG} .
-% \section{Dense Passage Retrieval (DPR)}
-%  not included
-  % \bibitem{cite17} V. Karpukhin, B. Oguz, S. Min, P. Lewis, L. Wu, S. Edunov, D. Chen, and W. Yih, "Dense Passage Retrieval for Open-Domain Question Answering," \textit{arXiv preprint arXiv:2004.04906}, 2020.
-
 
 \section{Research methodology}
 
@@ -769,10 +770,10 @@ flexible and modular enough so can use different LLMS as generators. The
 system will have a retriever that will be able to create embeddings
 based on sentences and also on paragraphs. The retriever will also
 retrieve embeddings based on a question/query. All the chosen LLMs and
-their corresponding RAGs will be asked three different type of Open-domain
-question. This is a type of question that can't be answered with simple
-yes or no and requires accessing a broad range of information to provide
-an answer. Find the RAG implementation and the \cite{cite_github_solution}.
+their corresponding RAGs will be asked three different types of Open-domain
+questions. These are types of questions that can't be answered with a simple 
+yes or no and require accessing a broad range of information to provide an answer. 
+Find the RAG implementation and refer to \cite{cite_github_solution}.
 
 The purpose of the experiments: 
 \begin{enumerate}
@@ -786,7 +787,7 @@ Depending on the LLMs type, three different LLM models will be used:
 
 \begin{enumerate}
 \item
-  Casual models
+  Causal models
 \item
   Question answering models
 \item
@@ -951,7 +952,7 @@ Where the important processes are numerated and described in the following list:
 
 
 In total five experiments will be performed. The questions type, the retrieved type of information(text), 
-and the number of retrievals for each experiment are shown in the Table \ref{tab:experiment_questions_table}. 
+and the number of retrievals for each experiment are shown in \autoref{tab:experiment_questions_table}. 
 
 \begin{table*}[htbp]
   \caption{Experiment description} 
@@ -994,34 +995,30 @@ experiment parameters are as follows:
 
 \subsubsection{Causal Models}
 
-The results of the experiment are shown in the Table \ref{tab:experiment_R_1_sentence_Q_fact_M_casual_table}.
-\begin{table*}[htbp]
-  \centering
-  \caption{Fact-based question, single sentence retrieval, causal models}
-  \label{tab:experiment_R_1_sentence_Q_fact_M_casual_table}
-    \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-      \hline
-      \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
-      facebook blenderbot-90M & balkicker mutations mutations pment mutations mutations mutations kicker fiers eston eston eston eres bender eston \ldots{} & lease willis lease mative mative lease willis mative lease lease lease willis \ldots{} \\ \hline
-      gpt2 & The Pyramid of Giza is the tallest building in Egypt. The Pyramid of Giza is located in the Giza Plateau \ldots{} & The Great Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
-      EleutherAI gpt-neo-125M & The Pyramid of Giza is the tallest pyramid in the world. It was completed in the 13th century AD \ldots{} & The Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
-      gpt2-medium & The Pyramid of Giza is the tallest structure in Egypt. It is 1,068 feet tall, and is one of the largest pyramids \ldots{} & The Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
-      gpt2-large & The Pyramid of Giza is the tallest structure in the world. How tall is the Taj Mahal? \ldots{} & The Great Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
-      EleutherAI gpt-neo-1.3B & The Pyramid of Giza is one of the Seven Wonders of the Ancient World. It is one of the Seven Wonders of the Modern World \ldots{} & The pyramid of Giza, also known as the Pyramid of Khufu \ldots{} and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
-    \end{tabular}
-\end{table*}
-In this experiment setup, in all the cases the casual models generated a wrong LLM answer. Except
-the \texttt{facebook/blenderbot-90M} they all generated grammatically
-correct sentences. Concerning the RAG answers, all of them generated a
-correct RAG answer except the \texttt{facebook/blenderbot-90M}. This is
-an amazing result since without any additional training or tuning, the
-models when using a RAG approach were able to generate an answer that 
-contained the correct information. The answer lacks structure and provides 
-additional information the is not required. This is because of the nature of the causal models.
-Taking in to consideration the parameters the smallest model that give a
-correct answer was GPT2 with 90M.
-
-
+The results of the experiment are shown in the \autoref{tab:experiment_R_1_sentence_Q_fact_M_causal_table}.
+% \begin{table*}[htbp]
+%   \centering
+%   \caption{Fact-based question, single sentence retrieval, causal models}
+%   \label{tab:experiment_R_1_sentence_Q_fact_M_causal_table}
+%     \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
+%       \hline
+%       \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
+%       facebook blenderbot-90M & balkicker mutations mutations pment mutations mutations mutations kicker fiers eston eston eston eres bender eston \ldots{} & lease willis lease mative mative lease willis mative lease lease lease willis \ldots{} \\ \hline
+%       gpt2 & The Pyramid of Giza is the tallest building in Egypt. The Pyramid of Giza is located in the Giza Plateau \ldots{} & The Great Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
+%       EleutherAI gpt-neo-125M & The Pyramid of Giza is the tallest pyramid in the world. It was completed in the 13th century AD \ldots{} & The Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
+%       gpt2-medium & The Pyramid of Giza is the tallest structure in Egypt. It is 1,068 feet tall, and is one of the largest pyramids \ldots{} & The Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
+%       gpt2-large & The Pyramid of Giza is the tallest structure in the world. How tall is the Taj Mahal? \ldots{} & The Great Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
+%       EleutherAI gpt-neo-1.3B & The Pyramid of Giza is one of the Seven Wonders of the Ancient World. It is one of the Seven Wonders of the Modern World \ldots{} & The pyramid of Giza, also known as the Pyramid of Khufu \ldots{} and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
+%     \end{tabular}
+% \end{table*}
+In this experiment setup, all the causal LLMs generated incorrect answers. 
+Except for \texttt{facebook/blenderbot-90M}, they all generated grammatically correct sentences. 
+Regarding the RAG answers, all models generated correct RAG answers except for \texttt{facebook/blenderbot-90M}.
+This is an amazing result, as without any additional training or tuning, the models
+using the RAG approach were able to generate answers that contained the correct information.
+However, the answers lacked structure and provided additional information that was not required. 
+This is due to the nature of the causal models. Taking into consideration the parameters,
+the smallest model that provided a correct answer was GPT-2 with 90M.
 \subsubsection{QA Models}
 
 \begin{table*}[htbp]
@@ -1036,12 +1033,11 @@ correct answer was GPT2 with 90M.
       bert-large-uncased-whole-word-masking-finetuned-squad\_340M & tall & 146.6 meters \\ \hline
     \end{tabular}
 \end{table*}
-The results of the question answering models for the experiment of the 
-current section are shown in Table \ref{tab:experiment_R_1_sentence_Q_fact_M_question_answering_table}.
-The QA models are also answered correctly. Compared to the casual LLMs
-RAG generated answer, here the models perform better as a model of 66M
-was able to answer the question correctly. The generated LLM answer was
-wrong for every model.
+The results of the question answering models for this experiment
+are shown in \autoref{tab:experiment_R_1_sentence_Q_fact_M_question_answering_table}.
+The QA models also provided correct answers. Compared to the causal LLMs
+RAG generated answer, here the models perform better as a model of 66M parameters
+was able to answer the question correctly. The answers generated by the LLM were incorrect for every model.
 
 \subsubsection{T5 Models}
 
@@ -1057,15 +1053,17 @@ wrong for every model.
   \end{tabular}
 \end{table}
 
-The results of the T5 conversational models this experiment can be seen in 
-Table \ref{tab:experiment_R_1_sentence_Q_fact_M_T5_table}.
+The results of the T5 conversational models this experiment can be seen in \autoref{tab:experiment_R_1_sentence_Q_fact_M_T5_table}.
 The T5 models RAG generated answer is correct for the T5-base model and partially correct
 for the T5-large model. The T5-large model answered correctly in feet but not in meters.
 
+The results of the T5 conversational models from this experiment can be seen in \autoref{tab:experiment_R_1_sentence_Q_fact_M_T5_table}. 
+The T5 model's RAG-generated answer is correct for the T5-base model and partially correct for the T5-large model. 
+The T5-large model answered gave the correct answer in feet but not in meters.
 
 \textbf{Summary:}
-Given the size of the models and the accuracy of the answers the QA models are most
-appropriate for answering Fact-based Question.
+Given the size of the models and the accuracy of the answers, the QA models are most
+appropriate for answering fact-based Question.
 
 
 \subsection{Experiment 2: List-based Question - 'What materials were
@@ -1107,13 +1105,12 @@ Great Wall of China?'. The experiment parameters are as follows:
   \end{tabular}
 \end{table*}
 
-The results of the causal models for the experiment of the current section 
-are documented in Table \ref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_casualModel_table}.
-In all cases, the causal models generated incorrect or irrelevant LLM
-answers. The RAG approach, however, performed significantly better, with
-all models providing correct information about the materials used in
-constructing the Great Wall of China. Because of the casual LLM model's nature the given answer
-of the RAG approach, contains additional not needed info.
+The results of the causal models for the experiment in the current section are 
+documented in \autoref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_causalModel_table}. 
+In all cases, the causal models generated incorrect or irrelevant LLM answers. 
+The RAG approach, however, performed significantly better, with all models providing correct 
+information about the materials used in constructing the Great Wall of China.
+Because of the causal LLM model's nature, the RAG approach's answer contains additional unnecessary information.
 
 \subsubsection{QA Models}
 
@@ -1132,16 +1129,12 @@ of the RAG approach, contains additional not needed info.
   \end{tabular}
 \end{table*}
 
+The results of the QA models for this experiment are documented in \autoref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_QaModels_table}.
 
-The results of the QA models for the experiment of the current section 
-are documented in Table \ref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_QaModels_table}.
+The QA models performed well in generating correct RAG answers, accurately listing the materials used in constructing the Great Wall of China. 
+Similar to the first experiment, the generated LLM answers were incorrect, but the RAG system compensated by providing correct and relevant answers,
+demonstrating its strength in retrieving and presenting accurate information.
 
-The QA models performed well in generating correct RAG answers,
-accurately listing the materials used in constructing the Great Wall of
-China. Similar to the first experiment, the generated LLM answers were
-incorrect, but the RAG system compensated for this by providing correct
-and relevant answers, showing its strength in retrieving and presenting
-accurate information.
 
 \subsubsection{T5 Models}
 
@@ -1159,14 +1152,13 @@ accurate information.
   \end{tabular}
 \end{table*}
 
-The results of the T5 conversational models for the experiment of this
-can be seen in the Table \ref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_T5Models_table}.
+The results of the T5 conversational models for this experiment can be seen 
+in \autoref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_T5Models_table}.
 
 Here, the T5 models also demonstrated strong performance in the RAG approach.
-They correctly listed the materials used in constructing the Great Wall of
-China. However, like the other models, their direct LLM answers were
-inaccurate or non-informative, further highlighting the importance of
-RAG in ensuring accurate output.
+They correctly listed the materials used in constructing the Great Wall of China.
+However, like the other models, their direct LLM answers were inaccurate or non-informative,
+further highlighting the importance of RAG in ensuring accurate output.
 
 % perhaps a subsection 
 \textbf{Summary:}
@@ -1180,11 +1172,10 @@ answering List-based Question.
 \subsubsection{Experiment Description}
 
 In this experiment, various language models were tested to answer the
-fact-based question: 'How tall is the Pyramid of Giza?' using
-paragraph retrieval with one retrieved document. Storing paragraphs is
-more efficient than storing sentences, as the size of the database will
-be smaller and paragraphs hold more context and information than the
-sentences. 
+fact-based question: 'How tall is the Pyramid of Giza?' using paragraph
+retrieval with one retrieved document. Storing paragraphs is more 
+efficient than storing sentences, as the size of the database will
+be smaller, and paragraphs hold more context and information than sentences.
 
 The experiment parameters are as follows:
 
@@ -1217,13 +1208,13 @@ The experiment parameters are as follows:
   \end{tabular}
 \end{table*}
 
-This experiment's results for the casual models can be observed in 
-Table \ref{tab:experiment_R_1_paragraph_Q_fact_M_casual_table}.
+This experiment's results for the causal models can be observed in 
+\autoref{tab:experiment_R_1_paragraph_Q_fact_M_causal_table}.
 
-In this experiment, the causal models generally provided incorrect or
-nonsensical LLM answers. However, the RAG approach performed
-significantly better, producing correct answers by accurately retrieving
-and presenting the relevant information from the paragraph.
+In this experiment, the causal models generally provided incorrect or nonsensical LLM answers. 
+However, the RAG approach performed significantly better, producing correct answers by accurately 
+retrieving and presenting the relevant information from the paragraph.
+
 
 \subsubsection{QA Models}
 % TODO REFERENCE TABLE IN TEXT
@@ -1240,12 +1231,11 @@ and presenting the relevant information from the paragraph.
   \end{tabular}
 \end{table*}
 
-The experiment results for the QA models are shown Table \ref{tab:experiment_R_1_paragraph_Q_fact_M_QaModels_table}.
+The experiment results for the QA models are shown in \autoref{tab:experiment_R_1_paragraph_Q_fact_M_QaModels_table}.
 
-The QA models continued to perform well, with the RAG approach providing
-correct and relevant answers. Despite the direct LLM answers being
-incorrect, the RAG system ensured accurate information was retrieved and
-presented.
+The QA models continued to perform well, with the RAG approach providing correct and relevant answers.
+Despite the direct LLM answers being incorrect, the RAG system ensured accurate information
+was retrieved and presented.
 
 \subsubsection{T5 Models}
 
@@ -1262,20 +1252,19 @@ presented.
   \end{tabular}
 \end{table*}
 
-The results of the T5 conversational models for the experiment of the current section 
-are shown in Table \ref{tab:experiment_R_1_paragraph_Q_fact_M_T5Models_table}.
+The results of the T5 conversational models for this experiment
+are shown in \autoref{tab:experiment_R_1_paragraph_Q_fact_M_T5Models_table}.
 
 The T5 models also demonstrated strong performance in the RAG approach,
 consistently providing the correct height of the Pyramid of Giza. As
-seen in previous experiments, the direct LLM answers were inaccurate,
-underscoring the importance of using RAG for accurate outputs.
+seen in previous experiments, the direct LLM answers were inaccurate.
 
 \textbf{Summary:}
 
 The QA models and T5 models were particularly efficient, consistently
 providing the correct height of the Pyramid of Giza. Given the size of
-the models, the most efficient for answering Fact-based Question with
-one paragraph retrieval are the QA models.
+the models, the most efficient for answering fact-based Question with
+one-paragraph retrieval are the QA models.
 
 \subsection{Experiment 4: List-based Question - 'What materials were
 used in constructing the Great Wall of China?'}
@@ -1326,8 +1315,8 @@ document. The experiment parameters are as follows:
   \end{tabular}
 \end{table*}
 
-The results of the causal models for the experiment of the current section can be seen 
-in Table \ref{tab:experiment_R_1_paragraph_Q_listBased_M_casual_table}.
+The results of the causal models for this experiment can be seen 
+in \autoref{tab:experiment_R_1_paragraph_Q_listBased_M_causal_table}.
 
 In this experiment, the causal models generally provided incorrect or
 nonsensical LLM answers. The RAG approach, however, showed improvement,
@@ -1354,8 +1343,8 @@ used in the construction of the Great Wall of China.
   \end{tabular}
 \end{table*}
 
-The results of the QA models for the experiment of the current section
-can be seen in Table \ref{tab:experiment_R_1_paragraph_Q_listBased_M_QaModels_table}.
+The results of the QA models for the experiment
+can be seen in \autoref{tab:experiment_R_1_paragraph_Q_listBased_M_QaModels_table}.
 
 The QA models performed exceptionally well in generating correct RAG
 answers, accurately listing the materials used in constructing the Great
@@ -1382,8 +1371,8 @@ information.
   \end{tabular}
 \end{table*}
 
-The results of the T5 conversational models for the experiment of the
-current section can be seen in Table \ref{tab:experiment_R_1_paragraph_Q_listBased_M_T5Models_table}.
+The results of the T5 conversational models for this experiment can be seen 
+in \autoref{tab:experiment_R_1_paragraph_Q_listBased_M_T5Models_table}.
 
 The T5 models also performed well in the RAG approach, consistently
 providing the correct list of materials used in constructing the Great
@@ -1398,7 +1387,7 @@ The QA models proved to be the most efficient for answering list-based
 questions with paragraph retrievals. Their performance in generating
 accurate RAG answers highlights their suitability for RAG-based
 solutions, especially when detailed and precise information is required.
-Given the size and efficiency, the QA models are the best choice for
+Given their size and efficiency, the QA models are the best choice for
 implementing a RAG solution in this context.
 
 
@@ -1427,11 +1416,11 @@ follows:
   \textbf{Number of Retrievals}: 3
 \end{itemize}
 
-The synthesis-based question require that several facts are taken in to
-consideration in order to answer the questions. In this case the
+The synthesis-based question requires that several facts are taken into
+consideration in order to answer the question. In this case the
 retriever will need to provide to the generator several paragraphs with
 information on Gustave Eiffel. In the answer generation, augmentation phase 
-the LLM needs to combine the facts in to a conclusion and generate the answer.
+the RAG needs to combine the facts in to a conclusion and generate the answer.
 
 \subsubsection{Causal Models}
 
@@ -1460,8 +1449,8 @@ the LLM needs to combine the facts in to a conclusion and generate the answer.
   \end{tabular}
 \end{table*}
 
-The results of the causal models for the experiment of the current section
-are stored in Table \ref{tab:experiment_R_3_paragraph_Q_synthesis_M_casual_table}.
+The results of the causal models for this experiment
+are stored in \autoref{tab:experiment_R_3_paragraph_Q_synthesis_M_causal_table}.
 
 In this experiment, the causal models struggled to produce accurate or
 relevant LLM answers. The RAG approach helped improve the accuracy but
@@ -1490,11 +1479,11 @@ best choice for complex synthesis-based questions.
   \end{tabular}
 \end{table*}
 
-The results of the QA models for the experiment of the current section
-are documented in Table \ref{tab:experiment_R_3_paragraph_Q_synthesis_M_QaModels_table}.
+The results of the QA models for this experiment
+are documented in \autoref{tab:experiment_R_3_paragraph_Q_synthesis_M_QaModels_table}.
 
 The QA models had mixed performance in this experiment. While the direct
-LLM answers were often uninformative, the RAG answers did manage to
+LLM answers were often uninformative, the RAG answers managed to
 identify at least one structure associated with Gustave Eiffel, but they
 lacked completeness. The synthesis required for this question appeared
 challenging for these models.
@@ -1517,14 +1506,14 @@ challenging for these models.
   \end{tabular}
 \end{table*}
 
-The results of the T5 conversational models for the experiment of the current section
-are documented in Table \ref{tab:experiment_R_3_paragraph_Q_synthesis_M_T5Models_table}.
+The results of the T5 conversational models for the experiment in the current section
+are documented in \autoref{tab:experiment_R_3_paragraph_Q_synthesis_M_T5Models_table}.
 
-The T5 models performed relatively well in the RAG approach, with the
-larger model (T5-large) being able to correctly list both the Eiffel
-Tower and the Statue of Liberty as structures associated with Gustave
-Eiffel. This highlights the potential of T5 models in synthesis-based
-tasks, especially when more complex reasoning is required.
+The T5 models performed relatively well in the RAG approach, with the larger 
+model (T5-large) correctly listing both the Eiffel Tower and the Statue of Liberty
+as structures associated with Gustave Eiffel. This highlights the potential of 
+T5-models in synthesis-based tasks, especially when more complex reasoning is required.
+
 
 \textbf{Summary:}
 
@@ -1539,49 +1528,57 @@ RAG-based solutions when dealing with synthesis-based questions.
 
 \subsection{Summary on performance}
 % todo contue here
-In terms of answer quality, the answers can be categorized in four groups, incorrect, partial, over information correct.
-Partial answer, would be an answer that does not provide some but not all necessarily information to answer the question
-also answers that are truncated or sentences not fully articulated will fall in this category. Over-information
-is a correct answer that contains additional or repeatable information that is not required for the question. 
-The answer quality alongside the model's speed and size in parameters can be observed in the tables 
+In terms of answer quality, the answers can be categorized into four groups, incorrect, partial, 
+over information correct. A partial answer, would be an answer that does provide some, but not
+all, of the necessary information to answer the question also answers that are truncated or sentences
+not fully articulated will fall in this category. Over-information is a correct answer that
+contains additional or repeatable information that is not required by the question. The answer
+quality alongside the model's speed and size in parameters can be observed in the tables 
 \autoref{tab:experiment1_model_performance_full_with_size}, \autoref{tab:experiment2_model_performance_full_with_size}, 
 \autoref{tab:experiment3_model_performance_full_with_size}, \autoref{tab:experiment4_model_performance_full_with_size},
-\autoref{tab:experiment5_model_performance_full_with_size} for each experiment. In terms of answer quality overall in all categoris
-the T5-models performed the best. In terms of measurable performance several interesting conclusions can be derived from the data. 
-For the purpose of comparing performance, simple efficiency score can be defined as:
+\autoref{tab:experiment5_model_performance_full_with_size} for each experiment.
+In terms of answer quality overall in all categories the T5-models performed the best. 
+In terms of measurable performance several interesting conclusions can be derived from the data.
+For the purpose of comparing performance, a simple efficiency score can be defined as:
 \begin{equation}
   \textstyle  
 EfficiencyScore = \frac{1}{Speed_n * Parameters_n}
   \label{eq:efficiency_score}
 \end{equation}
-Where $Speed_n$ is the normalized speed of the model and $Parameters_n$ is the normalized number of parameters of the model.
+Where $Speed_n$ is the normalized speed of the model and $Parameters_n$ is the normalized number of parameters
+of the model.
 
-The normalized speed and normalized parameters are calculated based on the maximum speed and the maximum number of parameters across all experiments.
-Bigger numbers in \autoref{eq:efficiency_score} indicate better performance. Base on this formula average efficiency scores 
-can be calculated for each model across all experiments. The results can be seen in \autoref{tab:model_efficiency_scores}.
+The normalized speed and normalized parameters are calculated based on the maximum speed and the
+maximum number of parameters across all experiments. Higher numbers in \autoref{eq:efficiency_score}
+indicate better performance. Based on this formula, average efficiency scores can be calculated 
+for each model across all experiments. The results can be seen in \autoref{tab:model_efficiency_scores}.
 
-Based on this assessment The QA models are in the top segment of the \autoref{tab:model_efficiency_scores},
-their efficiency score ranges from 200,85 to 5550,67, where the 'distilbert-base-uncased-distilled-squad' been the model with the highest efficiency score.
-Their average answer time is quite fast, with and the average per model ranges from 0,17 to 0,92 seconds.
+Based on this assessment, the QA models are in the top segment of  \autoref{tab:model_efficiency_scores},
+their efficiency score ranges from 200,85 to 5550,67, where the 'distilbert-base-uncased-distilled-squad'
+being the model with the highest efficiency score. Their average answer time is quite fast, starting from 0.17 up
+to 0.92 seconds per model.
 
-The GPT model family are positioned at the lower end of the table. The model with the lowest average efficiency score
-of 1,56 is `EleutherAI/gpt-neo-1.3B`. The average answer is slower than the others model families, with an average range per model from 3.8 up to 25 seconds.
-The `EleutherAI/gpt-neo-1.3B` is the slowest model in terms of absolute answer speed, it's average answer time is 25,20 seconds.
+The GPT model family is positioned at the lower end of the table. The model with the lowest average efficiency score
+of 1.56 is `EleutherAI/gpt-neo-1.3B`. The average answer is slower than of the others model families, with an average range per model
+from 3.8 up to 25 seconds. The `EleutherAI/gpt-neo-1.3B` is the slowest model in terms of absolute answer speed,
+its average answer time is 25.20 seconds.
 
-The T-model family are positioned in middle of the efficiency score \autoref{tab:model_efficiency_scores}. They are slower than the QA modes. 
-`T5-base` model have an average efficiency score of 22,13 for the T5-large and 185,50 for the T5-base model. When considering the 
+The T-model family is positioned in middle of the efficiency score \autoref{tab:model_efficiency_scores}. They are slower than the QA models. 
+`T5-base` model has an average efficiency score of 22.13 for the T5-large and 185.50 for the T5-base model. When considering the 
 answer quality, T5-large model performed better than the T5-base model. This is visible in the last experiment where the T5-base model
 failed to answer correctly on the synthesis based question. This might indicate that model can't handle complex context. 
-Given the size of the model, 22M parameter this is probably an underfitting problem and using same model type with more parameters might solve this issue.
-In terms of the absolute time of response, the T5 models are quite fast with an average from 1,2 to 3,5 seconds, this is an acceptable time.
-Without additional fine-tuning this model family can be used in a RAG system.
+Given the size of the model, 22M parameters, this is probably an underfitting problem and using same model type 
+with more parameters might solve this issue.In terms of the absolute time of response, the T5 models
+are quite fast with an average from 1.2 to 3.5 seconds, this is an acceptable time. Without additional
+fine-tuning, this model family can be used in a RAG system.
 
 \textbf{For comparison the expected response time of OpenAI's GPT-4o model is 1-3 seconds for a medium to short answers}.
 
-When comparing the LLM answer time to the RAG answer time, two tasks need to be measured. The time to retrieve of the context and the time to generate the answer.
-The time to retrieve the context depends on the parametric memory index, parametric memory size and number of retrievals. 
-The time to generate the answer depends on the model, bigger models need more time to generate the answer and the size of the question and context, 
-where bigger context and question need more time to generate the answer. The average response time of the LLM models was 5.6 seconds over all experiments.
+When comparing the LLM answer time to the RAG answer time, two tasks need to be measured. The time to retrieve the context
+and the time to generate the answer. The time to retrieve the context depends on the parametric memory index,
+parametric memory size, and number of retrievals. The time to generate the answer depends on the model and the size of input,
+including the question and context. Larger models need more time to generate the answer. Larger questions and contexts
+also require more time to be answered. The average response time of the LLM models was 5.6 seconds across all experiments.
 The average response time of the RAG for the experiments is:
 \begin{itemize}
   \item Experiment 1: 4.2 seconds
@@ -1591,8 +1588,10 @@ The average response time of the RAG for the experiments is:
   \item Experiment 5: 9.1 seconds
 \end{itemize}
 
-The context in experiments starting from experiment 1 to experiment 5 was increased. Experiment 1 and 2 have a context of one sentence, experiment 3 and 4 have a context of one paragraph and experiment 5 has a context of three paragraphs.
-This data indicates that as stated before the time to response in a RAG system depends on the context size.
+The context in experiments, starting from experiment 1 to experiment 5 was increased. 
+Experiments 1 and 2 have a context of one sentence, experiment 3 and 4 have a context
+of one paragraph and experiment 5 has a context of three paragraphs.
+This data indicates that as stated before response time in a RAG system depends on the context size.
 
 \begin{table*}[htbp]
   \centering
@@ -1637,17 +1636,17 @@ This data indicates that as stated before the time to response in a RAG system d
     \hline
     \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
     \hline
-    facebook/blenderbot-90M & casual\_model & Incorrect & 1.39 & 1.63 & 90M \\
+    facebook/blenderbot-90M & causal\_model & Incorrect & 1.39 & 1.63 & 90M \\
     \hline
-    gpt2 & casual\_model & Over Information & 3.59 & 2.75 & 124M \\
+    gpt2 & causal\_model & Over Information & 3.59 & 2.75 & 124M \\
     \hline
-    EleutherAI/gpt-neo-125M & casual\_model & Partial & 3.54 & 2.79 & 125M \\
+    EleutherAI/gpt-neo-125M & causal\_model & Partial & 3.54 & 2.79 & 125M \\
     \hline
-    gpt2-medium & casual\_model & Partial & 9.36 & 6.03 & 355M \\
+    gpt2-medium & causal\_model & Partial & 9.36 & 6.03 & 355M \\
     \hline
-    gpt2-large & casual\_model & Correct & 17.03 & 10.47 & 762M \\
+    gpt2-large & causal\_model & Correct & 17.03 & 10.47 & 762M \\
     \hline
-    EleutherAI/gpt-neo-1.3B & casual\_model & Partial & 20.68 & 19.14 & 1.3B \\
+    EleutherAI/gpt-neo-1.3B & causal\_model & Partial & 20.68 & 19.14 & 1.3B \\
     \hline
     distilbert-base-uncased-distilled-squad & qa\_model & Correct & 0.22 & 0.09 & 66M \\
     \hline
@@ -1672,17 +1671,17 @@ This data indicates that as stated before the time to response in a RAG system d
     \hline
     \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
     \hline
-    facebook/blenderbot-90M & casual\_model & Incorrect & 1.39 & 1.63 & 90M \\
+    facebook/blenderbot-90M & causal\_model & Incorrect & 1.39 & 1.63 & 90M \\
     \hline
-    gpt2 & casual\_model & Partial & 3.59 & 2.75 & 124M \\
+    gpt2 & causal\_model & Partial & 3.59 & 2.75 & 124M \\
     \hline
-    EleutherAI/gpt-neo-125M & casual\_model & Incorrect & 3.54 & 2.79 & 125M \\
+    EleutherAI/gpt-neo-125M & causal\_model & Incorrect & 3.54 & 2.79 & 125M \\
     \hline
-    gpt2-medium & casual\_model & Partial & 9.36 & 6.03 & 355M \\
+    gpt2-medium & causal\_model & Partial & 9.36 & 6.03 & 355M \\
     \hline
-    gpt2-large & casual\_model & Partial & 17.03 & 10.47 & 762M \\
+    gpt2-large & causal\_model & Partial & 17.03 & 10.47 & 762M \\
     \hline
-    EleutherAI/gpt-neo-1.3B & casual\_model & Partial & 20.68 & 19.14 & 1.3B \\
+    EleutherAI/gpt-neo-1.3B & causal\_model & Partial & 20.68 & 19.14 & 1.3B \\
     \hline
     distilbert-base-uncased-distilled-squad & qa\_model & Partial & 0.22 & 0.09 & 66M \\
     \hline
@@ -1707,17 +1706,17 @@ This data indicates that as stated before the time to response in a RAG system d
     \hline
     \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
     \hline
-    facebook/blenderbot-90M & casual\_model & Incorrect & 1.69 & 2.20 & 90M \\
+    facebook/blenderbot-90M & causal\_model & Incorrect & 1.69 & 2.20 & 90M \\
     \hline
-    gpt2 & casual\_model & Incorrect & 3.70 & 3.67 & 124M \\
+    gpt2 & causal\_model & Incorrect & 3.70 & 3.67 & 124M \\
     \hline
-    EleutherAI/gpt-neo-125M & casual\_model & Incorrect & 3.68 & 4.19 & 125M \\
+    EleutherAI/gpt-neo-125M & causal\_model & Incorrect & 3.68 & 4.19 & 125M \\
     \hline
-    gpt2-medium & casual\_model & Over Information & 8.95 & 8.65 & 355M \\
+    gpt2-medium & causal\_model & Over Information & 8.95 & 8.65 & 355M \\
     \hline
-    gpt2-large & casual\_model & Over Information & 16.52 & 15.63 & 762M \\
+    gpt2-large & causal\_model & Over Information & 16.52 & 15.63 & 762M \\
     \hline
-    EleutherAI/gpt-neo-1.3B & casual\_model & Incorrect & 21.88 & 27.92 & 1.3B \\
+    EleutherAI/gpt-neo-1.3B & causal\_model & Incorrect & 21.88 & 27.92 & 1.3B \\
     \hline
     distilbert-base-uncased-distilled-squad & qa\_model & Correct & 0.16 & 0.18 & 66M \\
     \hline
@@ -1742,17 +1741,17 @@ This data indicates that as stated before the time to response in a RAG system d
     \hline
     \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
     \hline
-    facebook/blenderbot-90M & casual\_model & Incorrect & 2.09 & 2.78 & 90M \\
+    facebook/blenderbot-90M & causal\_model & Incorrect & 2.09 & 2.78 & 90M \\
     \hline
-    gpt2 & casual\_model & Over Information & 4.11 & 4.32 & 124M \\
+    gpt2 & causal\_model & Over Information & 4.11 & 4.32 & 124M \\
     \hline
-    EleutherAI/gpt-neo-125M & casual\_model & Incorrect & 4.66 & 4.51 & 125M \\
+    EleutherAI/gpt-neo-125M & causal\_model & Incorrect & 4.66 & 4.51 & 125M \\
     \hline
-    gpt2-medium & casual\_model & Over Information & 10.92 & 10.45 & 355M \\
+    gpt2-medium & causal\_model & Over Information & 10.92 & 10.45 & 355M \\
     \hline
-    gpt2-large & casual\_model & Over Information & 17.46 & 14.16 & 762M \\
+    gpt2-large & causal\_model & Over Information & 17.46 & 14.16 & 762M \\
     \hline
-    EleutherAI/gpt-neo-1.3B & casual\_model & Over Information & 19.06 & 22.33 & 1.3B \\
+    EleutherAI/gpt-neo-1.3B & causal\_model & Over Information & 19.06 & 22.33 & 1.3B \\
     \hline
     distilbert-base-uncased-distilled-squad & qa\_model & Correct & 0.19 & 0.17 & 66M \\
     \hline
@@ -1777,17 +1776,17 @@ This data indicates that as stated before the time to response in a RAG system d
     \hline
     \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
     \hline
-    facebook/blenderbot-90M & casual\_model & Incorrect & 2.19 & 3.09 & 90M \\
+    facebook/blenderbot-90M & causal\_model & Incorrect & 2.19 & 3.09 & 90M \\
     \hline
-    gpt2 & casual\_model & Incorrect & 4.96 & 5.57 & 124M \\
+    gpt2 & causal\_model & Incorrect & 4.96 & 5.57 & 124M \\
     \hline
-    EleutherAI/gpt-neo-125M & casual\_model & Incorrect & 4.14 & 5.92 & 125M \\
+    EleutherAI/gpt-neo-125M & causal\_model & Incorrect & 4.14 & 5.92 & 125M \\
     \hline
-    gpt2-medium & casual\_model & Incorrect & 9.49 & 13.54 & 355M \\
+    gpt2-medium & causal\_model & Incorrect & 9.49 & 13.54 & 355M \\
     \hline
-    gpt2-large & casual\_model & Incorrect & 18.67 & 24.57 & 762M \\
+    gpt2-large & causal\_model & Incorrect & 18.67 & 24.57 & 762M \\
     \hline
-    EleutherAI/gpt-neo-1.3B & casual\_model & Incorrect & 18.41 & 37.47 & 1.3B \\
+    EleutherAI/gpt-neo-1.3B & causal\_model & Incorrect & 18.41 & 37.47 & 1.3B \\
     \hline
     distilbert-base-uncased-distilled-squad & qa\_model & Partial & 0.14 & 0.31 & 66M \\
     \hline

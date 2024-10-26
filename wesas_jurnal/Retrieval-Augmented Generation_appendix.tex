@@ -12,9 +12,6 @@
 \usepackage{fix-cm}
 
 
-% custom setup of how tables are rendered
-% \usepackage{multirow}
-
 \author{
   MARKO GRABULOSKI, ALEKSANDAR KARADIMCE, ANIS SEFIDANOSKI\\
   Information Sciences and Technologies\\
@@ -427,9 +424,6 @@ embeddings, where the sentence embedding models produces embeddings for
 entire sentences or text blocks.
 
 The requirement of the sentence embedding model is as follows:
-
-% TODO question: should i enumerate some of the mathematical expressions, not sure since there are no formulas in this section
-% TODO check what the \textless{} does, probably it is not needed
 For every three blocks of text \(A\), \(P\), \(N\), the model \(SE\) is
 to provide three embeddings \(SE(A)\), \(SE(P)\), \(SE(N)\),\\
 such that: if \(A\) and \(P\) are semantically more similar \(A\) and
@@ -457,16 +451,17 @@ including its input and output. Even though the input and output are in
 the required format, sentence embedding models are additionally trained
 to meet the semantic requirements defined above.
 
-The main issue during training is that that the exact output for a 
-block of text is not really know, it can be any embedding. It is the relative
-distance between the embeddings that is important. Semantically close
-embeddings should be closer than embeddings that have different
-meanings. To solve this problem, the model is trained using a Siamese
-network or a variation of the Siamese network. Initially the sentence
-embedder is trained with Siamese network that conceptual contains two
-copies of the same neural network. These two networks share the same
-parameters. The network ends with a loss function. Popular lost
-functions are contrastive loss and the triplet loss function.
+The main issue during training is that the exact output for a block of
+text is not really known; it can be any embedding. It is the relative 
+distance between the embeddings that is important. Semantically close 
+embeddings should be closer than embeddings that have different meanings. 
+To solve this problem, the model is trained using a Siamese network or a
+variation of the Siamese network. Initially, the sentence embedder is
+trained with a Siamese network that conceptually contains two copies of
+the same neural network. These two networks share the same parameters.
+The network ends with a loss function. Popular loss functions are
+contrastive loss and the triplet loss function.
+
 
 \paragraph{Contrastive loss function}
 
@@ -501,7 +496,7 @@ network can be trained on cases with similar and dissimilar embeddings.
 
 \begin{itemize}
 \item
-  Similar embeddings (y=1), the form of the loss function is: 
+  For similar embeddings \(y=1\), the form of the loss function is: 
   \begin{equation}
     Loss = \frac{1}{2}D(A,C)
   \end{equation}
@@ -515,8 +510,8 @@ network can be trained on cases with similar and dissimilar embeddings.
 \end{itemize}
 
 \paragraph{Triplet Loss function}
-Similarly to the Contrastive loss function training method, the triplet
-loss function uses a variation of the Siamese network where instead of
+Similar to the contrastive loss function training method, the triplet
+loss function uses a variation of the siamese network where instead of
 two networks, three networks are used. One single test case consists of
 three text blocks: \(A\), \(P\), and \(N\). 
 \begin{itemize}
@@ -532,14 +527,14 @@ three text blocks: \(A\), \(P\), and \(N\).
   \label{fig:triplet_loss_function_figure}
 \end{figure}
 
-This Siamese network ends with a triplet distance activation function.
+This siamese network ends with a triplet distance activation function.
 The function calculates the distance \(D(A,P)\) \(D(A,N)\) and is
 activated when:
 \begin{equation}
   D(A,P) \textgreater{} D(A,N) + margin
 \end{equation}
 
-The activation function from the perspective of the Sentence embedder model is
+The activation function from the perspective of the sentence embedder model is
 a Loss function, triplet loss function (\autoref{eq:efficiency_score}), and its output is used for training \cite{sbert}. 
 
 \begin{equation}
@@ -560,31 +555,35 @@ are updated when the function returns 0, the \(margin\) makes sure that the mode
 To be exact, the model will not be updated only if the distance between the anchor and the positive case is smaller
 than the distance between the anchor and the negative case plus the \(margin\). The \(margin\) in a way
 increases the model's precision.
-
+The \(margin\) is set by the user and introduces a bias to the function. Since the model's
+parameters are updated when the function returns 0, the \(margin\) ensures that the model
+is updated more often. Specifically, the model will not be updated only if the distance
+between the anchor and the positive case is smaller than the distance between the 
+anchor and the negative case plus the \(margin\). In this way, the \(margin\) helps
+increase the model's precision.
 
 \subparagraph{Contrastive vs Triplet Loss function}
 
-Both loss functions are used for training the embedder to detect
-semantic similarities. The primary difference is that contrastive loss
-is easier to implement in the context of generating the training set. It
-requires two text chunks, whereas triplet loss requires three text
-chunks. On the other hand, triplet loss often provides better results
-during training. Typically, the embedder is trained twice: initially
-with a contrastive loss function and later fine-tuned with a triplet
-loss function.
+Both loss functions are used for training the embedder to detect 
+semantic similarities. The primary difference is that contrastive loss is easier
+to implement in the context of generating the training set, as it requires
+two text chunks, whereas triplet loss requires three. On the other hand, triplet
+loss often provides better results during training. Typically, the embedder is trained 
+twice: initially with a contrastive loss function and later fine-tuned
+with a triplet loss function.
 
 An important point to mention is that the distance function in the
 triplet or contrastive loss can vary depending on the use case of the
 network. When trying to find semantic similarities, a cosine distance
 between the embeddings is used, whereas in different contexts, a norm
-distance like Euclidean distance can be used.
+distance, such as Euclidean distance, can be used.
 
 Cosine distance is based on cosine similarity, or the cosine of the
 angle between the two embeddings. Cosine distance does not measure the
 euclidean distance between the embeddings but how similar in
 direction are they. When the embeddings have similar directions the cosine distance
-between then is close to 0. Orthogonal embeddings have cosine values equal to 1, 
-and embeddings that are oppositely directed have cosine values close to 2. The loss
+between then is close to 0. Orthogonal embeddings have cosine values equal to 0, 
+and embeddings that are oppositely directed have cosine values close to -1. The loss
 function needs to be a "distance-like" measure, so just a cosine similarity
 between the embeddings won't be enough since it does not satisfy the
 distance requirements mainly because it produces negative values. That's why 
@@ -609,10 +608,10 @@ systematization}
 
 \subsubsection{Naive RAG}
 
-Is the simplest form of RAG, it contains all the components that were 
-previously described. This categorization is based the different components 
-that are part of the RAG system not their individual complexity. As an example
-naive RAG might contain a simple or complex LLM generator, simple or complex DB,
+This is the simplest form of RAG, it contains all the components that were 
+previously described. This categorization is based on the different components 
+that are part of the RAG system, not their individual complexity. For example
+naive RAG might contain a simple or complex LLM generator, simple or complex database,
 or simple or complex embedder. On the other side, this type of RAG will not 
 use complicated server architecture or complex multiphase retrieval or augmentation. 
 
@@ -651,10 +650,10 @@ models}
 \subsubsection{RAG-Sequence Model}
 
 This type of RAG retrieves \(k\) embeddings, but unlike the standard RAG
-implementation it does not use all the embeddings at the same time to
+implementation, it does not use all the embeddings at the same time to
 generate the answer. Before returning a token, the next token is
-generated \(k\) times, meaning for every embedding one token is
-generated. Then the token with the highest probability is returned. This 
+generated \(k\) times, meaning one token is generated for every embedding.
+Then, the token with the highest probability is returned. This 
 process is repeated for every token.
 
 \emph{The RAG-Sequence model uses the same retrieved document to
@@ -669,25 +668,24 @@ document, which are then marginalized} \cite{Retrieval_Augmented_Generation_(RAG
 
 Interesting research has been done using the so-called \emph{RAG-Token
 Model} \cite{Retrieval_Augmented_Generation_(RAG)_Explained_Understanding_Key_Concepts}. The RAG technique described, initially retrieves \(k\) documents
-related to the question then augments, creates context for the question and
-sends the context and the question as an input to an LLM or the
+related to the question then augments and creates context for the question and
+sending the context and question as input to an LLM or the
 generator. The RAG-Token Model retrieves new documents on every
 generated token. Once a token is generated, the token is appended to all
-previously generated tokens and this are appended to the initial
-question. This results in a string of the following form "Question +
+previously generated tokens which are then appended to the initial question. 
+This results in a string of the following form: "Question +
 GenerateTockenList". This new string is then used again as an input in
 the RAG, or as an input for the RAG retrieved. The process retrieves new
-documents for every new generated token and uses this documents to
+documents for every new generated token and uses these documents to
 generate the next token. 
 
 \emph{RAG-Token Model, in the RAG-Token model we can draw a different
 latent document for each target token and marginalize accordingly. This
 allows the generator to choose content from several documents when
-producing an answer. Concretely, the top $K$ documents are retrieved using
+producing an answer. Specifically, the top $K$ documents are retrieved using
 the retriever, and then the generator produces a distribution for the
 next output token for each document, before marginalizing, and repeating
-the process with the following output token}
-\cite{Retrieval_Augmented_Generation_(RAG)_Explained_Understanding_Key_Concepts}.
+the process with the following output token} \cite{Retrieval_Augmented_Generation_(RAG)_Explained_Understanding_Key_Concepts}.
 
 \subsection{Iterative RAG}
 
@@ -695,20 +693,20 @@ One example is the "Speculative RAG" \cite{SpeculativeRAG_EnhancingRetrieval-Aug
 Based on the question it retrieves \(N\) embeddings.
 The embeddings are then clustered in \(k\) classes using $K-means$. From the
 \(k\) clusters one embedding is selected per cluster, resulting in $k$
-embeddings. Then the algorithm uses two LLMs so called a drafter and a
+embeddings. Then the algorithm uses two LLMs called the drafter and the
 verifier. The drafter is used to generate the answer, called a draft and
-explanation called rational. It is important to note that not all LLMs
-generate rationals. There are some that can do this, but usually the
-model needs to be trained to provide the rational. The RAG-Model from
+explanation called rationale. It is important to note that not all LLMs
+generate rationales. There are some that can do this, but usually the
+model needs to be trained to provide the rationale. The RAG-Model from
 \href{https://huggingface.co/}{Hugginface} provides explanations that 
-can be used as a rational, also the retrieved embeddings might be used 
-as rationals. Once the answer and the rational are generated, the quality 
+can be used as a rationale, also the retrieved embeddings might be used 
+as rationales. Once the answer and the rational are generated, the quality 
 of the answer and question is measured by the verifier.
 
 \subsubsection{Self-Consistency Score}
 
 It gives the probability that the LLM can generate the answer and the
-rational based on the question. It is given by the joint probability
+rationale based on the question. It is given by the joint probability
 formula:
 
 \begin{equation}
@@ -723,10 +721,10 @@ Where:
   \item \( Q \) is the question
 \end{itemize}
 
-The simple interpretation of \autoref{eq:self_consistency_score} is that
-calculates the conditional joint probability of the answer been generated based on the question 
-and the probability that the rational is generated based on the question and the
-answer. The probability are calculated by the LLM. 
+The simple interpretation of \autoref{eq:self_consistency_score} is that it
+calculates the conditional joint probability of the answer being generated based on the question 
+and the probability that the rationale is generated based on the question and the
+answer. These probabilities are calculated by the LLM. 
 
 \subsubsection{Self-reflection score}
 
@@ -753,25 +751,23 @@ picked as the most relevant, and it is the answer that is returned.
 \subsection{Recursive RAG}
 
 As any recursive algorithm it repeats its self until the results
-satisfies certain criteria. In case of the retrieval, a naive RAG system
-performs good when all the information required for answering the
+satisfy certain criteria. In case of the retrieval, a naive RAG system
+performs good when all the information required to answer the
 question is in the retrieved embedding, but it fails when this
-information is scattered in different embeddings. The Recursive RAG
-starts examine the semantically similar documents not only of the
-question but also of the embeddings that are initially retrieved. With
-this it tries to capture all the relevant information. The previous is
-described in the paper from (Karpukhin et al.~2020; Pondhouse Data, no
-date) \cite{website_PondhouseGuideOnAdvancedRAG} .
+information is scattered in different embeddings. The Recursive RAG starts 
+by retrieving semantically similar documents to the question and continues 
+to search for other similar embeddings to the already retrieved embeddings.
+In this way, it tries to capture all relevant information \cite{website_PondhouseGuideOnAdvancedRAG}.
 
 \section{Research methodology}
 
-In this research, a simple RAG system will be coded. The system will be
+In this research, a simple RAG system is developed. The system is
 flexible and modular enough so can use different LLMS as generators. The
 system will have a retriever that will be able to create embeddings
 based on sentences and also on paragraphs. The retriever will also
 retrieve embeddings based on a question/query. All the chosen LLMs and
 their corresponding RAGs will be asked three different types of Open-domain
-questions. These are types of questions that can't be answered with a simple 
+questions. These types of questions cannot be answered with a simple 
 yes or no and require accessing a broad range of information to provide an answer. 
 Find the RAG implementation and refer to \cite{cite_github_solution}.
 
@@ -794,8 +790,8 @@ Depending on the LLMs type, three different LLM models will be used:
   T5 - conversational models
 \end{enumerate}
 
-Regarding the model size, the experiments will be done on small LLMs
-ranging from 66M up to 1.3B. Models size and type are shown in \autoref{tab:model_descriptions}.
+Regarding model size, the experiments will be conducted on a small set of LLMs
+ranging from 66M up to 1.3B. Model sizes and type are shown in \autoref{tab:model_descriptions}.
 \begin{table*}[htbp]
   \centering
   \caption{Model Descriptions} % Optional caption
@@ -838,12 +834,12 @@ performance.}
 It is important to point out that the causal models are not trained for
 answering questions but for generating text based on input. Running a
 RAG around causal LLMs will give an idea of how powerful a RAG system
-can be. The question-answering models are more suitable for usage in a
-RAG system. They extract the continuous character set in the context
+can be. The question-answering models are more suitable for use in a
+RAG system. They extract sequence of text within the context
 that has the highest probability of being an answer given a specific
 question. The T5 models are conversational models, and although they are
 not specifically trained to answer questions, they are trained to
-maintain a conversation and could potentially outperform the causal and
+maintain a conversation and could potentially outperform the causal and the
 question-answering LLMs.
 
 \subsection{Questions}
@@ -862,7 +858,7 @@ The questions asked and their types are:
   designed or structurally influenced by Gustave Eiffel?"
 \end{enumerate}
 
-The ``Synthesis-based Fact'' question is a type of question where the
+The 'Synthesis-based Fact' question is a type of question where the
 answer needs to be derived from more than one retrieved fact. Unlike the
 other questions, where the answer is directly contained in the
 embedding, correctly answering the synthesis-based fact question implies
@@ -871,8 +867,7 @@ and that the LLM is capable of drawing conclusions based on several
 facts.
 
 
-\subsection{Retrieval and
-augmentation}
+\subsection{Retrieval and augmentation}
 
 There will be 3 types of RAG augmentation, in this text called
 retrieval:
@@ -886,8 +881,8 @@ retrieval:
   from one paragraph using a facts sentence based database.
 \item
   Retrieval of three paragraphs, will create a context for the question
-  from three paragraphs using a facts paragraph based database. The
-  database for the sentences and paragraphs are created from two files
+  from three paragraphs using a facts-paragraph-based-database. The
+  database for the sentences and paragraphs is created from two files
   containing semantically correct but not necessarily related sentences
   and paragraphs.
 \end{itemize}
@@ -896,7 +891,7 @@ retrieval:
 
 \subsection{RAG solution}
 
-The RAG system will be a manual solution, not an existing RAG system.
+The RAG system is a manual solution, not an existing RAG system.
 The idea is to explore how even a simple RAG system can extend the
 capabilities of the LLM.
 
@@ -912,7 +907,7 @@ enough to handle this experiment.
 \subsubsection{LLM generator placeholder}
 
 The LLM placeholder is a component that allows the attachment of 
-different LLMs in the RAG solution. The reason for this is to test 
+different LLMs to the RAG solution. The reason for this is to test 
 how different LLMs perform.
 
 \subsection{In memory database}
@@ -951,7 +946,7 @@ Where the important processes are numerated and described in the following list:
 \subsubsection{Experiments definition}
 
 
-In total five experiments will be performed. The questions type, the retrieved type of information(text), 
+In total five experiments will be performed. The question type, the retrieved type of information(text), 
 and the number of retrievals for each experiment are shown in \autoref{tab:experiment_questions_table}. 
 
 \begin{table*}[htbp]
@@ -996,21 +991,6 @@ experiment parameters are as follows:
 \subsubsection{Causal Models}
 
 The results of the experiment are shown in the \autoref{tab:experiment_R_1_sentence_Q_fact_M_causal_table}.
-% \begin{table*}[htbp]
-%   \centering
-%   \caption{Fact-based question, single sentence retrieval, causal models}
-%   \label{tab:experiment_R_1_sentence_Q_fact_M_causal_table}
-%     \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-%       \hline
-%       \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
-%       facebook blenderbot-90M & balkicker mutations mutations pment mutations mutations mutations kicker fiers eston eston eston eres bender eston \ldots{} & lease willis lease mative mative lease willis mative lease lease lease willis \ldots{} \\ \hline
-%       gpt2 & The Pyramid of Giza is the tallest building in Egypt. The Pyramid of Giza is located in the Giza Plateau \ldots{} & The Great Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
-%       EleutherAI gpt-neo-125M & The Pyramid of Giza is the tallest pyramid in the world. It was completed in the 13th century AD \ldots{} & The Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
-%       gpt2-medium & The Pyramid of Giza is the tallest structure in Egypt. It is 1,068 feet tall, and is one of the largest pyramids \ldots{} & The Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
-%       gpt2-large & The Pyramid of Giza is the tallest structure in the world. How tall is the Taj Mahal? \ldots{} & The Great Pyramid of Giza is the largest and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
-%       EleutherAI gpt-neo-1.3B & The Pyramid of Giza is one of the Seven Wonders of the Ancient World. It is one of the Seven Wonders of the Modern World \ldots{} & The pyramid of Giza, also known as the Pyramid of Khufu \ldots{} and oldest of the three pyramids, standing at 146.6 meters \ldots{} \\ \hline
-%     \end{tabular}
-% \end{table*}
 In this experiment setup, all the causal LLMs generated incorrect answers. 
 Except for \texttt{facebook/blenderbot-90M}, they all generated grammatically correct sentences. 
 Regarding the RAG answers, all models generated correct RAG answers except for \texttt{facebook/blenderbot-90M}.
@@ -1021,18 +1001,6 @@ This is due to the nature of the causal models. Taking into consideration the pa
 the smallest model that provided a correct answer was GPT-2 with 90M.
 \subsubsection{QA Models}
 
-% \begin{table*}[htbp]
-%   \centering
-%   \caption{Fact-based question, single sentence retrieval, question answering models. "How tall is the Pyramid of Giza?"} % Optional caption
-%   \label{tab:experiment_R_1_sentence_Q_fact_M_question_answering_table}  % Adding label for referencing  
-%     \begin{tabular}{|p{0.2\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-%       \hline
-%       \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
-%       distilbert-base-uncased-distilled-squad\_66M & how tall is the pyramid of giza? {[}SEP{]} & 146.6 meters \\ \hline
-%       deepset roberta-base-squad2\_125M &  & 146.6 meters (481 feet) \\ \hline
-%       bert-large-uncased-whole-word-masking-finetuned-squad\_340M & tall & 146.6 meters \\ \hline
-%     \end{tabular}
-% \end{table*}
 The results of the question answering models for this experiment
 are shown in \autoref{tab:experiment_R_1_sentence_Q_fact_M_question_answering_table}.
 The QA models also provided correct answers. Compared to the causal LLMs
@@ -1041,17 +1009,6 @@ was able to answer the question correctly. The answers generated by the LLM were
 
 \subsubsection{T5 Models}
 
-% \begin{table}[htbp]
-%   \centering
-%   \caption{Fact-based question, single sentence retrieval, T5 conversational models. "How tall is the Pyramid of Giza?"} % Optional caption
-%   \label{tab:experiment_R_1_sentence_Q_fact_M_T5_table}  % Adding label for referencing
-%   \begin{tabular}{|p{0.22\linewidth}|p{0.29\linewidth}|p{0.35\linewidth}|}
-%     \hline
-%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
-%     t5-base\_220M & None & 146.6 meters (481 feet) \\ \hline
-%     t5-large\_770M & False & 140 meters (481 feet) \\ \hline
-%   \end{tabular}
-% \end{table}
 
 The results of the T5 conversational models this experiment can be seen in \autoref{tab:experiment_R_1_sentence_Q_fact_M_T5_table}.
 The T5 models RAG generated answer is correct for the T5-base model and partially correct
@@ -1064,7 +1021,6 @@ The T5-large model answered gave the correct answer in feet but not in meters.
 \textbf{Summary:}
 Given the size of the models and the accuracy of the answers, the QA models are most
 appropriate for answering fact-based Question.
-
 
 \subsection{Experiment 2: List-based Question - 'What materials were
 used in constructing the Great Wall of China?'}
@@ -1088,23 +1044,6 @@ Great Wall of China?'. The experiment parameters are as follows:
 
 \subsubsection{Causal Models}
 
-%  moved to the end of the document
-% \begin{table*}[htbp]
-%   \centering
-%   \caption{List-based question, single sentence retrieval, causal models. "What materials were used in constructing the Great Wall of China?"}
-%   \label{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_causalModel_table}  
-%   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-%     \hline
-%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
-%     facebook blenderbot-90M & pos sitter sitter drip ba ba ba le diving ba ba bee ba ba da ba ba cats ba ba table da ba da disc ba ba orba da da prba ba prda da \textbf{end} & scibal pubalfatty composition asses sciscifatty fatty bee pumubee bee mubee zarbalpuscibal mutbal bee bal composition fatty composition fatty bee bal strip scimutcomposition \textbf{end} \\ \hline
-%     gpt2 & The Great Wall of China is the largest in the world, and is the largest city in the world. It is the largest city in the world. It is the largest city in & The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood. The Great Wall of China was built by the People's Republic of \ldots{} \\ \hline
-%     EleutherAI gpt-neo-125M & The Great Wall of China was constructed by the Chinese government in the 17th century, and is known as the Great Wall of China \ldots{} & The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood. Answer What materials were used in constructing the Great Wall of China? \\ \hline
-%     gpt2-medium & The Great Wall of China was built by the Ming Dynasty (1644-1911). The Great Wall was constructed of a combination of stone, wood, and metal \ldots{} & 'Answer The Great Wall of China was built of various materials, including stone, brick, tamped earth, and wood. The Great Wall of China was constructed of various materials, including stone \ldots{} \\ \hline
-%     gpt2-large & The Great Wall of China was built by the Qin Dynasty (221-206 B.C.), which lasted from 221 to 206 B.C. \ldots{} & 'The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood.'Answer What materials were used in constructing the Great Wall of China? \\ \hline
-%     EleutherAI gpt-neo-1.3B & The Great Wall of China was constructed using many different types of materials, including wood, stone, brick, clay, and iron \ldots{} & The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood. \\ \hline
-%   \end{tabular}
-% \end{table*}
-
 The results of the causal models for the experiment in the current section are 
 documented in \autoref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_causalModel_table}. 
 In all cases, the causal models generated incorrect or irrelevant LLM answers. 
@@ -1114,43 +1053,14 @@ Because of the causal LLM model's nature, the RAG approach's answer contains add
 
 \subsubsection{QA Models}
 
-
-% TODO REFERENCE TABLE IN TEXT
-% \begin{table*}[htbp]
-%   \centering
-%   \caption{List-based question, single sentence retrieval, question answering models. "What materials were used in constructing the Great Wall of China?"} % Optional caption
-%   \label{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_QaModels_table} 
-%   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-%     \hline
-%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
-%     distilbert-base-uncased-distilled-squad\_66M & what materials were used in constructing the great wall of china? {[}SEP{]} & stone, brick, tamped earth, and wood \\ \hline
-%     deepset roberta-base-squad2\_125M & & stone, brick, tamped earth, and wood \\ \hline
-%     bert-large-uncased-whole-word-masking-finetuned-squad\_340M & & stone, brick, tamped earth, and wood \\ \hline
-%   \end{tabular}
-% \end{table*}
-
 The results of the QA models for this experiment are documented in \autoref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_QaModels_table}.
 
 The QA models performed well in generating correct RAG answers, accurately listing the materials used in constructing the Great Wall of China. 
 Similar to the first experiment, the generated LLM answers were incorrect, but the RAG system compensated by providing correct and relevant answers,
 demonstrating its strength in retrieving and presenting accurate information.
 
-
 \subsubsection{T5 Models}
 
-%  TODO reference table in text
-% \begin{table*}[htbp]
-%   \centering
-%   % TODO Table not referenced
-%   \caption{List based question, single sentence retrieval, T5 conversational models. "What materials were used in constructing the Great Wall of China?"} % Optional caption
-%   \label{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_T5Models_table} 
-%   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-%     \hline
-%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
-%     t5-base\_220M & None & stone, brick, tamped earth, and wood \\ \hline
-%     t5-large\_770M & False & stone, brick, tamped earth, and wood \\ \hline
-%   \end{tabular}
-% \end{table*}
 
 The results of the T5 conversational models for this experiment can be seen 
 in \autoref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_T5Models_table}.
@@ -1160,12 +1070,10 @@ They correctly listed the materials used in constructing the Great Wall of China
 However, like the other models, their direct LLM answers were inaccurate or non-informative,
 further highlighting the importance of RAG in ensuring accurate output.
 
-% perhaps a subsection 
 \textbf{Summary:}
 
 Given the size of the models the QA models are most appropriate for
 answering List-based Question.
-
 
 \subsection{Experiment 3: Fact-based Question - 'How tall is the Pyramid of Giza?'}
 
@@ -1192,22 +1100,6 @@ The experiment parameters are as follows:
 
 \subsubsection{Causal Models}
 
-% \begin{table*}[htbp]
-%   \centering
-%   \caption{Fact based question, single paragraph retrieval, causal models. "How tall is the Pyramid of Giza?"} % Optional caption
-%   \label{tab:experiment_R_1_paragraph_Q_fact_M_causal_table}  % Adding label for referencing  
-%   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-%     \hline
-%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
-%     facebook blenderbot-90M & pickbalfiers fiers predators mutations bender mutations mutations eston mutations eston predators kicker mutations mutations predators mutations pment eston eston eston trout mutations fiers eston eston bender eston eston kicker eston eston fiers eston joreston \textbf{end} & design mutpuwillis willis design lease orpotbee willis potpotdistribution fatty fatty composition lease mutfatty fatty willis strip spy lease willis distribution willis strip distribution mutdraft mutpupumutspy \textbf{end} \\ \hline
-%     gpt2 & The Pyramid of Giza is the tallest building in the world. It is located in the northern part of the country of Egypt. It is one of the tallest buildings in the world & The Great Pyramid of Giza is the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311. The Sphinx is \\ \hline
-%     EleutherAI gpt-neo-125M & How tall is the Pyramid of Giza? How tall is the Pyramid of Giza? How tall is the Pyramid of Giza? How tall is & The Great Pyramid of Giza was the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311. The Great \\ \hline
-%     gpt2-medium & The Pyramid of Giza, also known as the Great Pyramid of Giza or Pyramid of the Sun, is one of the world's largest pyramids. It was built in Egypt & The Pyramid of Giza is the tallest man-made structure in the world for over 3,800 years until the construction of Lincoln Cathedral in England in 1311. The Sphinx, \\ \hline
-%     gpt2-large & The Pyramid of Giza is believed to be the tallest structure in the world. The Pyramid of Giza is located in Egypt. The Pyramid of Giza was built between & The height of the Great Pyramid of Giza is 146.6 meters (481 feet). This is the tallest man-made structure in the world for over 3,800 years. The \\ \hline
-%     EleutherAI gpt-neo-1.3B & This is a question that has been asked many times, but the answer is not always so simple. Some of the tallest buildings in the world are located in the United States, and & The Pyramids of Giza are the only remaining structure of the Seven Wonders of the Ancient World. The Great Pyramid of Giza, also known as the Pyramid of Khuf \\ \hline
-%   \end{tabular}
-% \end{table*}
-
 This experiment's results for the causal models can be observed in 
 \autoref{tab:experiment_R_1_paragraph_Q_fact_M_causal_table}.
 
@@ -1215,21 +1107,7 @@ In this experiment, the causal models generally provided incorrect or nonsensica
 However, the RAG approach performed significantly better, producing correct answers by accurately 
 retrieving and presenting the relevant information from the paragraph.
 
-
 \subsubsection{QA Models}
-% TODO REFERENCE TABLE IN TEXT
-% \begin{table*}[htbp]
-%   \centering
-%   \caption{Fact based question, single paragraph retrieval, question answering models. "How tall is the Pyramid of Giza?"} % Optional caption
-%   \label{tab:experiment_R_1_paragraph_Q_fact_M_QaModels_table}
-%   \begin{tabular}{|p{0.2\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-%     \hline
-%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
-%     distilbert-base-uncased-distilled-squad\_66M & how tall is the pyramid of giza? {[}SEP{]} & 146.6 meters \\ \hline
-%     deepset roberta-base-squad2\_125M &  & 146.6 meters (481 feet) \\ \hline
-%     bert-large-uncased-whole-word-masking-finetuned-squad\_340M & tall & 146.6 meters \\ \hline
-%   \end{tabular}
-% \end{table*}
 
 The experiment results for the QA models are shown in \autoref{tab:experiment_R_1_paragraph_Q_fact_M_QaModels_table}.
 
@@ -1237,19 +1115,6 @@ The QA models continued to perform well, with the RAG approach providing correct
 Despite the direct LLM answers being incorrect, the RAG system ensured accurate information
 was retrieved and presented.
 \subsubsection{T5 Models}
-
-
-% \begin{table*}[htbp]
-%   \centering
-%   \caption{Fact based question, single paragraph retrieval, T5 conversational models. "How tall is the Pyramid of Giza?"} % Optional caption
-%   \label{tab:experiment_R_1_paragraph_Q_fact_M_T5Models_table}
-%   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-%     \hline
-%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\ \hline
-%     t5-base\_220M & None & 146.6 meters (481 feet) \\ \hline
-%     t5-large\_770M & False & 146.6 meters \\ \hline
-%   \end{tabular}
-% \end{table*}
 
 The results of the T5 conversational models for this experiment
 are shown in \autoref{tab:experiment_R_1_paragraph_Q_fact_M_T5Models_table}.
@@ -1289,30 +1154,6 @@ document. The experiment parameters are as follows:
 \end{itemize}
 
 \subsubsection{Causal Models}
-% TODO REFERENCE TABLE IN TEXT
-
-% \begin{table*}[htbp]
-%   \centering
-%   \caption{List based question, single paragraph retrieval, causal models. "What materials were used in constructing the Great Wall of China?"}
-%   \label{tab:experiment_R_1_paragraph_Q_listBased_M_causal_table}
-%   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-%     \hline
-%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
-%     \hline
-%     facebook blenderbot-90M & horn ba ba squba ba ba da ba ba bal ba ba phba ba eling ba ba sheet ba ba itba da phth ba ba muba da da audprba da \textbf{end} & potpotscistrip scipotorscizarpotdistribution scipotstrip strip cupotstrip sciscistrip potsciscibee qpotstrip cuqstrip potqsciqstrip sci\_\_end\_\_ \\
-%     \hline
-%     gpt2 & There are many materials that were used in the construction of the Great Wall of China, but only a few were used for the construction of the Great Wall of China \ldots{} & The Great Wall of China was built to protect against invasions from northern tribes. The Great Wall of China is made of various materials, including stone, brick, tamped earth \ldots{} \\
-%     \hline
-%     EleutherAI gpt-neo-125M & The Great Wall of China was built by the Chinese government during the reign of the Qing dynasty \ldots{} & The Great Wall of China is over 13,000 miles long. Construction of the Great Wall of China began in the 7th century BC. The Great Wall of China was \ldots{} \\
-%     \hline
-%     gpt2-medium & The Great Wall of China was constructed by a team of Chinese engineers, engineers, and architects \ldots{} & The Great Wall of China was constructed of various materials, including stone, brick, tamped earth, and wood. The height of the Great Wall of China varies, with the tallest \ldots{} \\
-%     \hline
-%     gpt2-large & The Great Wall of China was constructed by the Han Dynasty (206 BC -- 220 AD) \ldots{} & The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood. The height of the Great Wall of China varies, with the tallest sections \ldots{} \\
-%     \hline
-%     EleutherAI gpt-neo-1.3B & The Great Wall of China is one of the most famous examples of ancient Chinese architecture \ldots{} & The Great Wall of China is made of various materials, including stone, brick, tamped earth, and wood. The height of the Great Wall of China varies, with the tallest \ldots{} \\
-%     \hline
-%   \end{tabular}
-% \end{table*}
 
 The results of the causal models for this experiment can be seen 
 in \autoref{tab:experiment_R_1_paragraph_Q_listBased_M_causal_table}.
@@ -1325,22 +1166,6 @@ used in the construction of the Great Wall of China.
 
 \subsubsection{QA Models}
 
-% \begin{table*}[htbp]
-%   \centering
-%   \caption{List based question, single paragraph retrieval, question answering models. "What materials were used in constructing the Great Wall of China?"} % Optional caption
-%   \label{tab:experiment_R_1_paragraph_Q_listBased_M_QaModels_table}  % Adding label for referencing
-%   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-%     \hline
-%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
-%     \hline
-%     distilbert-base-uncased-distilled-squad\_66M & what materials were used in constructing the great wall of china? {[}SEP{]} & stone, brick, tamped earth, and wood \\
-%     \hline
-%     deepset roberta-base-squad2\_125M & & stone, brick, tamped earth, and wood \\
-%     \hline
-%     bert-large-uncased-whole-word-masking-finetuned-squad\_340M & & stone, brick, tamped earth, and wood \\
-%     \hline
-%   \end{tabular}
-% \end{table*}
 
 The results of the QA models for the experiment
 can be seen in \autoref{tab:experiment_R_1_paragraph_Q_listBased_M_QaModels_table}.
@@ -1353,22 +1178,6 @@ information.
 
 \subsubsection{T5 Models}
 
-% \begin{table*}[htbp]
-%   \centering
-%   \caption{List based question, single paragraph retrieval, T5 conversational models. "What materials were used in constructing the Great Wall of China?"}
-%   \label{tab:experiment_R_1_paragraph_Q_listBased_M_T5Models_table}  % Adding label for referencing
-%   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-%     \hline
-%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
-%     \hline
-%     distilbert-base-uncased-distilled-squad\_66M & what materials were used in constructing the great wall of china? {[}SEP{]} & stone, brick, tamped earth, and wood \\
-%     \hline
-%     deepset roberta-base-squad2\_125M & & stone, brick, tamped earth, and wood \\
-%     \hline
-%     bert-large-uncased-whole-word-masking-finetuned-squad\_340M & & stone, brick, tamped earth, and wood \\
-%     \hline
-%   \end{tabular}
-% \end{table*}
 
 The results of the T5 conversational models for this experiment can be seen 
 in \autoref{tab:experiment_R_1_paragraph_Q_listBased_M_T5Models_table}.
@@ -1381,14 +1190,12 @@ output.
 
 \textbf{Summary:}
 
-
 The QA models proved to be the most efficient for answering list-based
 questions with paragraph retrievals. Their performance in generating
 accurate RAG answers highlights their suitability for RAG-based
 solutions, especially when detailed and precise information is required.
 Given their size and efficiency, the QA models are the best choice for
 implementing a RAG solution in this context.
-
 
 \subsection{Experiment 5: Synthesis-based Question - ``Which famous
 structures, both designed or structurally influenced by Gustave
@@ -1423,31 +1230,6 @@ the RAG needs to combine the facts in to a conclusion and generate the answer.
 
 \subsubsection{Causal Models}
 
-% TODO REFERENCE TABLE IN TEXT
-
-% \begin{table*}[htbp]
-%   \centering
-%   \caption{Synthesis based question, three paragraph retrieval, causal models. "Which famous structures, both designed or structurally influenced by Gustave Eiffel?"} % Optional caption
-%   \label{tab:experiment_R_3_paragraph_Q_synthesis_M_causal_table}  % Adding label for referencing
-%   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-%     \hline
-%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
-%     \hline
-%     facebook blenderbot-90M & etically ication ix belle ication belle ication judgment ication belle le tacication belle conception ication le le belle ication planted le tacdden ication tacication judge ix ication le ication judge belle ication ication le \textbf{end} & Error generating text for facebook blenderbot-90M \\
-%     \hline
-%     gpt2 & They're not, but it's hard not to feel a twinge of nostalgia for them \ldots{} & The Eiffel Tower is located in Paris, France. The Eiffel Tower was completed in 1889. The Eiffel Tower was painted every seven years to prevent it \ldots{} \\
-%     \hline
-%     EleutherAI gpt-neo-125M & This article is part of a series of articles that explore Gustave Eiffel's influence on architecture and design \ldots{} & The Colosseum was completed in AD 80. The Colosseum was designed by Gustave Eiffel, who also designed the Eiffel Tower. \\
-%     \hline
-%     gpt2-medium & There are many, many, many. Some of the most famous of them are: The Eiffel Tower, Paris \ldots{} & The Eiffel Tower is located in Paris, France. The Eiffel Tower was completed in 1889. The Eiffel Tower is 324 meters tall. The Eiffel Tower was designed by Gustave Eiffel. \\
-%     \hline
-%     gpt2-large & The Louvre, Paris, France The Eiffel Tower, Paris, France The Eiffel Tower, Paris, France \ldots{} & The Eiffel Tower is located in Paris, France. The Eiffel Tower is 324 meters tall. The Eiffel Tower was designed by Gustave Eiffel. \\
-%     \hline
-%     EleutherAI gpt-neo-1.3B & The Eiffel Tower in Paris. The Eiffel Tower in Paris. The Eiffel Tower in Paris \ldots{} & The Eiffel Tower is located in Paris, France. The Eiffel Tower was completed in 1889. The Eiffel Tower is 324 meters tall. \\
-%     \hline
-%   \end{tabular}
-% \end{table*}
-
 The results of the causal models for this experiment
 are stored in \autoref{tab:experiment_R_3_paragraph_Q_synthesis_M_causal_table}.
 
@@ -1458,25 +1240,8 @@ list of structures designed or influenced by Gustave Eiffel. The answers
 often lacked synthesis, indicating that causal models might not be the
 best choice for complex synthesis-based questions.
 
-
 \subsubsection{QA Models}
 
-% \begin{table*}[htbp]
-%   \centering
-%   \caption{Synthesis based question, three paragraph retrieval, question answering models. "Which famous structures, both designed or structurally influenced by Gustave Eiffel?"} % Optional caption
-%   \label{tab:experiment_R_3_paragraph_Q_synthesis_M_QaModels_table}  % Adding label for referencing
-%   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-%     \hline
-%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
-%     \hline
-%     distilbert-base-uncased-distilled-squad\_66M & which famous structures, both designed or structurally influenced by Gustave Eiffel? {[}SEP{]} & statue of liberty \\
-%     \hline
-%     deepset roberta-base-squad2\_125M & & \\
-%     \hline
-%     bert-large-uncased-whole-word-masking-finetuned-squad\_340M & & statue of liberty \\
-%     \hline
-%   \end{tabular}
-% \end{table*}
 
 The results of the QA models for this experiment
 are documented in \autoref{tab:experiment_R_3_paragraph_Q_synthesis_M_QaModels_table}.
@@ -1488,22 +1253,6 @@ lacked completeness. The synthesis required for this question appeared
 challenging for these models.
 
 \subsubsection{T5 Models}
-%  TODO UP TO HERE
-% % Referece table in text
-% \begin{table*}[htbp]
-%   \centering
-%   \caption{Synthesis based question, three paragraph retrieval, T5 Models} % Optional caption
-%   \label{tab:experiment_R_3_paragraph_Q_synthesis_M_T5Models_table}  % Adding label for referencing
-%   \begin{tabular}{|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|}
-%     \hline
-%     \textbf{LLM} & \textbf{LLM Answer} & \textbf{RAG Answer} \\
-%     \hline
-%     t5-base\_220M & None & The Eiffel Tower \\
-%     \hline
-%     t5-large\_770M & False & Eiffel Tower and The Statue of Liberty \\
-%     \hline
-%   \end{tabular}
-% \end{table*}
 
 The results of the T5 conversational models for the experiment in the current section
 are documented in \autoref{tab:experiment_R_3_paragraph_Q_synthesis_M_T5Models_table}.
@@ -1512,7 +1261,6 @@ The T5 models performed relatively well in the RAG approach, with the larger
 model (T5-large) correctly listing both the Eiffel Tower and the Statue of Liberty
 as structures associated with Gustave Eiffel. This highlights the potential of 
 T5-models in synthesis-based tasks, especially when more complex reasoning is required.
-
 
 \textbf{Summary:}
 
@@ -1526,7 +1274,6 @@ this task effectively. Therefore, T5 models are the best choice for
 RAG-based solutions when dealing with synthesis-based questions.
 
 \subsection{Summary on performance}
-% todo contue here
 In terms of answer quality, the answers can be categorized into four groups, incorrect, partial, 
 over information correct. A partial answer, would be an answer that does provide some, but not
 all, of the necessary information to answer the question also answers that are truncated or sentences
@@ -1625,184 +1372,6 @@ This data indicates that as stated before response time in a RAG system depends 
   \end{tabular}
 \end{table*}
 
-
-
-% \begin{table*}[htbp]
-%   \centering
-%   \caption{Experiment 1, Model Performance with Sizes in Parameters} % Optional caption
-%   \label{tab:experiment1_model_performance_full_with_size}  % Adding label for referencing
-%   \resizebox{\textwidth}{!}{  % Resizes the table to fit the page width
-%   \begin{tabular}{|p{0.18\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.12\linewidth}|}
-%     \hline
-%     \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
-%     \hline
-%     facebook/blenderbot-90M & causal\_model & Incorrect & 1.39 & 1.63 & 90M \\
-%     \hline
-%     gpt2 & causal\_model & Over Information & 3.59 & 2.75 & 124M \\
-%     \hline
-%     EleutherAI/gpt-neo-125M & causal\_model & Partial & 3.54 & 2.79 & 125M \\
-%     \hline
-%     gpt2-medium & causal\_model & Partial & 9.36 & 6.03 & 355M \\
-%     \hline
-%     gpt2-large & causal\_model & Correct & 17.03 & 10.47 & 762M \\
-%     \hline
-%     EleutherAI/gpt-neo-1.3B & causal\_model & Partial & 20.68 & 19.14 & 1.3B \\
-%     \hline
-%     distilbert-base-uncased-distilled-squad & qa\_model & Correct & 0.22 & 0.09 & 66M \\
-%     \hline
-%     deepset/roberta-base-squad2 & qa\_model & Correct & 0.49 & 0.17 & 125M \\
-%     \hline
-%     bert-large-uncased-whole-word-masking-finetuned-squad & qa\_model & Correct & 1.26 & 0.45 & 340M \\
-%     \hline
-%     t5-base & t5\_model & Correct & 1.17 & 0.90 & 220M \\
-%     \hline
-%     t5-large & t5\_model & Partial & 3.40 & 1.83 & 770M \\
-%     \hline
-%   \end{tabular}
-%   }
-% \end{table*}
-
-% \begin{table*}[htbp]
-%   \centering
-%   \caption{Experiment 2, Model Performance with Sizes in Parameters} % Optional caption
-%   \label{tab:experiment2_model_performance_full_with_size}  % Adding label for referencing
-%   \resizebox{\textwidth}{!}{  % Resizes the table to fit the page width
-%   \begin{tabular}{|p{0.18\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.12\linewidth}|}
-%     \hline
-%     \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
-%     \hline
-%     facebook/blenderbot-90M & causal\_model & Incorrect & 1.39 & 1.63 & 90M \\
-%     \hline
-%     gpt2 & causal\_model & Partial & 3.59 & 2.75 & 124M \\
-%     \hline
-%     EleutherAI/gpt-neo-125M & causal\_model & Incorrect & 3.54 & 2.79 & 125M \\
-%     \hline
-%     gpt2-medium & causal\_model & Partial & 9.36 & 6.03 & 355M \\
-%     \hline
-%     gpt2-large & causal\_model & Partial & 17.03 & 10.47 & 762M \\
-%     \hline
-%     EleutherAI/gpt-neo-1.3B & causal\_model & Partial & 20.68 & 19.14 & 1.3B \\
-%     \hline
-%     distilbert-base-uncased-distilled-squad & qa\_model & Partial & 0.22 & 0.09 & 66M \\
-%     \hline
-%     deepset/roberta-base-squad2 & qa\_model & Correct & 0.49 & 0.17 & 125M \\
-%     \hline
-%     bert-large-uncased-whole-word-masking-finetuned-squad & qa\_model & Correct & 1.26 & 0.45 & 340M \\
-%     \hline
-%     t5-base & t5\_model & Correct & 1.17 & 0.90 & 220M \\
-%     \hline
-%     t5-large & t5\_model & Correct & 3.40 & 1.83 & 770M \\
-%     \hline
-%   \end{tabular}
-%   }
-% \end{table*}
-
-% \begin{table*}[htbp]
-%   \centering
-%   \caption{Experiment 3, Model Performance with Sizes in Parameters} % Optional caption
-%   \label{tab:experiment3_model_performance_full_with_size}  % Adding label for referencing
-%   \resizebox{\textwidth}{!}{  % Resizes the table to fit the page width
-%   \begin{tabular}{|p{0.16\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|}
-%     \hline
-%     \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
-%     \hline
-%     facebook/blenderbot-90M & causal\_model & Incorrect & 1.69 & 2.20 & 90M \\
-%     \hline
-%     gpt2 & causal\_model & Incorrect & 3.70 & 3.67 & 124M \\
-%     \hline
-%     EleutherAI/gpt-neo-125M & causal\_model & Incorrect & 3.68 & 4.19 & 125M \\
-%     \hline
-%     gpt2-medium & causal\_model & Over Information & 8.95 & 8.65 & 355M \\
-%     \hline
-%     gpt2-large & causal\_model & Over Information & 16.52 & 15.63 & 762M \\
-%     \hline
-%     EleutherAI/gpt-neo-1.3B & causal\_model & Incorrect & 21.88 & 27.92 & 1.3B \\
-%     \hline
-%     distilbert-base-uncased-distilled-squad & qa\_model & Correct & 0.16 & 0.18 & 66M \\
-%     \hline
-%     deepset/roberta-base-squad2 & qa\_model & Correct & 0.32 & 0.35 & 125M \\
-%     \hline
-%     bert-large-uncased-whole-word-masking-finetuned-squad & qa\_model & Correct & 1.29 & 1.12 & 340M \\
-%     \hline
-%     t5-base & t5\_model & Correct & 1.33 & 1.54 & 220M \\
-%     \hline
-%     t5-large & t5\_model & Correct & 3.66 & 3.38 & 770M \\
-%     \hline
-%   \end{tabular}
-%   }
-% \end{table*}
-
-% \begin{table*}[htbp]
-%   \centering
-%   \caption{Experiment 4, Model Performance with Sizes in Parameters} % Optional caption
-%   \label{tab:experiment4_model_performance_full_with_size}  % Adding label for referencing
-%   \resizebox{\textwidth}{!}{  % Resizes the table to fit the page width
-%   \begin{tabular}{|p{0.18\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.13\linewidth}|p{0.13\linewidth}|}
-%     \hline
-%     \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
-%     \hline
-%     facebook/blenderbot-90M & causal\_model & Incorrect & 2.09 & 2.78 & 90M \\
-%     \hline
-%     gpt2 & causal\_model & Over Information & 4.11 & 4.32 & 124M \\
-%     \hline
-%     EleutherAI/gpt-neo-125M & causal\_model & Incorrect & 4.66 & 4.51 & 125M \\
-%     \hline
-%     gpt2-medium & causal\_model & Over Information & 10.92 & 10.45 & 355M \\
-%     \hline
-%     gpt2-large & causal\_model & Over Information & 17.46 & 14.16 & 762M \\
-%     \hline
-%     EleutherAI/gpt-neo-1.3B & causal\_model & Over Information & 19.06 & 22.33 & 1.3B \\
-%     \hline
-%     distilbert-base-uncased-distilled-squad & qa\_model & Correct & 0.19 & 0.17 & 66M \\
-%     \hline
-%     deepset/roberta-base-squad2 & qa\_model & Correct & 0.55 & 0.30 & 125M \\
-%     \hline
-%     bert-large-uncased-whole-word-masking-finetuned-squad & qa\_model & Correct & 1.40 & 0.86 & 340M \\
-%     \hline
-%     t5-base & t5\_model & Correct & 1.16 & 1.41 & 220M \\
-%     \hline
-%     t5-large & t5\_model & Correct & 3.59 & 4.72 & 770M \\
-%     \hline
-%   \end{tabular}
-%   }
-% \end{table*}
-
-% \begin{table*}[htbp]
-%   \centering
-%   \caption{Experiment 5, Model Performance with Sizes in Parameters} % Optional caption
-%   \label{tab:experiment5_model_performance_full_with_size}  % Adding label for referencing
-%   \resizebox{\textwidth}{!}{  % Resizes the table to fit the page width
-%   \begin{tabular}{|p{0.16\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|}
-%     \hline
-%     \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
-%     \hline
-%     facebook/blenderbot-90M & causal\_model & Incorrect & 2.19 & 3.09 & 90M \\
-%     \hline
-%     gpt2 & causal\_model & Incorrect & 4.96 & 5.57 & 124M \\
-%     \hline
-%     EleutherAI/gpt-neo-125M & causal\_model & Incorrect & 4.14 & 5.92 & 125M \\
-%     \hline
-%     gpt2-medium & causal\_model & Incorrect & 9.49 & 13.54 & 355M \\
-%     \hline
-%     gpt2-large & causal\_model & Incorrect & 18.67 & 24.57 & 762M \\
-%     \hline
-%     EleutherAI/gpt-neo-1.3B & causal\_model & Incorrect & 18.41 & 37.47 & 1.3B \\
-%     \hline
-%     distilbert-base-uncased-distilled-squad & qa\_model & Partial & 0.14 & 0.31 & 66M \\
-%     \hline
-%     deepset/roberta-base-squad2 & qa\_model & Incorrect & 0.38 & 0.71 & 125M \\
-%     \hline
-%     bert-large-uncased-whole-word-masking-finetuned-squad & qa\_model & Partial & 0.92 & 1.70 & 340M \\
-%     \hline
-%     t5-base & t5\_model & Partial & 0.99 & 1.53 & 220M \\
-%     \hline
-%     t5-large & t5\_model & Correct & 3.56 & 5.78 & 770M \\
-%     \hline
-%   \end{tabular}
-%   }
-% \end{table*}
-
-
 \section{Conclusion}
 This text demonstrates through experimentation that Retrieval-Augmented
 Generation (RAG) systems effectively address some of the most
@@ -1811,7 +1380,6 @@ models with parametric memory. Compared to models solely relying on
 parametric memory, RAG systems offer several advantages:
 
 \begin{itemize}
-
 \item
   \textbf{Horizontally Scalable}: RAG systems can efficiently scale by
   distributing the retrieval process across multiple nodes, allowing for
@@ -1915,28 +1483,16 @@ It is an optional section where the authors may write a short text on what shoul
 \end{thebibliography}
 
 \flushleft \justifying{ \textbf {Contribution of Individual Authors to the \break Creation of a Scientific Article (Ghostwriting \break  Policy)}}
-% \par{{\color{red}
-% \noindent \textbf{Please, indicate the role and the contribution of each author:}\\ 
-% \\
-% For Example:}}
 \par{
   \noindent 
   {Marko Grabuloski, conceptualized and executed the primary research and writing.} \break
   Aleksandar Karadimce, Anis Sefidanoski provided guidance, review, and input on the methodology and analysis. \break
 
   \flushleft \justifying{ \textbf {Sources of Funding for Research Presented in a Scientific Article or Scientific Article Itself}}
-  % \par{{\color{red}
-  % \noindent \textbf{Report potential sources of funding if there is any}}}
-
-
-  % \flushleft \justifying{ \textbf {\hl {Alternatively, in case of no funding the following text will be published:}}}
   \par { \noindent No funding was received for conducting this study.}
   \break
 
   \flushleft \justifying{ \textbf {Conflicts of Interest}}
-  % \par { \noindent {\color{red}{\textbf{Please declare anything related to this study.}}}}
-
-  % \flushleft \justifying{ \textbf{\hl {Alternatively, in case of no conflicts of interest the following text will be published:}}}
 }
 \par  \justifying{ { \noindent The authors have no conflicts of interest to \break declare that are relevant to the content of this \break  article.}}
 
@@ -1945,52 +1501,6 @@ It is an optional section where the authors may write a short text on what shoul
 
 \par { \noindent This article is published under the terms of the Creative Commons Attribution License 4.0\\
 \href{https://creativecommons.org/licenses/by/4.0/deed.en\_US}{\color{blue}{https://creativecommons.org/licenses/by/4.0/deed.en\break\_US}} }
-
-% \twocolumn[
-%   \begin{@twocolumnfalse}
-
-% \section{Appendix}
-
-% \begin{table*}[htbp]
-%   \centering
-%   \caption{Experiment 5, Model Performance with Sizes in Parameters} % Optional caption
-%   % \label{tab:experiment5_model_performance_full_with_size}  % Adding label for referencing
-%   \resizebox{\textwidth}{!}{  % Resizes the table to fit the page width
-%   \begin{tabular}{|p{0.16\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|}
-%     \hline
-%     \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
-%     \hline
-%     facebook/blenderbot-90M & causal\_model & Incorrect & 2.19 & 3.09 & 90M \\
-%     \hline
-%     gpt2 & causal\_model & Incorrect & 4.96 & 5.57 & 124M \\
-%     \hline
-%     EleutherAI/gpt-neo-125M & causal\_model & Incorrect & 4.14 & 5.92 & 125M \\
-%     \hline
-%     gpt2-medium & causal\_model & Incorrect & 9.49 & 13.54 & 355M \\
-%     \hline
-%     gpt2-large & causal\_model & Incorrect & 18.67 & 24.57 & 762M \\
-%     \hline
-%     EleutherAI/gpt-neo-1.3B & causal\_model & Incorrect & 18.41 & 37.47 & 1.3B \\
-%     \hline
-%     distilbert-base-uncased-distilled-squad & qa\_model & Partial & 0.14 & 0.31 & 66M \\
-%     \hline
-%     deepset/roberta-base-squad2 & qa\_model & Incorrect & 0.38 & 0.71 & 125M \\
-%     \hline
-%     bert-large-uncased-whole-word-masking-finetuned-squad & qa\_model & Partial & 0.92 & 1.70 & 340M \\
-%     \hline
-%     t5-base & t5\_model & Partial & 0.99 & 1.53 & 220M \\
-%     \hline
-%     t5-large & t5\_model & Correct & 3.56 & 5.78 & 770M \\
-%     \hline
-%   \end{tabular}
-%   }
-% \end{table*}
-% ]
-
-% \twocolumn[
-%   \begin{@twocolumnfalse}
-%     \maketitle
-%     \begin{appendix}
     
 \onecolumn
 \section*{Appendix}
@@ -2393,48 +1903,4 @@ It is an optional section where the authors may write a short text on what shoul
   \end{tabular}
   }
 \end{table*}
-
-      % \begin{table*}[htbp]
-      %   \centering
-      %   \caption{Experiment 5, Model Performance with Sizes in Parameters} % Optional caption
-      %   % \label{tab:experiment5_model_performance_full_with_size}  % Adding label for referencing
-      %   \resizebox{\textwidth}{!}{  % Resizes the table to fit the page width
-      %   \begin{tabular}{|p{0.16\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|}
-      %     \hline
-      %     \textbf{Model Name} & \textbf{Model Type} & \textbf{RAG Answer Quality} & \textbf{LLM Answer Time (s)} & \textbf{RAG Answer Time (s)} & \textbf{Size in Parameters} \\
-      %     \hline
-      %     facebook/blenderbot-90M & causal\_model & Incorrect & 2.19 & 3.09 & 90M \\
-      %     \hline
-      %     gpt2 & causal\_model & Incorrect & 4.96 & 5.57 & 124M \\
-      %     \hline
-      %     EleutherAI/gpt-neo-125M & causal\_model & Incorrect & 4.14 & 5.92 & 125M \\
-      %     \hline
-      %     gpt2-medium & causal\_model & Incorrect & 9.49 & 13.54 & 355M \\
-      %     \hline
-      %     gpt2-large & causal\_model & Incorrect & 18.67 & 24.57 & 762M \\
-      %     \hline
-      %     EleutherAI/gpt-neo-1.3B & causal\_model & Incorrect & 18.41 & 37.47 & 1.3B \\
-      %     \hline
-      %     distilbert-base-uncased-distilled-squad & qa\_model & Partial & 0.14 & 0.31 & 66M \\
-      %     \hline
-      %     deepset/roberta-base-squad2 & qa\_model & Incorrect & 0.38 & 0.71 & 125M \\
-      %     \hline
-      %     bert-large-uncased-whole-word-masking-finetuned-squad & qa\_model & Partial & 0.92 & 1.70 & 340M \\
-      %     \hline
-      %     t5-base & t5\_model & Partial & 0.99 & 1.53 & 220M \\
-      %     \hline
-      %     t5-large & t5\_model & Correct & 3.56 & 5.78 & 770M \\
-      %     \hline
-      %   \end{tabular}
-      %   }
-      % \end{table*}
-% \end{apeendix}
-
-%     \end{appendix}  
-  
-%   \end{@twocolumnfalse}
-% \vspace{2ex} 
-% ]
-
-
 \end{document}    

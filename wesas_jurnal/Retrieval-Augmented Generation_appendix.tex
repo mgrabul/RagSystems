@@ -1033,7 +1033,8 @@ The T5-large model answered gave the correct answer in feet but not in meters.
 
 \textbf{Summary:}
 Given the size of the models and the accuracy of the answers, the QA models are most
-appropriate for answering fact-based Question.
+appropriate for answering fact-based Question. They are efficient and are able to provide the most probable 
+sequence inside the context that answers the question.
 
 \subsection{Experiment 2: List-based Question - 'What materials were
 used in constructing the Great Wall of China?'}
@@ -1086,7 +1087,8 @@ further highlighting the importance of RAG in ensuring accurate output.
 \textbf{Summary:}
 
 Given the size of the models the QA models are most appropriate for
-answering List-based Question.
+answering List-based Question. Same as in the previous experiment, the QA models are efficient and
+provide the most probable character sequence inside the context that answers the question.
 
 \subsection{Experiment 3: Fact-based Question - 'How tall is the Pyramid of Giza?'}
 
@@ -1104,7 +1106,7 @@ The experiment parameters are as follows:
 \item
   \textbf{Question Type}: Fact-based Question
 \item
-  \textbf{Question}: ``How tall is the Pyramid of Giza?''
+  \textbf{Question}: "How tall is the Pyramid of Giza?"
 \item
   \textbf{Retrieval Type}: Paragraph retrieval
 \item
@@ -1175,7 +1177,8 @@ In this experiment, the causal models generally provided incorrect or
 nonsensical LLM answers. The RAG approach, however, showed improvement,
 with more accurate information being retrieved and presented. Despite
 this, the answers still lacked consistency in listing all the materials
-used in the construction of the Great Wall of China.
+used in the construction of the Great Wall of China. These models would require 
+additional fine-tuning if they are to be used for question answering tasks.
 
 \subsubsection{QA Models}
 
@@ -1255,7 +1258,6 @@ best choice for complex synthesis-based questions.
 
 \subsubsection{QA Models}
 
-
 The results of the QA models for this experiment
 are documented in \autoref{tab:experiment_R_3_paragraph_Q_synthesis_M_QaModels_table}.
 
@@ -1263,7 +1265,9 @@ The QA models had mixed performance in this experiment. While the direct
 LLM answers were often uninformative, the RAG answers managed to
 identify at least one structure associated with Gustave Eiffel, but they
 lacked completeness. The synthesis required for this question appeared
-challenging for these models.
+challenging for these models. Main reason for this behavior is that this QA models are trained
+to extract one sequential list of characters from the context, that has the biggest probability
+to answer the question.
 
 \subsubsection{T5 Models}
 

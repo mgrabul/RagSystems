@@ -991,14 +991,14 @@ fact-based question: "How tall is the Pyramid of Giza?". The
 experiment parameters are as follows:
 
 \begin{itemize}
-\item
-  \textbf{Question Type}: Fact-based
-\item
-  \textbf{Question}: "How tall is the Pyramid of Giza?"
-\item
-  \textbf{Retrieval Type}: Sentence retrieval
-\item
-  \textbf{Number of Retrievals}: 1
+  \item
+    \textbf{Question Type}: Fact-based
+  \item
+    \textbf{Question}: "How tall is the Pyramid of Giza?"
+  \item
+    \textbf{Retrieval Type}: Sentence retrieval
+  \item
+    \textbf{Number of Retrievals}: 1
 \end{itemize}
 
 \subsubsection{Causal Models}
@@ -1103,14 +1103,14 @@ be smaller, and paragraphs hold more context and information than sentences.
 The experiment parameters are as follows:
 
 \begin{itemize}
-\item
-  \textbf{Question Type}: Fact-based Question
-\item
-  \textbf{Question}: "How tall is the Pyramid of Giza?"
-\item
-  \textbf{Retrieval Type}: Paragraph retrieval
-\item
-  \textbf{Number of Retrievals}: 1
+  \item
+    \textbf{Question Type}: Fact-based Question
+  \item
+    \textbf{Question}: "How tall is the Pyramid of Giza?"
+  \item
+    \textbf{Retrieval Type}: Paragraph retrieval
+  \item
+    \textbf{Number of Retrievals}: 1
 \end{itemize}
 
 \subsubsection{Causal Models}
@@ -1156,16 +1156,15 @@ Great Wall of China?' using paragraph retrieval with one retrieved
 document. The experiment parameters are as follows:
 
 \begin{itemize}
-
-\item
-  \textbf{Question Type}: List-based Question
-\item
-  \textbf{Question}: ``What materials were used in constructing the
-  Great Wall of China?''
-\item
-  \textbf{Retrieval Type}: Paragraph retrieval
-\item
-  \textbf{Number of Retrievals}: 1
+  \item
+    \textbf{Question Type}: List-based Question
+  \item
+    \textbf{Question}: ``What materials were used in constructing the
+    Great Wall of China?''
+  \item
+    \textbf{Retrieval Type}: Paragraph retrieval
+  \item
+    \textbf{Number of Retrievals}: 1
 \end{itemize}
 
 \subsubsection{Causal Models}
@@ -1226,16 +1225,15 @@ with three retrieved documents. The experiment parameters are as
 follows:
 
 \begin{itemize}
-
-\item
-  \textbf{Question Type}: Synthesis-based Question
-\item
-  \textbf{Question}: ``Which famous structures, both designed or
-  structurally influenced by Gustave Eiffel?''
-\item
-  \textbf{Retrieval Type}: Paragraph retrieval
-\item
-  \textbf{Number of Retrievals}: 3
+  \item
+    \textbf{Question Type}: Synthesis-based Question
+  \item
+    \textbf{Question}: ``Which famous structures, both designed or
+    structurally influenced by Gustave Eiffel?''
+  \item
+    \textbf{Retrieval Type}: Paragraph retrieval
+  \item
+    \textbf{Number of Retrievals}: 3
 \end{itemize}
 
 The synthesis-based question requires that several facts are taken into
@@ -1405,20 +1403,20 @@ The experiments were conducted using various open-source LLMs and a custom-built
 assess the effectiveness of different approaches. Compared to models solely relying 
 on parametric memory, RAG systems offer several advantages:
 \begin{itemize}
-\item
-  \textbf{Horizontally Scalable}: RAG systems can efficiently scale by distributing the retrieval process across multiple nodes, 
-  allowing for handling larger datasets and more complex queries.
-\item
-  \textbf{Distributive}: RAG systems' modular nature enables the distribution of tasks across different components, 
-  enhancing their robustness and flexibility.
-\item
-  \textbf{Mitigates High Bias}: By integrating external knowledge retrieval, RAG systems reduce 
-  the need for extremely large models with numerous parameters, thus, to a degree, avoiding issues 
-  related to underfitting and high bias in terms of the real-world dataset or the cross-validation 
-  set where the model is not flexible enough or lacks sufficient curvature to approximate the problem.
-\item
-  \textbf{Performance Enhancement}: By leveraging external knowledge, RAG systems can surpass the
-   performance of their base generative models, resulting in more accurate and contextually relevant responses.
+  \item
+    \textbf{Horizontally Scalable}: RAG systems can efficiently scale by distributing the retrieval process across multiple nodes, 
+    allowing for handling larger datasets and more complex queries.
+  \item
+    \textbf{Distributive}: RAG systems' modular nature enables the distribution of tasks across different components, 
+    enhancing their robustness and flexibility.
+  \item
+    \textbf{Mitigates High Bias}: By integrating external knowledge retrieval, RAG systems reduce 
+    the need for extremely large models with numerous parameters, thus, to a degree, avoiding issues 
+    related to underfitting and high bias in terms of the real-world dataset or the cross-validation 
+    set where the model is not flexible enough or lacks sufficient curvature to approximate the problem.
+  \item
+    \textbf{Performance Enhancement}: By leveraging external knowledge, RAG systems can surpass the
+    performance of their base generative models, resulting in more accurate and contextually relevant responses.
 \end{itemize}
 
 For example, a decent quality question-answering system can be created 

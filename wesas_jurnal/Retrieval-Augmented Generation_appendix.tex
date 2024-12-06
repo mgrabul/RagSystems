@@ -112,7 +112,7 @@ The entire code, experiment definitions and results can be found in a github rep
 The basic idea around a RAG system is extending the capabilities of an
 already trained machine learning model (MLM) in particular an LLM.
 
-One common problem in LLMs is that in order get a correct output/answer
+One common problem in LLMs is that in order to get a correct output/answer
 the LLM needs to be trained on a dataset that is relevant to the
 input/question. For example, asking an LLM who is the winner of 2024
 euro championship will not result in a correct answer if the model is
@@ -155,10 +155,10 @@ on various topics. Therefor a RAG system's main two component or sub-systems are
 \begin{itemize}
 
 \item
-  \textbf{Retrieval and Augmentation}, manages the storing and retrieval of 
+  \textbf{Retrieval and Augmentation component}, manages the storing and retrieval of 
   data from and to the parametric memory. Synthesizes the data and creates a context.
 \item
-  \textbf{Generative AI component}, it is usually a component that contains
+  \textbf{Generative AI component}, also called a generator, it is usually a component that contains
   language generation tool like LLMs. It generates text, answers based on the data 
   provided by the retrieval and augmentation system.
 \end{itemize}
@@ -192,7 +192,7 @@ simplified RAG process can be seen in the \autoref{fig:rag_system_figure}.
 
 \section{Generative AI component}
 
-The generative AI component is an LLM transformer. Typically, the
+At its core is an LLM transformer. The
 transformer has two main subcomponents, encoder and decoder. The
 input text is initially tokenized, meaning it is split into small
 continuous lists of characters. In the next step, the model transforms
@@ -228,7 +228,7 @@ smallest LLM "What is the capital of France?" it might return "Berlin
 is the capital of France". The answers will perhaps not be correct, but
 they will contain the context of the question and grammatically correct.
 
-\textbf{The generative component of the RAG system needs to be able for
+\textbf{The generator component of the RAG system needs to be able for
 a given input and context to generate grammatically correct sentences
 related to the given context.}
 
@@ -236,12 +236,12 @@ related to the given context.}
 that is why they are ideal to be used in the generation phase of the RAG
 system.}
 
-\section{Retrieval System}
+\section{Retrieval and Augmentation component}
 
-The retrieval system is used to store and retrieve knowledge outside the
-knowledge maintained in the LLM. The knowledge here is in the form of
-paragraphs, sentences, or other forms of continuous text, referred to
-here as a text block. The text blocks are stored as embeddings.
+The retrieval and augmentation component is used to store 
+and retrieve knowledge outside the knowledge maintained in the LLM. The knowledge 
+here is in the form of paragraphs, sentences, or other forms of continuous text,
+referred to here as a text block. The text blocks are stored as embeddings.
 
 This part of the system is composed of two components or modules:
 
@@ -263,7 +263,7 @@ The process is as follows:
 \item
     Takes block of text, sentence, or paragraph.
 \item
-    Passes this text to the Sentence Embedding model to get an
+    Passes this text to the sentence embedding model to get an
     embedding(dense vector).
 \item
     Stores this embedding in a non-parametric memory.
@@ -286,7 +286,7 @@ The process is as follows:
 \item
   Takes input text, referred to as a query.
 \item
-  Passes the query text to the Sentence Embedding model to get a query
+  Passes the query text to the sentence embedding model to get a query
   embedding, query dense vector.
 \item
   Using the query embedding, fetches a list of related knowledge from
@@ -363,11 +363,10 @@ Currently, (as of 2024), these are the options for dense vector storage:
 
 Sentence embedding models are derived from LLM transformer models. LLMs
 transformer contains two general components, encoder and decoder. As
-described in the section "Generative AI component or a LLM
-transformer", the input of an encoder is a text, the output is a
+described in the section "Generative AI component", the input of an encoder is a text, the output is a
 contextual embedding.
 
-From particular interest for the Sentence embedding models and the RAG
+From particular interest for the sentence embedding models and the RAG
 system is the encoder layer of the LLMs transformer.
 
 In \autoref{fig:encoder_layer_figure} is a description on how sentences are converted to embedding by an
@@ -466,7 +465,7 @@ text is not really known; it can be any embedding. It is the relative
 distance between the embeddings that is important. Semantically close 
 embeddings should be closer than embeddings that have different meanings. 
 To solve this problem, the model is trained using a Siamese network or a
-variation of the Siamese network. Initially, the sentence embedder is
+variation of the Siamese network. Initially, the sentence embedding model is
 trained with a Siamese network that conceptually contains two copies of
 the same neural network. These two networks share the same parameters.
 The network ends with a loss function. Popular loss functions are
@@ -544,7 +543,7 @@ activated when:
   D(A,P) \textgreater{} D(A,N) + margin
 \end{equation}
 
-The activation function from the perspective of the sentence embedder model is
+The activation function from the perspective of the sentence embedding model is
 a Loss function, triplet loss function (\autoref{eq:efficiency_score}), and its output is used for training \cite{sbert}. 
 
 \begin{equation}
@@ -608,7 +607,7 @@ Where \(\theta\) is the angle between \(A\) and \(B\).
 At this point, all the components of the sentence embedding model are
 explained. A representative example of a sentence embedding model is
 SBERT, which is based on the popular LLM BERT. This resource will use
-SBERT as a Sentence Embedder Model.
+SBERT as a sentence embedding model.
 
 
 \section{Related work}
@@ -622,7 +621,7 @@ systematization}
 This is the simplest form of RAG, it contains all the components that were 
 previously described. This categorization is based on the different components 
 that are part of the RAG system, not their individual complexity. For example
-naive RAG might contain a simple or complex LLM generator, simple or complex database,
+naive RAG might contain a generator component with a simple or complex LLM, simple or complex database,
 or simple or complex embedder. On the other side, this type of RAG will not 
 use complicated server architecture or complex multiphase retrieval or augmentation. 
 
@@ -783,17 +782,13 @@ yes or no and require accessing a broad range of information to provide an answe
 Find the RAG implementation and refer to \cite{cite_github_solution}.
 
 The purpose of the experiments: 
-\begin{enumerate} 
-  \item Compare the differences between answers generated by a RAG system and those generated by a standard LLM. 
-  \item Assess the quality of the models in answering different types of questions. 
-  \item Evaluate the impact of different LLM architectures (causal, question answering, and T5) on the performance of the RAG system. 
-  \item Analyze the effect of model size on the quality of answers in the RAG system. 
-  \item Test the performance of various retrieval strategies and their influence on answer quality. 
-  \item Examine the role of retrieval, context size in the accuracy and relevance of RAG system answers. 
-  \item Compare the performance of different LLM types, sizes, question types, retrieval strategies, and retrieval corpus sizes to identify configurations that perform better in specific RAG scenarios. 
-  \item Investigate the consistency of the RAG system's performance across diverse question types. 
-  \item Measure the efficiency of the RAG system under different configurations. 
-\end{enumerate}
+\begin{itemize}
+  \item Compare the quality of answers generated by a RAG system versus a standard LLM for open-domain questions.
+  \item Assess the influence of different LLM architectures (causal, question answering, and T5) on the RAG system's performance.
+  \item Analyze the effect of model size and retrieval strategies on answer quality in the RAG system.
+  \item Examine how retrieval context size affect the accuracy and relevance of answers.
+  \item Evaluate the efficiency of the RAG system across diverse configurations, including question types and retrieval approaches.
+\end{itemize}
 
 \subsection{LLMs}
 Depending on the type of LLM, three different models with distinct architectures will be used:
@@ -832,9 +827,9 @@ ranging from 66M up to 1.3B. Model sizes and type are shown in \autoref{tab:mode
   \hline
   \textbf{bert-large-uncased-whole-word-masking-finetuned-squad 340M} & Google's NLU Model for QA & 340M & Question Answering Model \\
   \hline
-  \textbf{T5 Base 220M} & Google's Text-to-Text Transfer Transformer & 220M & T5 - Conversational Model \\
+  \textbf{T5 Base 220M} & Google's Text-to-Text Transfer Transformer & 220M & T5 \\
   \hline
-  \textbf{T5 Large 770M} & Google's Text-to-Text Transfer Transformer & 770M & T5 - Conversational Model \\
+  \textbf{T5 Large 770M} & Google's Text-to-Text Transfer Transformer & 770M & T5 \\
   \hline
   \end{tabular}
 \end{table*}  
@@ -909,18 +904,18 @@ The RAG system is a manual solution, not an existing RAG system.
 The idea is to explore how even a simple RAG system can extend the
 capabilities of the LLM.
 
-\subsubsection{Sentence Embedder}
+\subsubsection{Sentence embedding model}
 
-For sentence embedder a SBART based embedder will be used.
+For sentence embedding model a SBART based model will be used.
 
 \subsubsection{Non-Parametric library}
 
 For non-parametric library \textit{faiss} will be used, it is more than
 enough to handle this experiment.
 
-\subsubsection{LLM generator placeholder}
+\subsubsection{LLM placeholder}
 
-The LLM placeholder is a component that allows the attachment of 
+The LLM is part of the generator component, it allows attachment of 
 different LLMs to the RAG solution. The reason for this is to test 
 how different LLMs perform.
 
@@ -948,7 +943,8 @@ Where the important processes are numerated and described in the following list:
   \item Retrieval augmentation phase, the actor, user asks a question, this question is passed to the embedder.
   \item Retrieval augmentation phase, the embedder creates an embedding for the question and queries the non-parametric memory for the k-closest embeddings.
   \item Retrieval augmentation phase, the retrieved k-closest embeddings are used to obtain their corresponding texts from the in-memory key-value database, forming the context.
-  \item Retrieval augmentation phase, the context with the question is passed to the LLM generator and the LLM generator creates an answer for the users question.
+  \item Generation augmentation phase, the context with the question is passed to the generator component.
+  \item Generation phase, the generator component inside it creates an answer for the users question.
 \end{enumerate}
 
 \begin{figure*}[htbp]

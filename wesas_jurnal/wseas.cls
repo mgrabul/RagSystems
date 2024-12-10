@@ -20,11 +20,8 @@
 \RequirePackage{flushend}
 \RequirePackage{enumitem}
 \RequirePackage{hyperref}
-
+\usepackage[none]{hyphenat}
 %\usepackage{showframe}
-\usepackage{xcolor}    % for highlighting text (e.g. \hl)
-\usepackage{soul}      % for highlighting text (e.g. \hl)
-\usepackage{ragged2e}  % for text alignment    (e.g. \justify)
 
 \RequirePackage{fontspec}
 \setmainfont{Times New Roman}

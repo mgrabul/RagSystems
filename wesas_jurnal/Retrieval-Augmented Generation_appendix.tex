@@ -1,5 +1,9 @@
 \documentclass{wseas}
 
+\usepackage{xcolor}    % for highlighting text (e.g. \hl)
+\usepackage{soul}      % for highlighting text (e.g. \hl)
+\usepackage{ragged2e}  % for text alignment    (e.g. \justify)
+
 % custom package for drawing flowcharts
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows}
@@ -35,7 +39,6 @@
     and retrieval-augmentation strategies (sentence-level, paragraph-level) on the performance of RAG systems. 
     We conducted experiments using various open-source LLMs and a custom-built RAG system to assess the 
     effectiveness of different approaches. 
-    
     The findings indicate that RAG systems can significantly enhance 
     the performance of LLMs, especially for complex questions that require access to diverse information sources.
     T5 conversational models, in particular, demonstrate strong performance in synthesis-based tasks, effectively combining 
@@ -113,7 +116,7 @@ The entire code, experiment definitions and results can be found in a github rep
 The basic idea around a RAG system is extending the capabilities of an
 already trained machine learning model (MLM) in particular an LLM.
 
-One common problem in LLMs is that in order get a correct output/answer
+One common problem in LLMs is that in order to get a correct output/answer
 the LLM needs to be trained on a dataset that is relevant to the
 input/question. For example, asking an LLM who is the winner of 2024
 euro championship will not result in a correct answer if the model is
@@ -156,10 +159,10 @@ on various topics. Therefor a RAG system's main two component or sub-systems are
 \begin{itemize}
 
 \item
-  \textbf{Retrieval and Augmentation}, manages the storing and retrieval of 
+  \textbf{Retrieval and Augmentation component}, manages the storing and retrieval of 
   data from and to the parametric memory. Synthesizes the data and creates a context.
 \item
-  \textbf{Generative AI component}, it is usually a component that contains
+  \textbf{Generative AI component}, also called a generator, it is usually a component that contains
   language generation tool like LLMs. It generates text, answers based on the data 
   provided by the retrieval and augmentation system.
 \end{itemize}
@@ -191,9 +194,9 @@ simplified RAG process can be seen in the \autoref{fig:rag_system_figure}.
   \label{fig:rag_system_figure}
 \end{figure}
 
-\section{Generative AI component or a LLM transformer}
+\section{Generative AI component}
 
-The generative AI component is an LLM transformer. Typically, the
+At its core is an LLM transformer. The
 transformer has two main subcomponents, encoder and decoder. The
 input text is initially tokenized, meaning it is split into small
 continuous lists of characters. In the next step, the model transforms
@@ -229,7 +232,7 @@ smallest LLM "What is the capital of France?" it might return "Berlin
 is the capital of France". The answers will perhaps not be correct, but
 they will contain the context of the question and grammatically correct.
 
-\textbf{The generative component of the RAG system needs to be able for
+\textbf{The generator component of the RAG system needs to be able for
 a given input and context to generate grammatically correct sentences
 related to the given context.}
 
@@ -237,12 +240,12 @@ related to the given context.}
 that is why they are ideal to be used in the generation phase of the RAG
 system.}
 
-\section{Retrieval System}
+\section{Retrieval and Augmentation component}
 
-The retrieval system is used to store and retrieve knowledge outside the
-knowledge maintained in the LLM. The knowledge here is in the form of
-paragraphs, sentences, or other forms of continuous text, referred to
-here as a text block. The text blocks are stored as embeddings.
+The retrieval and augmentation component is used to store 
+and retrieve knowledge outside the knowledge maintained in the LLM. The knowledge 
+here is in the form of paragraphs, sentences, or other forms of continuous text,
+referred to here as a text block. The text blocks are stored as embeddings.
 
 This part of the system is composed of two components or modules:
 
@@ -264,7 +267,7 @@ The process is as follows:
 \item
     Takes block of text, sentence, or paragraph.
 \item
-    Passes this text to the Sentence Embedding model to get an
+    Passes this text to the sentence embedding model to get an
     embedding(dense vector).
 \item
     Stores this embedding in a non-parametric memory.
@@ -287,7 +290,7 @@ The process is as follows:
 \item
   Takes input text, referred to as a query.
 \item
-  Passes the query text to the Sentence Embedding model to get a query
+  Passes the query text to the sentence embedding model to get a query
   embedding, query dense vector.
 \item
   Using the query embedding, fetches a list of related knowledge from
@@ -364,11 +367,10 @@ Currently, (as of 2024), these are the options for dense vector storage:
 
 Sentence embedding models are derived from LLM transformer models. LLMs
 transformer contains two general components, encoder and decoder. As
-described in the section "Generative AI component or a LLM
-transformer", the input of an encoder is a text, the output is a
+described in the section "Generative AI component", the input of an encoder is a text, the output is a
 contextual embedding.
 
-From particular interest for the Sentence embedding models and the RAG
+From particular interest for the sentence embedding models and the RAG
 system is the encoder layer of the LLMs transformer.
 
 In \autoref{fig:encoder_layer_figure} is a description on how sentences are converted to embedding by an
@@ -467,7 +469,7 @@ text is not really known; it can be any embedding. It is the relative
 distance between the embeddings that is important. Semantically close 
 embeddings should be closer than embeddings that have different meanings. 
 To solve this problem, the model is trained using a Siamese network or a
-variation of the Siamese network. Initially, the sentence embedder is
+variation of the Siamese network. Initially, the sentence embedding model is
 trained with a Siamese network that conceptually contains two copies of
 the same neural network. These two networks share the same parameters.
 The network ends with a loss function. Popular loss functions are
@@ -542,10 +544,10 @@ This siamese network ends with a triplet distance activation function.
 The function calculates the distance \(D(A,P)\) \(D(A,N)\) and is
 activated when:
 \begin{equation}
-  D(A,P) \textgreater{} D(A,N) + margin
+  D(A,P) > D(A,N) + margin
 \end{equation}
 
-The activation function from the perspective of the sentence embedder model is
+The activation function from the perspective of the sentence embedding model is
 a Loss function, triplet loss function (\autoref{eq:efficiency_score}), and its output is used for training \cite{sbert}. 
 
 \begin{equation}
@@ -609,10 +611,11 @@ Where \(\theta\) is the angle between \(A\) and \(B\).
 At this point, all the components of the sentence embedding model are
 explained. A representative example of a sentence embedding model is
 SBERT, which is based on the popular LLM BERT. This resource will use
-SBERT as a Sentence Embedder Model.
+SBERT as a sentence embedding model.
 
 
 \section{Related work}
+This research primarily aims to compare the performance of various LLMs within a RAG system, with a focus on smaller models that can operate on consumer-accessible hardware. A secondary goal is to aggregate and present the advantages of RAG systems, particularly in comparison to standard LLMs or, more broadly, traditional neural network models.
 
 \subsection{General RAG
 systematization}
@@ -622,7 +625,7 @@ systematization}
 This is the simplest form of RAG, it contains all the components that were 
 previously described. This categorization is based on the different components 
 that are part of the RAG system, not their individual complexity. For example
-naive RAG might contain a simple or complex LLM generator, simple or complex database,
+naive RAG might contain a generator component with a simple or complex LLM, simple or complex database,
 or simple or complex embedder. On the other side, this type of RAG will not 
 use complicated server architecture or complex multiphase retrieval or augmentation. 
 
@@ -783,22 +786,21 @@ yes or no and require accessing a broad range of information to provide an answe
 Find the RAG implementation and refer to \cite{cite_github_solution}.
 
 The purpose of the experiments: 
-\begin{enumerate}
-  \item Compare the differences between a RAG answer and a standard LLM.
-  \item Assess the quality of the models for answering different type of questions.
-\end{enumerate}
+\begin{itemize}
+  \item Compare the quality of answers generated by a RAG system versus a standard LLM for open-domain questions.
+  \item Assess the influence of different LLM architectures (causal, question answering, and T5) on the RAG system's performance.
+  \item Analyze the effect of model size and retrieval strategies on answer quality in the RAG system.
+  \item Examine how retrieval context size affect the accuracy and relevance of answers.
+  \item Evaluate the efficiency of the RAG system across diverse configurations, including question types and retrieval approaches.
+\end{itemize}
 
 \subsection{LLMs}
+Depending on the type of LLM, three different models with distinct architectures will be used:
 
-Depending on the LLMs type, three different LLM models will be used:
-
-\begin{enumerate}
-\item
-  Causal models
-\item
-  Question answering models
-\item
-  T5 - conversational models
+\begin{enumerate} 
+  \item Causal models process input text sequentially, left-to-right, and predict the next token in the sequence. 
+  \item Question answering models are trained to understand both the context and the question, extracting the answer directly from the provided context. 
+  \item T5 models use a text-to-text framework, a more modern and flexible approach that extends beyond question answering to handle a variety of NLP tasks. 
 \end{enumerate}
 
 Regarding model size, the experiments will be conducted on a small set of LLMs
@@ -829,9 +831,9 @@ ranging from 66M up to 1.3B. Model sizes and type are shown in \autoref{tab:mode
   \hline
   \textbf{bert-large-uncased-whole-word-masking-finetuned-squad 340M} & Google's NLU Model for QA & 340M & Question Answering Model \\
   \hline
-  \textbf{T5 Base 220M} & Google's Text-to-Text Transfer Transformer & 220M & T5 - Conversational Model \\
+  \textbf{T5 Base 220M} & Google's Text-to-Text Transfer Transformer & 220M & T5 \\
   \hline
-  \textbf{T5 Large 770M} & Google's Text-to-Text Transfer Transformer & 770M & T5 - Conversational Model \\
+  \textbf{T5 Large 770M} & Google's Text-to-Text Transfer Transformer & 770M & T5 \\
   \hline
   \end{tabular}
 \end{table*}  
@@ -906,18 +908,18 @@ The RAG system is a manual solution, not an existing RAG system.
 The idea is to explore how even a simple RAG system can extend the
 capabilities of the LLM.
 
-\subsubsection{Sentence Embedder}
+\subsubsection{Sentence embedding model}
 
-For sentence embedder a SBART based embedder will be used.
+For sentence embedding model a SBART based model will be used.
 
 \subsubsection{Non-Parametric library}
 
 For non-parametric library \textit{faiss} will be used, it is more than
 enough to handle this experiment.
 
-\subsubsection{LLM generator placeholder}
+\subsubsection{LLM placeholder}
 
-The LLM placeholder is a component that allows the attachment of 
+The LLM is part of the generator component, it allows attachment of 
 different LLMs to the RAG solution. The reason for this is to test 
 how different LLMs perform.
 
@@ -945,7 +947,8 @@ Where the important processes are numerated and described in the following list:
   \item Retrieval augmentation phase, the actor, user asks a question, this question is passed to the embedder.
   \item Retrieval augmentation phase, the embedder creates an embedding for the question and queries the non-parametric memory for the k-closest embeddings.
   \item Retrieval augmentation phase, the retrieved k-closest embeddings are used to obtain their corresponding texts from the in-memory key-value database, forming the context.
-  \item Retrieval augmentation phase, the context with the question is passed to the LLM generator and the LLM generator creates an answer for the users question.
+  \item Generation augmentation phase, the context with the question is passed to the generator component.
+  \item Generation phase, the generator component inside it creates an answer for the users question.
 \end{enumerate}
 
 \begin{figure*}[htbp]
@@ -989,19 +992,19 @@ fact-based question: "How tall is the Pyramid of Giza?". The
 experiment parameters are as follows:
 
 \begin{itemize}
-\item
-  \textbf{Question Type}: Fact-based
-\item
-  \textbf{Question}: "How tall is the Pyramid of Giza?"
-\item
-  \textbf{Retrieval Type}: Sentence retrieval
-\item
-  \textbf{Number of Retrievals}: 1
+  \item
+    \textbf{Question Type}: Fact-based
+  \item
+    \textbf{Question}: "How tall is the Pyramid of Giza?"
+  \item
+    \textbf{Retrieval Type}: Sentence retrieval
+  \item
+    \textbf{Number of Retrievals}: 1
 \end{itemize}
 
 \subsubsection{Causal Models}
 
-The results of the experiment are shown in the \autoref{tab:experiment_R_1_sentence_Q_fact_M_causal_table}.
+The results of the experiment are shown in the appendix, \autoref{tab:experiment_R_1_sentence_Q_fact_M_causal_table}.
 In this experiment setup, all the causal LLMs generated incorrect answers. 
 Except for \texttt{facebook/blenderbot-90M}, they all generated grammatically correct sentences. 
 Regarding the RAG answers, all models generated correct RAG answers except for \texttt{facebook/blenderbot-90M}.
@@ -1013,7 +1016,7 @@ the smallest model that provided a correct answer was GPT-2 with 90M.
 \subsubsection{QA Models}
 
 The results of the question answering models for this experiment
-are shown in \autoref{tab:experiment_R_1_sentence_Q_fact_M_question_answering_table}.
+are shown in the appendix, \autoref{tab:experiment_R_1_sentence_Q_fact_M_question_answering_table}.
 The QA models also provided correct answers. Compared to the causal LLMs
 RAG generated answer, here the models perform better as a model of 66M parameters
 was able to answer the question correctly. The answers generated by the LLM were incorrect for every model.
@@ -1021,17 +1024,18 @@ was able to answer the question correctly. The answers generated by the LLM were
 \subsubsection{T5 Models}
 
 
-The results of the T5 conversational models this experiment can be seen in \autoref{tab:experiment_R_1_sentence_Q_fact_M_T5_table}.
+The results of the T5 conversational models this experiment can be seen in the appendix, \autoref{tab:experiment_R_1_sentence_Q_fact_M_T5_table}.
 The T5 models RAG generated answer is correct for the T5-base model and partially correct
 for the T5-large model. The T5-large model answered correctly in feet but not in meters.
 
-The results of the T5 conversational models from this experiment can be seen in \autoref{tab:experiment_R_1_sentence_Q_fact_M_T5_table}. 
+The results of the T5 conversational models from this experiment can be seen in the appendix, \autoref{tab:experiment_R_1_sentence_Q_fact_M_T5_table}. 
 The T5 model's RAG-generated answer is correct for the T5-base model and partially correct for the T5-large model. 
 The T5-large model answered gave the correct answer in feet but not in meters.
 
 \textbf{Summary:}
 Given the size of the models and the accuracy of the answers, the QA models are most
-appropriate for answering fact-based Question.
+appropriate for answering fact-based Question. They are efficient and are able to provide the most probable 
+sequence inside the context that answers the question.
 
 \subsection{Experiment 2: List-based Question - 'What materials were
 used in constructing the Great Wall of China?'}
@@ -1056,7 +1060,7 @@ Great Wall of China?'. The experiment parameters are as follows:
 \subsubsection{Causal Models}
 
 The results of the causal models for the experiment in the current section are 
-documented in \autoref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_causalModel_table}. 
+documented in the appendix, \autoref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_causalModel_table}. 
 In all cases, the causal models generated incorrect or irrelevant LLM answers. 
 The RAG approach, however, performed significantly better, with all models providing correct 
 information about the materials used in constructing the Great Wall of China.
@@ -1064,7 +1068,7 @@ Because of the causal LLM model's nature, the RAG approach's answer contains add
 
 \subsubsection{QA Models}
 
-The results of the QA models for this experiment are documented in \autoref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_QaModels_table}.
+The results of the QA models for this experiment are documented in the appendix, \autoref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_QaModels_table}.
 
 The QA models performed well in generating correct RAG answers, accurately listing the materials used in constructing the Great Wall of China. 
 Similar to the first experiment, the generated LLM answers were incorrect, but the RAG system compensated by providing correct and relevant answers,
@@ -1074,7 +1078,7 @@ demonstrating its strength in retrieving and presenting accurate information.
 
 
 The results of the T5 conversational models for this experiment can be seen 
-in \autoref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_T5Models_table}.
+in the appendix, \autoref{tab:experiment_Q_listBased_R_1Sentence_Q_listBased_M_T5Models_table}.
 
 Here, the T5 models also demonstrated strong performance in the RAG approach.
 They correctly listed the materials used in constructing the Great Wall of China.
@@ -1084,7 +1088,8 @@ further highlighting the importance of RAG in ensuring accurate output.
 \textbf{Summary:}
 
 Given the size of the models the QA models are most appropriate for
-answering List-based Question.
+answering List-based Question. Same as in the previous experiment, the QA models are efficient and
+provide the most probable character sequence inside the context that answers the question.
 
 \subsection{Experiment 3: Fact-based Question - 'How tall is the Pyramid of Giza?'}
 
@@ -1099,19 +1104,19 @@ be smaller, and paragraphs hold more context and information than sentences.
 The experiment parameters are as follows:
 
 \begin{itemize}
-\item
-  \textbf{Question Type}: Fact-based Question
-\item
-  \textbf{Question}: ``How tall is the Pyramid of Giza?''
-\item
-  \textbf{Retrieval Type}: Paragraph retrieval
-\item
-  \textbf{Number of Retrievals}: 1
+  \item
+    \textbf{Question Type}: Fact-based Question
+  \item
+    \textbf{Question}: "How tall is the Pyramid of Giza?"
+  \item
+    \textbf{Retrieval Type}: Paragraph retrieval
+  \item
+    \textbf{Number of Retrievals}: 1
 \end{itemize}
 
 \subsubsection{Causal Models}
 
-This experiment's results for the causal models can be observed in 
+This experiment's results for the causal models can be observed in the appendix,
 \autoref{tab:experiment_R_1_paragraph_Q_fact_M_causal_table}.
 
 In this experiment, the causal models generally provided incorrect or nonsensical LLM answers. 
@@ -1120,7 +1125,7 @@ retrieving and presenting the relevant information from the paragraph.
 
 \subsubsection{QA Models}
 
-The experiment results for the QA models are shown in \autoref{tab:experiment_R_1_paragraph_Q_fact_M_QaModels_table}.
+The experiment results for the QA models are shown in the appendix, \autoref{tab:experiment_R_1_paragraph_Q_fact_M_QaModels_table}.
 
 The QA models continued to perform well, with the RAG approach providing correct and relevant answers.
 Despite the direct LLM answers being incorrect, the RAG system ensured accurate information
@@ -1128,7 +1133,7 @@ was retrieved and presented.
 \subsubsection{T5 Models}
 
 The results of the T5 conversational models for this experiment
-are shown in \autoref{tab:experiment_R_1_paragraph_Q_fact_M_T5Models_table}.
+are shown in the appendix, \autoref{tab:experiment_R_1_paragraph_Q_fact_M_T5Models_table}.
 
 The T5 models also demonstrated strong performance in the RAG approach,
 consistently providing the correct height of the Pyramid of Giza. As
@@ -1152,34 +1157,34 @@ Great Wall of China?' using paragraph retrieval with one retrieved
 document. The experiment parameters are as follows:
 
 \begin{itemize}
-
-\item
-  \textbf{Question Type}: List-based Question
-\item
-  \textbf{Question}: ``What materials were used in constructing the
-  Great Wall of China?''
-\item
-  \textbf{Retrieval Type}: Paragraph retrieval
-\item
-  \textbf{Number of Retrievals}: 1
+  \item
+    \textbf{Question Type}: List-based Question
+  \item
+    \textbf{Question}: ``What materials were used in constructing the
+    Great Wall of China?''
+  \item
+    \textbf{Retrieval Type}: Paragraph retrieval
+  \item
+    \textbf{Number of Retrievals}: 1
 \end{itemize}
 
 \subsubsection{Causal Models}
 
 The results of the causal models for this experiment can be seen 
-in \autoref{tab:experiment_R_1_paragraph_Q_listBased_M_causal_table}.
+in the appendix, \autoref{tab:experiment_R_1_paragraph_Q_listBased_M_causal_table}.
 
 In this experiment, the causal models generally provided incorrect or
 nonsensical LLM answers. The RAG approach, however, showed improvement,
 with more accurate information being retrieved and presented. Despite
 this, the answers still lacked consistency in listing all the materials
-used in the construction of the Great Wall of China.
+used in the construction of the Great Wall of China. These models would require 
+additional fine-tuning if they are to be used for question answering tasks.
 
 \subsubsection{QA Models}
 
 
 The results of the QA models for the experiment
-can be seen in \autoref{tab:experiment_R_1_paragraph_Q_listBased_M_QaModels_table}.
+can be seen in the appendix, \autoref{tab:experiment_R_1_paragraph_Q_listBased_M_QaModels_table}.
 
 The QA models performed exceptionally well in generating correct RAG
 answers, accurately listing the materials used in constructing the Great
@@ -1191,7 +1196,7 @@ information.
 
 
 The results of the T5 conversational models for this experiment can be seen 
-in \autoref{tab:experiment_R_1_paragraph_Q_listBased_M_T5Models_table}.
+in the appendix, \autoref{tab:experiment_R_1_paragraph_Q_listBased_M_T5Models_table}.
 
 The T5 models also performed well in the RAG approach, consistently
 providing the correct list of materials used in constructing the Great
@@ -1221,16 +1226,15 @@ with three retrieved documents. The experiment parameters are as
 follows:
 
 \begin{itemize}
-
-\item
-  \textbf{Question Type}: Synthesis-based Question
-\item
-  \textbf{Question}: ``Which famous structures, both designed or
-  structurally influenced by Gustave Eiffel?''
-\item
-  \textbf{Retrieval Type}: Paragraph retrieval
-\item
-  \textbf{Number of Retrievals}: 3
+  \item
+    \textbf{Question Type}: Synthesis-based Question
+  \item
+    \textbf{Question}: ``Which famous structures, both designed or
+    structurally influenced by Gustave Eiffel?''
+  \item
+    \textbf{Retrieval Type}: Paragraph retrieval
+  \item
+    \textbf{Number of Retrievals}: 3
 \end{itemize}
 
 The synthesis-based question requires that several facts are taken into
@@ -1242,7 +1246,7 @@ the RAG needs to combine the facts in to a conclusion and generate the answer.
 \subsubsection{Causal Models}
 
 The results of the causal models for this experiment
-are stored in \autoref{tab:experiment_R_3_paragraph_Q_synthesis_M_causal_table}.
+are stored in the appendix, \autoref{tab:experiment_R_3_paragraph_Q_synthesis_M_causal_table}.
 
 In this experiment, the causal models struggled to produce accurate or
 relevant LLM answers. The RAG approach helped improve the accuracy but
@@ -1253,20 +1257,21 @@ best choice for complex synthesis-based questions.
 
 \subsubsection{QA Models}
 
-
 The results of the QA models for this experiment
-are documented in \autoref{tab:experiment_R_3_paragraph_Q_synthesis_M_QaModels_table}.
+are documented in the appendix, \autoref{tab:experiment_R_3_paragraph_Q_synthesis_M_QaModels_table}.
 
 The QA models had mixed performance in this experiment. While the direct
 LLM answers were often uninformative, the RAG answers managed to
 identify at least one structure associated with Gustave Eiffel, but they
 lacked completeness. The synthesis required for this question appeared
-challenging for these models.
+challenging for these models. Main reason for this behavior is that this QA models are trained
+to extract one sequential list of characters from the context, that has the biggest probability
+to answer the question.
 
 \subsubsection{T5 Models}
 
 The results of the T5 conversational models for the experiment in the current section
-are documented in \autoref{tab:experiment_R_3_paragraph_Q_synthesis_M_T5Models_table}.
+are documented in the appendix, \autoref{tab:experiment_R_3_paragraph_Q_synthesis_M_T5Models_table}.
 
 The T5 models performed relatively well in the RAG approach, with the larger 
 model (T5-large) correctly listing both the Eiffel Tower and the Statue of Liberty
@@ -1291,8 +1296,8 @@ all, of the necessary information to answer the question also answers that are t
 not fully articulated will fall in this category. Over-information is a correct answer that
 contains additional or repeatable information that is not required by the question. The answer
 quality alongside the model's speed and size in parameters can be observed in the tables 
-\autoref{tab:experiment1_model_performance_full_with_size}, \autoref{tab:experiment2_model_performance_full_with_size}, 
-\autoref{tab:experiment3_model_performance_full_with_size}, \autoref{tab:experiment4_model_performance_full_with_size},
+appendix, \autoref{tab:experiment1_model_performance_full_with_size}, appendix, \autoref{tab:experiment2_model_performance_full_with_size},  appendix,
+\autoref{tab:experiment3_model_performance_full_with_size}, appendix, \autoref{tab:experiment4_model_performance_full_with_size}, appendix,
 \autoref{tab:experiment5_model_performance_full_with_size} for each experiment.
 In terms of answer quality overall in all categories the T5-models performed the best. 
 In terms of measurable performance several interesting conclusions can be derived from the data.
@@ -1396,23 +1401,22 @@ This research explores the implementation and evaluation of RAG systems, focusin
 the impact of different LLM types (causal, question-answering, conversational) and retrieval 
 strategies (sentence-level, paragraph-level) on their performance. 
 The experiments were conducted using various open-source LLMs and a custom-built RAG system to 
-assess the effectiveness of different approaches. Compared to models solely relying 
-on parametric memory, RAG systems offer several advantages:
+assess the effectiveness of different approaches. A notable observation in this paper when evaluating the capabilities of LLMs versus RAG systems is that RAG systems offer several advantages:
 \begin{itemize}
-\item
-  \textbf{Horizontally Scalable}: RAG systems can efficiently scale by distributing the retrieval process across multiple nodes, 
-  allowing for handling larger datasets and more complex queries.
-\item
-  \textbf{Distributive}: RAG systems' modular nature enables the distribution of tasks across different components, 
-  enhancing their robustness and flexibility.
-\item
-  \textbf{Mitigates High Bias}: By integrating external knowledge retrieval, RAG systems reduce 
-  the need for extremely large models with numerous parameters, thus, to a degree, avoiding issues 
-  related to underfitting and high bias in terms of the real-world dataset or the cross-validation 
-  set where the model is not flexible enough or lacks sufficient curvature to approximate the problem.
-\item
-  \textbf{Performance Enhancement}: By leveraging external knowledge, RAG systems can surpass the
-   performance of their base generative models, resulting in more accurate and contextually relevant responses.
+  \item
+    \textbf{Horizontally Scalable}: RAG systems can efficiently scale by distributing the retrieval process across multiple nodes, 
+    allowing for handling larger datasets and more complex queries.
+  \item
+    \textbf{Distributive}: RAG systems' modular nature enables the distribution of tasks across different components, 
+    enhancing their robustness and flexibility.
+  \item
+    \textbf{Mitigates High Bias}: By integrating external knowledge retrieval, RAG systems reduce 
+    the need for extremely large models with numerous parameters, thus, to a degree, avoiding issues 
+    related to underfitting and high bias in terms of the real-world dataset or the cross-validation 
+    set where the model is not flexible enough or lacks sufficient curvature to approximate the problem.
+  \item
+    \textbf{Performance Enhancement}: By leveraging external knowledge, RAG systems can surpass the
+    performance of their base generative models, resulting in more accurate and contextually relevant responses.
 \end{itemize}
 
 For example, a decent quality question-answering system can be created 
@@ -1436,6 +1440,8 @@ Popular cloud-based, pre-existing LLMs like OpenAI's GPT-4 or GPT-3 models can a
 RAG systems in environments where data privacy is not a concern. This type of RAG system will easily outperform any open-source LLM-based RAG solution. 
 More and more companies are offering their powerful LLMs as APIs on a subscription or pay-per-use basis.
 
+As a practical software solution for real-world applications, a RAG system can be implemented to power question-answering systems where knowledge is stored as documents, text, or any other storage system—not necessarily a traditional database. These systems are particularly suitable for chatbots, such as those used for customer support across various industries. In medicine, they can assist doctors by providing precise dosing guidelines for medications or warning about potential side effects of combining drugs. In IT, RAG systems can function as knowledge management tools, storing comprehensive documentation about how systems operate and enabling engineers to query and retrieve insights. A key advantage of these systems is their ability to be easily updated with new knowledge without the need to retrain the underlying model.
+
 In conclusion, the main challenge in designing a RAG (Retrieval-Augmented Generation) system is not the
 LLM (Large Language Model) itself but the context creation process. The model can only respond accurately 
 if the context contains all the information required to answer the question. On the other hand, as shown 
@@ -1447,19 +1453,13 @@ In summary, RAG systems provide a scalable, distributive, and cost-efficient sol
 They address key limitations and improve overall performance without needing excessively large and complex models. 
 \begin{thebibliography}{9}
 
-  \bibitem{attention_is_all_you_need} A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, Ł. Kaiser, and I. Polosukhin, "Attention Is All You Need," \textit{arXiv preprint arXiv:1706.03762}, 2017, pp. 8-10.
+  \bibitem{cite_github_solution} M. Grabuloski, (2024). "RagSystems", \textit{GitHub repository} \href{https://github.com/mgrabul/RagSystems}{RagSystems}, 2024.
+
+  \bibitem{website_deffinition_rag} P. Miesle, "Retrieval-Augmented Generation (RAG) Explained: Understanding Key Concepts," \textit{DataStax}. Retrieved from \href{https://www.datastax.com/guides/what-is-retrieval-augmented-generation}{DataStax Guide on RAG}.
   
   \bibitem{the_faiss_library} M. Douze, A. Guzhva, C. Deng, J. Johnson, G. Szilvasy, P.-E. Mazaré, M. Lomeli, L. Hosseini, and H. Jégou, "The Faiss Library," \textit{arXiv preprint arXiv:2401.08281}, 2024. pp. 1-13.
-  
-  \bibitem{Retrieval_Augmented_Generation_(RAG)_Explained_Understanding_Key_Concepts} P. Lewis, W. Yih, T. Rocktäschel, and S. Riedel, "Retrieval-Augmented Generation (RAG) Explained: Understanding Key Concepts," \textit{arXiv preprint arXiv:2005.11401v4}, 2020. pp. 3
-  
-  \bibitem{Retrieval-Augmented_Generation_for_Large_Language_Models:_A_Survey} Y. Gao, Y. Xiong, X. Gao, K. Jia, J. Pan, Y. Bi, Y. Dai, J. Sun, Q. Guo, M. Wang, and H. Wang, "Retrieval-Augmented Generation for Large Language Models: A Survey," \textit{arXiv preprint arXiv:2312.10997}, 2023. pp. 1-13
-  
-  \bibitem{sbert} N. Reimers and I. Gurevych, "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks," \textit{arXiv preprint arXiv:1908.10084}, 2019. pp. 1-11
-    
-  \bibitem{SpeculativeRAG_EnhancingRetrieval-AugmentedGenerationThroughDrafting} Z. Wang, Z. Wang, L. Le, H. S. Zheng, S. Mishra, V. Perot, Y. Zhang, A. Mattapalli, A. Taly, J. Shang, C.-Y. Lee, and T. Pfister, "Speculative RAG: Enhancing Retrieval-Augmented Generation through Drafting" \textit{arXiv preprint arXiv:2407.08223}, 2024.
-  
-  \bibitem{website_deffinition_rag} P. Miesle, "Retrieval-Augmented Generation (RAG) Explained: Understanding Key Concepts," \textit{DataStax}. Retrieved from \href{https://www.datastax.com/guides/what-is-retrieval-augmented-generation}{DataStax Guide on RAG}.
+
+  \bibitem{attention_is_all_you_need} A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, Ł. Kaiser, and I. Polosukhin, "Attention Is All You Need," \textit{arXiv preprint arXiv:1706.03762}, 2017, pp. 8-10.
 
   \bibitem{website_MediumGuideonRAGDatabases} M. Ali, "Optimizing RAG: A Guide to Choosing the Right Vector Database," \textit{Medium}, 2023. Retrieved from \href{https://medium.com/@mutahar789/optimizing-rag-a-guide-to-choosing-the-right-vector-database-480f71a33139}{Medium Guide on RAG Databases}.
   
@@ -1476,10 +1476,15 @@ They address key limitations and improve overall performance without needing exc
   \bibitem{website_Neo4jBlogOnLangchainVectorIndex} T. Bratanič, "Neo4j Langchain Vector Index Implementation," \textit{Neo4j}, 2023. Retrieved from \href{https://neo4j.com/developer-blog/neo4j-langchain-vector-index-implementation/}{Neo4j Blog on Langchain Vector Index}.
   
   \bibitem{website_PondhouseGuideOnAdvancedRAG} Pondhouse Data, "Advanced RAG: Recursive Retrieval with LlamaIndex," \textit{Pondhouse Data}, 2023. Retrieved from \href{https://www.pondhouse-data.com/blog/advanced-rag-recursive-retrieval-with-llamaindex}{Pondhouse Guide on Advanced RAG}.
+
+  \bibitem{sbert} N. Reimers and I. Gurevych, "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks," \textit{arXiv preprint arXiv:1908.10084}, 2019. pp. 1-11
+
+  \bibitem{Retrieval-Augmented_Generation_for_Large_Language_Models:_A_Survey} Y. Gao, Y. Xiong, X. Gao, K. Jia, J. Pan, Y. Bi, Y. Dai, J. Sun, Q. Guo, M. Wang, and H. Wang, "Retrieval-Augmented Generation for Large Language Models: A Survey," \textit{arXiv preprint arXiv:2312.10997}, 2023. pp. 1-13
   
-  \bibitem{cite_github_solution} Grabuloski, M. (2024). *RagSystems: Retrieval-Augmented Generation Systems*. GitHub repository. Retrieved from \url{https://github.com/mgrabul/RagSystems}
-
-
+  \bibitem{Retrieval_Augmented_Generation_(RAG)_Explained_Understanding_Key_Concepts} P. Lewis, W. Yih, T. Rocktäschel, and S. Riedel, "Retrieval-Augmented Generation (RAG) Explained: Understanding Key Concepts," \textit{arXiv preprint arXiv:2005.11401v4}, 2020. pp. 3
+    
+  \bibitem{SpeculativeRAG_EnhancingRetrieval-AugmentedGenerationThroughDrafting} Z. Wang, Z. Wang, L. Le, H. S. Zheng, S. Mishra, V. Perot, Y. Zhang, A. Mattapalli, A. Taly, J. Shang, C.-Y. Lee, and T. Pfister, "Speculative RAG: Enhancing Retrieval-Augmented Generation through Drafting" \textit{arXiv preprint arXiv:2407.08223}, 2024.
+  
 \end{thebibliography}
 
 \flushleft \justifying{ \textbf {Contribution of Individual Authors to the \break Creation of a Scientific Article (Ghostwriting \break  Policy)}}
